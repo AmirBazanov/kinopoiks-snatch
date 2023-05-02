@@ -7,14 +7,21 @@
     "moduleResolution": "node",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
+    "useDefineForClassFields": false,
     "importHelpers": true,
-    "target": "es2015",
+    "target": "es2017",
     "module": "esnext",
     "lib": ["es2017", "dom"],
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "paths": {}
+    "paths": {
+      "@kinopoisk-snitch/rabbitmq": ["libs/rabbitmq/src/index.ts"],
+      "@kinopoisk-snitch/rabbitmq-config": [
+        "libs/rabbitmq-config/src/index.ts"
+      ],
+      "@kinopoisk-snitch/typeorm": ["libs/typeorm/src/index.ts"]
+    }
   },
   "exclude": ["node_modules", "tmp"]
 }
