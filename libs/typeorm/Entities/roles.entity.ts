@@ -1,17 +1,20 @@
-import {Column, Entity, OneToMany, PrimaryGeneratedColumn} from "typeorm";
-import { MoviesPersonsRolesEntity } from "./movies-persons-roles.entity";
+import {Column, Entity, ManyToMany, OneToMany, PrimaryGeneratedColumn} from "typeorm";
+import "reflect-metadata"
+
+import {PersonsEntity} from "./persons.entity";
 
 @Entity('Roles')
 export class RolesEntity{
   @PrimaryGeneratedColumn()
   role_id: number
 
-  @Column("text", { nullable: false })
-  name: string;
+  @Column()
+  name_ru: string
 
-  @Column("text", { nullable: false })
-  name_eng: string;
+  @Column()
+  name_eng: string
 
-  @OneToMany(() => MoviesPersonsRolesEntity, moviesPersonsRole => moviesPersonsRole.role_id)
-  moviesPersonsRoles: MoviesPersonsRolesEntity[]
+  @ManyToMany(()=>PersonsEntity, person=>person.person_id)
+  @Column()
+  persons: PersonsEntity[]
 }
