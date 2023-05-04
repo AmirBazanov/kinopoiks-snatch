@@ -2,7 +2,7 @@ import {Column, Entity, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn
 import {CountriesEntity} from "./countries.entity";
 import {GenresEntity} from "./genres.entity";
 import {JoinTable} from "typeorm/browser";
-
+import { MoviesPersonsRolesEntity } from "./movies-persons-roles.entity";
 
 @Entity('Movies')
 export class MoviesEntity{
@@ -60,4 +60,6 @@ export class MoviesEntity{
   @Column()
   production_country_id: number
 
+  @OneToMany(() => MoviesPersonsRolesEntity, moviesPersonsRole => moviesPersonsRole.movie_id)
+  moviesPersonsRoles: MoviesPersonsRolesEntity[];
 }

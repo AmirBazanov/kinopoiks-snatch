@@ -1,33 +1,35 @@
 import {Column, Entity, OneToMany, PrimaryGeneratedColumn} from "typeorm";
+import { AwardsAndPrizesEntity } from "./awards-and-prizes.entity";
+import { MoviesPersonsRolesEntity } from "./movies-persons-roles.entity";
 
 @Entity('Persons')
 export class PersonsEntity{
   @PrimaryGeneratedColumn()
   person_id: number
 
-  @Column({ nullable: false })
+  @Column("text", { nullable: false })
   name: string;
 
-  @Column({ nullable: false })
+  @Column("text", { nullable: false })
   surname: string;
 
-  @Column({ nullable: false })
+  @Column("float8", { nullable: false })
   height: number;
 
-  @Column({ nullable: true })
+  @Column("date", { nullable: true })
   date_birth: Date;
 
-  @Column({ nullable: true })
+  @Column("text", { nullable: true })
   place_birth: string;
 
-  @Column({ nullable: true })
+  @Column("text", { nullable: true })
   spouse: string;
 
-  @Column({ nullable: false })
+  @Column("text", { nullable: false })
   photo_link: string;
 
   @OneToMany(() => AwardsAndPrizesEntity, awardsAndPrize => awardsAndPrize.person_id)
-  awardsAndPrizesEntity: AwardsAndPrizesEntity[]
+  awardsAndPrizes: AwardsAndPrizesEntity[]
 
   @OneToMany(() => MoviesPersonsRolesEntity, moviesPersonsRole => moviesPersonsRole.person_id)
   moviesPersonsRoles: MoviesPersonsRolesEntity[]
