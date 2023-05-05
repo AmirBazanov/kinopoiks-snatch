@@ -1,8 +1,10 @@
-import {Column, Entity, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn} from "typeorm";
+import { Column, Entity, JoinColumn, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import {CountriesEntity} from "./countries.entity";
 import {GenresEntity} from "./genres.entity";
-import {JoinTable} from "typeorm/browser";
-import { MoviesPersonsRolesEntity } from "./movies-persons-roles.entity";
+import {JoinTable} from "typeorm";
+import {AwardsEntity} from "./awards.entity";
+import { CommentsEntity } from "./comments.entity";
+
 
 @Entity('Movies')
 export class MoviesEntity{
@@ -16,7 +18,7 @@ export class MoviesEntity{
   @Column()
   orig_title: string;
 
-  @Column('year')
+  @Column()
   production_year: Date;
 
   @Column()
@@ -46,20 +48,25 @@ export class MoviesEntity{
   @Column()
   film_description: string;
 
-  @Column()
-  language: string;
-
   @Column({default: false})
   is_serial: boolean;
 
-  @ManyToMany(()=>GenresEntity, genre=>genre.genre_id)
+  @OneToMany(()=>AwardsEntity, award=>award.movie)
+  @JoinTable()
+  awards: AwardsEntity[]
+
+  @ManyToMany(()=>GenresEntity, genre=>genre.movies)
   @JoinTable()
   genres: GenresEntity[]
 
-  @ManyToOne(()=>CountriesEntity, county=>county.country_id)
-  @Column()
-  production_country_id: number
+  @ManyToOne(()=>CountriesEntity, country=>country.movies)
+  @JoinColumn({name: 'country_id'})
+  country: CountriesEntity
 
-  @OneToMany(() => MoviesPersonsRolesEntity, moviesPersonsRole => moviesPersonsRole.movie_id)
-  moviesPersonsRoles: MoviesPersonsRolesEntity[];
+  @OneToMany(()=>CommentsEntity, comment=>comment.movie)
+  @JoinTable()
+  comments: CommentsEntity[]
+
+  @Column()
+  is_eng: boolean
 }

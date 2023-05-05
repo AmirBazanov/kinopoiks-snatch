@@ -1,8 +1,7 @@
-import {Column, Entity, ManyToMany, OneToMany, PrimaryGeneratedColumn} from "typeorm";
+import { Column, Entity, JoinColumn, ManyToMany, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import {AwardsEntity} from "./awards.entity";
-import "reflect-metadata"
 
-import {JoinTable} from "typeorm/browser";
+import {JoinTable} from "typeorm";
 import {RolesEntity} from "./roles.entity";
 
 @Entity('Persons')
@@ -26,18 +25,19 @@ export class PersonsEntity{
   place_birth: string
 
   @Column()
-  spouse: string | PersonsEntity
+  spouse: string
 
   @Column()
   photo: string
 
-  @OneToMany(()=>AwardsEntity, award=>award.award_id)
+  @OneToMany(()=>AwardsEntity, award=>award.person)
   @JoinTable()
-  @Column()
   awards: AwardsEntity[]
 
-  @ManyToMany(()=>RolesEntity, role=>role.role_id)
-  @Column()
+  @ManyToMany(()=>RolesEntity, role=>role.persons)
   @JoinTable()
   roles: RolesEntity[]
+
+  @Column()
+  is_eng: boolean
 }
