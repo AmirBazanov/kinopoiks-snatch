@@ -39,6 +39,9 @@ export class UsersEntity{
   quote:string
 
   @Column()
+  created_at: Date
+
+  @Column()
   is_admin: boolean
 
   @Column()

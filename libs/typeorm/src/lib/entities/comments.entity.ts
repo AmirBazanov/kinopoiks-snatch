@@ -20,6 +20,9 @@ export class CommentsEntity{
   @Column()
   replied_comment: number
 
+  @Column()
+  created_at: Date
+
   @ManyToOne(()=>MoviesEntity, movie=>movie.comments)
   @JoinColumn({name: 'movie_id'})
   movie: MoviesEntity
