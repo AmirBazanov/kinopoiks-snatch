@@ -3,6 +3,13 @@ import { NestFactory } from '@nestjs/core';
 
 import { PersonsModule } from './app/persons.module';
 import { Transport, MicroserviceOptions } from '@nestjs/microservices';
+import { ConfigService } from '@nestjs/config';
+
+import * as dotenv from 'dotenv';
+
+dotenv.config();
+
+const configService = new ConfigService();
 
 async function bootstrap() {
   const app = await NestFactory.createMicroservice<MicroserviceOptions>(
@@ -10,9 +17,13 @@ async function bootstrap() {
     {
       transport: Transport.RMQ,
       options: {
-        //shoto
-      }
-    }
+        urls: [`amqp://${configService.get('RABBITMQ_HOST')}`],
+        queue: 'persons-queue',
+        queueOptions: {
+          durable: false,
+        },
+      },
+    },
   );
   await app.listen();
   Logger.log(
