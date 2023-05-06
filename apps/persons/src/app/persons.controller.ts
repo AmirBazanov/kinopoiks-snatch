@@ -4,10 +4,10 @@ import { PersonsService } from './persons.service';
 
 @Controller('persons')
 export class PersonsController {
-  constructor(private readonly appService: PersonsService) {}
+  constructor(private readonly personService: PersonsService) {}
 
   @Get('info')
   getInfo() {
-    return this.appService.getInfo();
+    return this.personService.getInfo();
   }
 }
