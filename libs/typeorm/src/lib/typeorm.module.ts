@@ -1,7 +1,16 @@
 import { Module } from '@nestjs/common';
-import {TypeOrmModule} from "@nestjs/typeorm";
-import { ConfigModule, ConfigService } from "@nestjs/config";
-
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { ConfigService } from '@nestjs/config';
+import { AwardsEntity } from './entities/awards.entity';
+import { CommentsEntity } from './entities/comments.entity';
+import { CountriesEntity } from './entities/countries.entity';
+import { FriendsEntity } from './entities/friends.entity';
+import { GenresEntity } from './entities/genres.entity';
+import { MoviesEntity } from './entities/movies.entity';
+import { PersonsEntity } from './entities/persons.entity';
+import { RolesEntity } from './entities/roles.entity';
+import { UserMoviesInfoEntity } from './entities/user-movies-info.entity';
+import { UsersEntity } from './entities/users.entity';
 
 @Module({
   imports: [
@@ -13,6 +22,18 @@ import { ConfigModule, ConfigService } from "@nestjs/config";
         database: configService.get('POSTGRES_DB'),
         username: configService.get('POSTGRES_USER'),
         password: configService.get('POSTGRES_PASSWORD'),
+        entities: [
+          AwardsEntity,
+          CommentsEntity,
+          CountriesEntity,
+          FriendsEntity,
+          GenresEntity,
+          MoviesEntity,
+          PersonsEntity,
+          RolesEntity,
+          UserMoviesInfoEntity,
+          UsersEntity,
+        ],
         autoLoadEntities: true,
         synchronize: true,
       }),
