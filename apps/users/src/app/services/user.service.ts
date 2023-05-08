@@ -6,14 +6,8 @@ import {CreateUserDto} from "../dtos/create.user.dto";
 export class UserService {
   constructor(@Inject(UserRepository) private userRepository: UserRepository) {}
 
-  async createUser(userDto: CreateUserDto) {
-    const newUser = await this.userRepository.createUser(userDto);
-    return newUser;
-  }
-
-  async editUserProfile(id: number) {
-    const user = this.userRepository.findUserById(id);
-    //какие-то изменения юзера
-    return user;
+  async createUser(userInfo: CreateUserDto) {
+    console.log(userInfo);
+    await this.userRepository.createUser(userInfo);
   }
 }
