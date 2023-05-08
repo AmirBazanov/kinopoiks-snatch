@@ -6,9 +6,4 @@ import {CreateUserDto} from "../dtos/create.user.dto";
 export class UserQuery {
   constructor(private readonly userRespository: UserRepository) {}
 
-  //какие-то настройки rmq
-  async getUser() {
-    const user = await this.userRespository.findUserById(id);
-    return user;
-  }
 }
