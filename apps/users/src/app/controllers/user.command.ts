@@ -1,8 +1,7 @@
-import {Controller} from '@nestjs/common';
-import {UserService} from "../services/user.service";
-import {RabbitRPC, RabbitSubscribe} from "@golevelup/nestjs-rabbitmq";
-import {CreateUserDto} from "../dtos/create.user.dto";
-import {logger} from "nx/src/utils/logger";
+import { Controller } from '@nestjs/common';
+import { UserService } from '../services/user.service';
+import { RabbitRPC } from '@golevelup/nestjs-rabbitmq';
+import { CreateUserDto } from '../dtos/create.user.dto';
 
 @Controller()
 export class UserCommand {
@@ -14,7 +13,9 @@ export class UserCommand {
     queue: 'queue1',
   })
   async createUser(userDto: CreateUserDto) {
-    console.log("Пришло")
+    console.log('Пришло');
     await this.userService.createUser(userDto);
+    //в параметры Payload()
+    //отправлять requestom
   }
 }

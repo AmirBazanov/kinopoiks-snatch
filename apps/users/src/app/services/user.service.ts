@@ -7,7 +7,6 @@ export class UserService {
   constructor(@Inject(UserRepository) private userRepository: UserRepository) {}
 
   async createUser(userInfo: CreateUserDto) {
-    console.log(userInfo);
     await this.userRepository.createUser(userInfo);
   }
 }

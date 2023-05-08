@@ -1,14 +1,13 @@
 import { Module } from '@nestjs/common';
-
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeormModuleConfig, UsersEntity } from '@kinopoisk-snitch/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import {RabbitMQModule} from "@golevelup/nestjs-rabbitmq";
-import {UserGatewayCommand} from "./user.api-gateway/user.gateway.command";
-import {UserGatewayQuery} from "./user.api-gateway/user.gateway.event";
-import {UserGatewayEvent} from "./user.api-gateway/user.gateway.query";
+import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
+import { UserGatewayCommand } from './user.api-gateway/user.gateway.command';
+import { UserGatewayQuery } from './user.api-gateway/user.gateway.event';
+import { UserGatewayEvent } from './user.api-gateway/user.gateway.query';
 
 @Module({
   imports: [
@@ -24,10 +23,15 @@ import {UserGatewayEvent} from "./user.api-gateway/user.gateway.query";
       ],
       uri: 'amqp://nestjs:nestjs@localhost:5672',
       connectionInitOptions: { wait: false },
-      enableControllerDiscovery: true
+      enableControllerDiscovery: true,
     }),
   ],
-  controllers: [AppController, UserGatewayCommand, UserGatewayQuery, UserGatewayEvent],
+  controllers: [
+    AppController,
+    UserGatewayCommand,
+    UserGatewayQuery,
+    UserGatewayEvent,
+  ],
   providers: [AppService],
 })
 export class AppModule {}
