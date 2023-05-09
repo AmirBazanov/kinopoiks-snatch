@@ -1304,3 +1304,4 @@ Thumbs.db
 /db/data/postgresql.auto.conf
 /db/data/postgresql.conf
 /db/data/postmaster.opts
+/db
