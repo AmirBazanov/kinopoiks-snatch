@@ -1305,3 +1305,4 @@ Thumbs.db
 /db/data/postgresql.conf
 /db/data/postmaster.opts
 /db
+/migrations
