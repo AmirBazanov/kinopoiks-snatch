@@ -1,8 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { CreateUserDto } from '../dtos/create.user.dto';
 import { UsersEntity } from '@kinopoisk-snitch/typeorm';
+import { CreateUserDto } from '../dtos/create.user.dto';
+import * as bcrypt from 'bcryptjs';
 
 @Injectable()
 export class UserRepository {
@@ -12,7 +13,13 @@ export class UserRepository {
   ) {}
 
   async createUser(userInfo: CreateUserDto) {
-    const temp = this.UserModel.create({ ...userInfo, created_at: new Date() });
-    await this.UserModel.save(temp);
+    const passwordHash = await bcrypt.hash(userInfo['password'], 5);
+    const temp = this.UserModel.create({
+      ...userInfo,
+      password: passwordHash,
+      created_at: new Date(),
+    });
+    const newUser = await this.UserModel.save(temp);
+    return newUser;
   }
 }

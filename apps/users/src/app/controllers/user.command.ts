@@ -1,6 +1,7 @@
 import { Controller } from '@nestjs/common';
 import { UserService } from '../services/user.service';
 import { RabbitRPC } from '@golevelup/nestjs-rabbitmq';
+import { Payload } from '@nestjs/microservices';
 import { CreateUserDto } from '../dtos/create.user.dto';
 
 @Controller()
@@ -12,10 +13,9 @@ export class UserCommand {
     routingKey: 'create-user',
     queue: 'queue1',
   })
-  async createUser(userDto: CreateUserDto) {
+  async createUser(@Payload() userDto: CreateUserDto) {
     console.log('Пришло');
-    await this.userService.createUser(userDto);
-    //в параметры Payload()
-    //отправлять requestom
+    const newUser = await this.userService.createUser(userDto);
+    return newUser;
   }
 }
