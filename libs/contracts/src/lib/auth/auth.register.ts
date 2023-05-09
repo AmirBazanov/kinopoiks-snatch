@@ -1,5 +1,12 @@
 import { UsersEntity } from '@kinopoisk-snitch/typeorm';
-import { IsBoolean, IsDate, IsEmail, IsEnum, IsString } from 'class-validator';
+import {
+  IsBoolean,
+  IsDate,
+  IsEmail,
+  IsEnum,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 import { HttpStatus } from '@nestjs/common';
 import { Type } from 'class-transformer';
 
@@ -15,6 +22,7 @@ export namespace AuthRegister {
     @IsString()
     gender: string;
     @IsBoolean()
+    @IsOptional()
     is_admin: boolean;
     @IsString()
     password: string;

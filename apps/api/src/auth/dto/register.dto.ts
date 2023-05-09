@@ -1,5 +1,11 @@
 import { UsersEntity } from '@kinopoisk-snitch/typeorm';
-import { IsBoolean, IsDate, IsEmail, IsString } from 'class-validator';
+import {
+  IsBoolean,
+  IsDate,
+  IsEmail,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 import { Type } from 'class-transformer';
 
 export class RegisterDto implements Partial<UsersEntity> {
@@ -13,6 +19,7 @@ export class RegisterDto implements Partial<UsersEntity> {
   @IsString()
   gender: string;
   @IsBoolean()
+  @IsOptional()
   is_admin: boolean;
   @IsString()
   password: string;
