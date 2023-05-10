@@ -3,7 +3,7 @@ import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
 import { EmailUserContract } from '@kinopoisk-snitch/contracts';
 
 @Controller()
-export class UserGatewayEvent {
+export class UserGatewayQuery {
   constructor(private readonly amqpConnection: AmqpConnection) {}
 
   @Get('/getUser/:id')
