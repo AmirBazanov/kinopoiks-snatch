@@ -2,8 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UsersEntity } from '@kinopoisk-snitch/typeorm';
-import { CreateUserDto } from '../dtos/create.user.dto';
 import * as bcrypt from 'bcryptjs';
+import { CreateUserContract } from '@kinopoisk-snitch/contracts';
 
 @Injectable()
 export class UserRepository {
@@ -12,7 +12,7 @@ export class UserRepository {
     private readonly UserModel: Repository<UsersEntity>
   ) {}
 
-  async createUser(userInfo: CreateUserDto) {
+  async createUser(userInfo: CreateUserContract.Request) {
     const passwordHash = await bcrypt.hash(userInfo['password'], 5);
     const temp = this.UserModel.create({
       ...userInfo,
@@ -21,5 +21,23 @@ export class UserRepository {
     });
     const newUser = await this.UserModel.save(temp);
     return newUser;
+  }
+
+  async findUserById(id: number) {
+    const user = await this.UserModel.find({
+      where: {
+        user_id: id,
+      },
+    });
+    return user;
+  }
+
+  async findUserByEmail(email: string) {
+    const user = await this.UserModel.find({
+      where: {
+        email: email,
+      },
+    });
+    return user;
   }
 }

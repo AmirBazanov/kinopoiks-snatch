@@ -8,23 +8,14 @@ import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
 import { UserGatewayCommand } from './user.api-gateway/user.gateway.command';
 import { UserGatewayQuery } from './user.api-gateway/user.gateway.event';
 import { UserGatewayEvent } from './user.api-gateway/user.gateway.query';
+import { rmqUserConfig } from './configs/amqp.user.config';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
     TypeormModuleConfig,
     TypeOrmModule.forFeature([UsersEntity]),
-    RabbitMQModule.forRoot(RabbitMQModule, {
-      exchanges: [
-        {
-          name: 'UsersExchange',
-          type: 'topic',
-        },
-      ],
-      uri: 'amqp://nestjs:nestjs@localhost:5672',
-      connectionInitOptions: { wait: false },
-      enableControllerDiscovery: true,
-    }),
+    RabbitMQModule.forRoot(RabbitMQModule, rmqUserConfig()),
   ],
   controllers: [
     AppController,
