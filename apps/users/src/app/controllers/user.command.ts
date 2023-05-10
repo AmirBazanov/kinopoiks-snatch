@@ -1,20 +1,29 @@
-import {Controller} from '@nestjs/common';
-import {UserService} from "../services/user.service";
-import {RabbitRPC, RabbitSubscribe} from "@golevelup/nestjs-rabbitmq";
-import {CreateUserDto} from "../dtos/create.user.dto";
-import {logger} from "nx/src/utils/logger";
+import { Controller } from '@nestjs/common';
+import { UserService } from '../services/user.service';
+import { AmqpConnection, RabbitRPC } from '@golevelup/nestjs-rabbitmq';
+import { Payload } from '@nestjs/microservices';
+import { CreateUserContract } from '@kinopoisk-snitch/contracts';
 
 @Controller()
 export class UserCommand {
-  constructor(private readonly userService: UserService) {}
+  constructor(
+    private readonly userService: UserService,
+    private readonly amqpConnection: AmqpConnection
+  ) {}
 
   @RabbitRPC({
-    exchange: 'UsersExchange',
+    exchange: 'PostUsersExchange',
     routingKey: 'create-user',
     queue: 'queue1',
   })
-  async createUser(userDto: CreateUserDto) {
-    console.log("Пришло")
-    await this.userService.createUser(userDto);
+  async createUser(@Payload() userDto: CreateUserContract.Request) {
+    console.log('Пришло');
+    const newUser = await this.userService.createUser(userDto);
+    await this.amqpConnection.publish(
+      'GetUsersExchange',
+      'get-user',
+      newUser['user_id']
+    );
+    return newUser;
   }
 }

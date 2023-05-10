@@ -41,11 +41,14 @@ export class UsersEntity{
   @Column()
   created_at: Date
 
-  @Column()
+  @Column({default: false})
   is_admin: boolean
 
-  @Column()
+  @Column({default: null, nullable: true})
   refresh_token: string
+
+  @Column({default: false})
+  is_eng: boolean
 
   @OneToMany(()=>CommentsEntity, comment=>comment.user)
   @JoinTable()
@@ -58,7 +61,4 @@ export class UsersEntity{
   @OneToOne(()=>UserMoviesInfoEntity, usermovie=>usermovie.user)
   @JoinColumn({name:"user_movie_info_id"})
   user_movies_info: UserMoviesInfoEntity
-
-  @Column()
-  is_eng: boolean
 }
