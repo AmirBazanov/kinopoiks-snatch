@@ -1,7 +1,10 @@
 import {
   Body,
   Controller,
+  Get,
   Post,
+  Req,
+  UseGuards,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
@@ -9,6 +12,7 @@ import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
 import { AuthLogin, AuthRegister } from '@kinopoisk-snitch/contracts';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
+import { GoogleOauthGuard } from './guards/google-oauth.guard';
 
 @Controller('/auth')
 @UsePipes(new ValidationPipe())
@@ -31,5 +35,12 @@ export class AuthCommands {
       routingKey: 'auth-register',
       payload: loginDto,
     });
+  }
+
+  @Get('/google')
+  @UseGuards(GoogleOauthGuard)
+  async google(@Req() googleUser) {
+    const { user } = googleUser;
+    console.log(user);
   }
 }
