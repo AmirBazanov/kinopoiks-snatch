@@ -1,5 +1,4 @@
 import { Module } from '@nestjs/common';
-import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { TypeormModuleConfig, UsersEntity } from '@kinopoisk-snitch/typeorm';
@@ -16,6 +15,6 @@ import { UserGatewayQuery } from '../users/user.api-gateway/user.gateway.query';
     RabbitMQModule.forRoot(RabbitMQModule, rmqUserConfig()),
   ],
   controllers: [UserGatewayCommand, UserGatewayQuery],
-  providers: [AppService],
+  providers: [],
 })
 export class AppModule {}
