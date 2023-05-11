@@ -41,16 +41,18 @@ export class UsersEntity {
   @CreateDateColumn()
   created_at: Date;
 
-  @Column({ default: false })
-  is_admin: boolean;
 
-  @Column({ default: false })
-  is_eng: boolean;
+  @Column({default: false})
+  is_admin: boolean
 
-  @Column()
-  refresh_token: string;
+  @Column({default: null, nullable: true})
+  refresh_token: string
 
-  @OneToMany(() => CommentsEntity, (comment) => comment.user)
+  @Column({default: false})
+  is_eng: boolean
+
+  @OneToMany(()=>CommentsEntity, comment=>comment.user)
+
   @JoinTable()
   comments: CommentsEntity[];
 
@@ -58,7 +60,8 @@ export class UsersEntity {
   @JoinTable()
   friends: FriendsEntity[];
 
-  @OneToOne(() => UserMoviesInfoEntity, (usermovie) => usermovie.user)
-  @JoinColumn({ name: 'user_movie_info_id' })
-  user_movies_info: UserMoviesInfoEntity;
+  @OneToOne(()=>UserMoviesInfoEntity, usermovie=>usermovie.user)
+  @JoinColumn({name:"user_movie_info_id"})
+  user_movies_info: UserMoviesInfoEntity
+
 }

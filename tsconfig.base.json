@@ -14,10 +14,12 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-
     "paths": {
       "@kinopoisk-snitch/contracts": ["libs/contracts/src/index.ts"],
-      "@kinopoisk-snitch/typeorm": ["libs/typeorm/src/index.ts"]
+      "@kinopoisk-snitch/interfaces": ["libs/interfaces/src/index.ts"],
+"@kinopoisk-snitch/typeorm": ["libs/typeorm/src/index.ts"],
+
+      
     }
   },
   "exclude": ["node_modules", "tmp"]
