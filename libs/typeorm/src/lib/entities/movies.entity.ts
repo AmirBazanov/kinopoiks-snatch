@@ -1,19 +1,25 @@
-import { Column, Entity, JoinColumn, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import {CountriesEntity} from "./countries.entity";
-import {GenresEntity} from "./genres.entity";
-import {JoinTable} from "typeorm";
-import {AwardsEntity} from "./awards.entity";
-import { CommentsEntity } from "./comments.entity";
-
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  JoinTable,
+  ManyToMany,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { CountriesEntity } from './countries.entity';
+import { GenresEntity } from './genres.entity';
+import { AwardsEntity } from './awards.entity';
+import { CommentsEntity } from './comments.entity';
 
 @Entity('Movies')
-export class MoviesEntity{
-
+export class MoviesEntity {
   @PrimaryGeneratedColumn()
   movie_id: number;
 
-  @Column({nullable: false})
-  title: string
+  @Column()
+  title: string;
 
   @Column()
   orig_title: string;
@@ -24,10 +30,10 @@ export class MoviesEntity{
   @Column()
   tagline: string;
 
-  @Column('int')
+  @Column()
   budget: number;
 
-  @Column('int')
+  @Column()
   marketing: number;
 
   @Column('date')
@@ -48,25 +54,25 @@ export class MoviesEntity{
   @Column()
   film_description: string;
 
-  @Column({default: false})
+  @Column({ default: false })
   is_serial: boolean;
 
-  @OneToMany(()=>AwardsEntity, award=>award.movie)
+  @Column({ default: false })
+  is_eng: boolean;
+
+  @OneToMany(() => AwardsEntity, (award) => award.movie)
   @JoinTable()
-  awards: AwardsEntity[]
+  awards: AwardsEntity[];
 
-  @ManyToMany(()=>GenresEntity, genre=>genre.movies)
+  @ManyToMany(() => GenresEntity, (genre) => genre.movies)
   @JoinTable()
-  genres: GenresEntity[]
+  genres: GenresEntity[];
 
-  @ManyToOne(()=>CountriesEntity, country=>country.movies)
-  @JoinColumn({name: 'country_id'})
-  country: CountriesEntity
+  @ManyToOne(() => CountriesEntity, (country) => country.movies)
+  @JoinColumn({ name: 'country_id' })
+  country: CountriesEntity;
 
-  @OneToMany(()=>CommentsEntity, comment=>comment.movie)
+  @OneToMany(() => CommentsEntity, (comment) => comment.movie)
   @JoinTable()
-  comments: CommentsEntity[]
-
-  @Column()
-  is_eng: boolean
+  comments: CommentsEntity[];
 }
