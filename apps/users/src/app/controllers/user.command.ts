@@ -18,6 +18,7 @@ export class UserCommand {
   })
   async createUser(@Payload() userDto: CreateUserContract.Request) {
     console.log('Пришло');
+    console.log(userDto);
     const newUser = await this.userService.createUser(userDto);
     await this.amqpConnection.publish(
       'GetUsersExchange',

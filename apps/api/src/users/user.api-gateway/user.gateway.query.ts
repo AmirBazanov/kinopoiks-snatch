@@ -2,7 +2,7 @@ import { Body, Controller, Get, Param } from '@nestjs/common';
 import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
 import { EmailUserContract } from '@kinopoisk-snitch/contracts';
 
-@Controller()
+@Controller('/users')
 export class UserGatewayQuery {
   constructor(private readonly amqpConnection: AmqpConnection) {}
 
