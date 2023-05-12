@@ -15,7 +15,7 @@ export class AwardsEntity {
   })
   award_id: number;
 
-  @Column()
+  @Column({ unique: true })
   name: string;
 
   @Column()

@@ -4,6 +4,7 @@ import {
   Entity,
   JoinColumn,
   JoinTable,
+  ManyToOne,
   OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
@@ -41,27 +42,24 @@ export class UsersEntity {
   @CreateDateColumn()
   created_at: Date;
 
+  @Column({ default: false })
+  is_admin: boolean;
 
-  @Column({default: false})
-  is_admin: boolean
+  @Column({ default: null, nullable: true })
+  refresh_token: string;
 
-  @Column({default: null, nullable: true})
-  refresh_token: string
+  @Column({ default: false })
+  is_eng: boolean;
 
-  @Column({default: false})
-  is_eng: boolean
-
-  @OneToMany(()=>CommentsEntity, comment=>comment.user)
-
+  @OneToMany(() => CommentsEntity, (comment) => comment.user)
   @JoinTable()
   comments: CommentsEntity[];
 
-  @OneToMany(() => FriendsEntity, (friend) => friend.user)
-  @JoinTable()
+  @ManyToOne(() => FriendsEntity, (friend) => friend.friends_id)
+  @JoinColumn({ name: 'friends_id' })
   friends: FriendsEntity[];
 
-  @OneToOne(()=>UserMoviesInfoEntity, usermovie=>usermovie.user)
-  @JoinColumn({name:"user_movie_info_id"})
-  user_movies_info: UserMoviesInfoEntity
-
+  @OneToOne(() => UserMoviesInfoEntity, (usermovie) => usermovie.user)
+  @JoinColumn({ name: 'user_movie_info_id' })
+  user_movies_info: UserMoviesInfoEntity;
 }

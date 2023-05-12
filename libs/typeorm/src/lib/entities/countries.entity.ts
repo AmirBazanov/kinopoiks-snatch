@@ -12,7 +12,7 @@ export class CountriesEntity {
   @PrimaryGeneratedColumn()
   country_id: number;
 
-  @Column()
+  @Column({ unique: true })
   name: string;
 
   @OneToMany(() => MoviesEntity, (movie) => movie.country)
