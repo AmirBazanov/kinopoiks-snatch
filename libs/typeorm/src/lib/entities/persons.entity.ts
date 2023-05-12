@@ -1,43 +1,55 @@
-import { Column, Entity, JoinColumn, ManyToMany, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import {AwardsEntity} from "./awards.entity";
-
-import {JoinTable} from "typeorm";
-import {RolesEntity} from "./roles.entity";
+import {
+  Column,
+  Entity,
+  JoinTable,
+  ManyToMany,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  Unique,
+} from 'typeorm';
+import { AwardsEntity } from './awards.entity';
+import { RolesEntity } from './roles.entity';
+import { MoviesEntity } from './movies.entity';
 
 @Entity('Persons')
-export class PersonsEntity{
+@Unique(['name', 'sur_name', 'date_birth', 'place_birth'])
+export class PersonsEntity {
   @PrimaryGeneratedColumn()
-  person_id: number
+  person_id: number;
 
   @Column()
-  name: string
+  name: string;
 
   @Column()
-  sur_name: string
+  sur_name: string;
 
   @Column('int2')
-  height: number
+  height: number;
 
   @Column('date')
-  date_birth: Date
+  date_birth: Date;
 
   @Column()
-  place_birth: string
+  place_birth: string;
 
   @Column()
-  spouse: string
+  spouse: string;
 
   @Column()
-  photo: string
+  photo: string;
 
-  @OneToMany(()=>AwardsEntity, award=>award.person)
+  @Column({ default: false })
+  is_eng: boolean;
+
+  @OneToMany(() => AwardsEntity, (award) => award.person)
   @JoinTable()
-  awards: AwardsEntity[]
+  awards: AwardsEntity[];
 
-  @ManyToMany(()=>RolesEntity, role=>role.persons)
+  @ManyToMany(() => RolesEntity, (role) => role.persons)
   @JoinTable()
-  roles: RolesEntity[]
+  roles: RolesEntity[];
 
-  @Column()
-  is_eng: boolean
+  @ManyToMany(() => MoviesEntity, (movie) => movie.persons)
+  @JoinTable()
+  movies: MoviesEntity[];
 }

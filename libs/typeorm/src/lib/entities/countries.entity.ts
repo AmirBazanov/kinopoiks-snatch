@@ -1,18 +1,24 @@
-import { Column, Entity, JoinTable, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import {MoviesEntity} from "./movies.entity";
+import {
+  Column,
+  Entity,
+  JoinTable,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { MoviesEntity } from './movies.entity';
 
 @Entity('Countries')
-export class CountriesEntity{
+export class CountriesEntity {
   @PrimaryGeneratedColumn()
-  country_id: number
+  country_id: number;
 
-  @Column()
+  @Column({ unique: true })
   name: string;
 
-  @OneToMany(()=>MoviesEntity, movie=> movie.country)
+  @OneToMany(() => MoviesEntity, (movie) => movie.country)
   @JoinTable()
-  movies: MoviesEntity[]
+  movies: MoviesEntity[];
 
-  @Column()
-  is_eng: boolean
+  @Column({ default: false })
+  is_eng: boolean;
 }

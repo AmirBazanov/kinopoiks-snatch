@@ -1,34 +1,37 @@
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
-import {MoviesEntity} from "./movies.entity";
-import {PersonsEntity} from "./persons.entity";
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { MoviesEntity } from './movies.entity';
+import { PersonsEntity } from './persons.entity';
 
 @Entity('Awards')
- export class AwardsEntity{
+export class AwardsEntity {
   @PrimaryGeneratedColumn('identity', {
-   generatedIdentity: 'ALWAYS',
+    generatedIdentity: 'ALWAYS',
   })
-  award_id: number
+  award_id: number;
+
+  @Column({ unique: true })
+  name: string;
 
   @Column()
-  name: string
+  year: Date;
 
   @Column()
-  year: Date
+  nomination: string;
 
-  @Column()
-  nomination: string
+  @ManyToOne(() => PersonsEntity, (person) => person.awards)
+  @JoinColumn({ name: 'person_id' })
+  person: PersonsEntity;
 
-  @ManyToOne(()=>PersonsEntity, person=>person.awards)
-  @JoinColumn({name: 'person_id'})
-  person: PersonsEntity
+  @ManyToOne(() => MoviesEntity, (movie) => movie.awards)
+  @JoinColumn({ name: 'movie_id' })
+  movie: MoviesEntity;
 
-  @ManyToOne(()=> MoviesEntity, movie=>movie.awards)
-  @JoinColumn({name: 'movie_id'})
-
-  movie: MoviesEntity
-
-  @Column()
-  is_eng: boolean
+  @Column({ default: false })
+  is_eng: boolean;
 }
-
-

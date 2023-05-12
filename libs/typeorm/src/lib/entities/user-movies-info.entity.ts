@@ -1,30 +1,28 @@
 import {
-  Column,
   Entity,
   JoinColumn,
   JoinTable,
   ManyToMany,
-  ManyToOne,
   OneToOne,
-  PrimaryGeneratedColumn
-} from "typeorm";
-import { MoviesEntity } from "./movies.entity";
-import { UsersEntity } from "./users.entity";
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { MoviesEntity } from './movies.entity';
+import { UsersEntity } from './users.entity';
 
 @Entity('UserMoviesInfo')
-export class UserMoviesInfoEntity{
+export class UserMoviesInfoEntity {
   @PrimaryGeneratedColumn()
-  user_movie_info_id: number
+  user_movie_info_id: number;
 
-  @ManyToMany(()=>MoviesEntity)
+  @ManyToMany(() => MoviesEntity)
   @JoinTable()
-  favorite_movies: MoviesEntity[]
+  favorite_movies: MoviesEntity[];
 
-  @ManyToMany(()=>MoviesEntity)
+  @ManyToMany(() => MoviesEntity)
   @JoinTable()
-  expecting_movies: MoviesEntity[]
+  expecting_movies: MoviesEntity[];
 
-  @OneToOne(()=>UsersEntity)
-  @JoinColumn({name: 'user_id'})
-  user: UsersEntity
+  @OneToOne(() => UsersEntity)
+  @JoinColumn({ name: 'user_id' })
+  user: UsersEntity;
 }
