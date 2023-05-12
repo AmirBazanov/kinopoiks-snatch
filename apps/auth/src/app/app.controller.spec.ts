@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 
-import { AppCommands } from './app.commands';
+import { AuthCommands } from './auth.commands';
 import { AppService } from './app.service';
 
 describe('AppController', () => {
@@ -8,14 +8,14 @@ describe('AppController', () => {
 
   beforeAll(async () => {
     app = await Test.createTestingModule({
-      controllers: [AppCommands],
+      controllers: [AuthCommands],
       providers: [AppService],
     }).compile();
   });
 
   describe('getData', () => {
     it('should return "Hello API"', () => {
-      const appController = app.get<AppCommands>(AppCommands);
+      const appController = app.get<AuthCommands>(AuthCommands);
       expect(appController.getData()).toEqual({ message: 'Hello API' });
     });
   });

@@ -1,5 +1,4 @@
 import { RabbitMQConfig } from '@golevelup/nestjs-rabbitmq';
-import * as process from 'process';
 
 export function rmqConfig(): RabbitMQConfig {
   return {

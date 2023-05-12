@@ -3,6 +3,10 @@ import { AmqpConnection, RabbitRPC } from '@golevelup/nestjs-rabbitmq';
 import { UserService } from '../services/user.service';
 import { Payload } from '@nestjs/microservices';
 import { EmailUserContract } from '@kinopoisk-snitch/contracts';
+import {
+  getUserByEmailRMQConfig,
+  getUserRMQConfig,
+} from '@kinopoisk-snitch/rmq-configs';
 
 @Controller()
 export class UserQuery {
@@ -11,23 +15,13 @@ export class UserQuery {
     private readonly userService: UserService
   ) {}
 
-  @RabbitRPC({
-    exchange: 'GetUsersExchange',
-    routingKey: 'get-user',
-    queue: 'queue2',
-  })
+  @RabbitRPC(getUserRMQConfig())
   async getUserById(@Payload() user_id: number) {
-    const user = this.userService.getUserById(user_id);
-    return user;
+    return this.userService.getUserById(user_id);
   }
 
-  @RabbitRPC({
-    exchange: 'GetUsersExchange',
-    routingKey: 'get-user',
-    queue: 'queue2',
-  })
+  @RabbitRPC(getUserByEmailRMQConfig())
   async getUserByEmail(@Payload() email: EmailUserContract.Request) {
-    const user = this.userService.getUserByEmail(email['email']);
-    return user;
+    return this.userService.getUserByEmail(email['email']);
   }
 }
