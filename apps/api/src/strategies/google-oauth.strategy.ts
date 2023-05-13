@@ -10,25 +10,23 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
       clientID: configService.get('GOOGLE_CLIENT_ID'),
       clientSecret: configService.get('GOOGLE_CLIENT_SECRET'),
       callbackURL: configService.get('GOOGLE_CALLBACK_URL'),
-      scope: ['profile', 'email'],
+      scope: [
+        'email',
+        'profile',
+        'https://www.googleapis.com/auth/user.birthday.read',
+      ],
     });
   }
-
-  async validate(
-    _accessToken: string,
-    _refreshToken: string,
-    profile: any,
-    done: VerifyCallback
-  ) {
-    const { id, name, emails, photos } = profile;
+  и;
+  async validate(_accessToken, _refreshToken, profile, done: VerifyCallback) {
+    const { id, name, emails } = profile;
     const user = {
-      provider: 'google',
       providerId: id,
       email: emails[0].value,
-      name: `${name.givenName} ${name.familyName}`,
-      picture: photos[0].value,
+      name: `${name.givenName}${name.familyName}`,
     };
 
+    //TODO Google auth error handler
     done(null, user);
   }
 }

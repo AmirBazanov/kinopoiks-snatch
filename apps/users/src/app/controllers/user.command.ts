@@ -25,6 +25,7 @@ export class UserCommand {
       getUserRMQConfig().routingKey,
       newUser['user_id']
     );
-    return newUser;
+    // return newUser;
+    return new Error();
   }
 }

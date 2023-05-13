@@ -30,13 +30,16 @@ export class UsersEntity {
   @Column({ nullable: true })
   community: string;
 
-  @Column()
+  @Column({ nullable: true })
   birthday: Date;
 
-  @Column()
+  @Column({ nullable: true })
   gender: string;
 
-  @Column()
+  @Column({ nullable: true })
+  external_service_id: string;
+
+  @Column({ nullable: true })
   quote: string;
 
   @CreateDateColumn()

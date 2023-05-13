@@ -21,7 +21,7 @@ import {
   authLoginRMQConfig,
   authRegisterRMQConfig,
 } from '@kinopoisk-snitch/rmq-configs';
-import { GoogleOPIGuard } from '../guards/google-opi.guard';
+import { GoogleOauthGuard } from '../guards/google-oauth.guard';
 
 @Controller('/auth')
 @UsePipes(new ValidationPipe())
@@ -47,7 +47,7 @@ export class AuthCommands {
   }
 
   @Get('/google')
-  @UseGuards(GoogleOPIGuard)
+  @UseGuards(GoogleOauthGuard)
   async google(@Req() googleUser) {
     const { user } = googleUser;
     return this.amqpService.request<AuthGoogle.Response>({
