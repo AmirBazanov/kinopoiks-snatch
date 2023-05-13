@@ -27,7 +27,7 @@ export class UsersEntity {
   @Column()
   user_name: string;
 
-  @Column()
+  @Column({ nullable: true })
   community: string;
 
   @Column()

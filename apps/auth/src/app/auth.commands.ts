@@ -3,8 +3,13 @@ import { Controller } from '@nestjs/common';
 import { AppService } from './app.service';
 import { RabbitRPC } from '@golevelup/nestjs-rabbitmq';
 import { Payload } from '@nestjs/microservices';
-import { AuthLogin, AuthRegister } from '@kinopoisk-snitch/contracts';
 import {
+  AuthGoogle,
+  AuthLogin,
+  AuthRegister,
+} from '@kinopoisk-snitch/contracts';
+import {
+  authGoogleRMQConfig,
   authLoginRMQConfig,
   authRegisterRMQConfig,
 } from '@kinopoisk-snitch/rmq-configs';
@@ -23,5 +28,13 @@ export class AuthCommands {
   login(@Payload() data: AuthLogin.Request) {
     console.log(data);
     return data;
+  }
+
+  @RabbitRPC(authGoogleRMQConfig())
+  google(@Payload() data: AuthGoogle.Request) {
+    // const userData: CreateUserContract.Request = {
+    //   email: data.email,
+    //   user_name: data.name,
+    // };
   }
 }

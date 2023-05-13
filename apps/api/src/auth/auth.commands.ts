@@ -9,14 +9,19 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
-import { AuthLogin, AuthRegister } from '@kinopoisk-snitch/contracts';
+import {
+  AuthGoogle,
+  AuthLogin,
+  AuthRegister,
+} from '@kinopoisk-snitch/contracts';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
-import { GoogleOauthGuard } from '../guards/google-oauth.guard';
 import {
+  authGoogleRMQConfig,
   authLoginRMQConfig,
   authRegisterRMQConfig,
 } from '@kinopoisk-snitch/rmq-configs';
+import { GoogleOPIGuard } from '../guards/google-opi.guard';
 
 @Controller('/auth')
 @UsePipes(new ValidationPipe())
@@ -42,9 +47,13 @@ export class AuthCommands {
   }
 
   @Get('/google')
-  @UseGuards(GoogleOauthGuard)
+  @UseGuards(GoogleOPIGuard)
   async google(@Req() googleUser) {
     const { user } = googleUser;
-    console.log(user);
+    return this.amqpService.request<AuthGoogle.Response>({
+      exchange: authGoogleRMQConfig().exchange,
+      routingKey: authGoogleRMQConfig().routingKey,
+      payload: user,
+    });
   }
 }

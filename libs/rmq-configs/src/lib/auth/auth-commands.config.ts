@@ -15,3 +15,11 @@ export const authLoginRMQConfig = (): RmqConfig => {
     queue: 'AuthQueue',
   };
 };
+
+export const authGoogleRMQConfig = (): RmqConfig => {
+  return {
+    routingKey: 'google-auth',
+    exchange: 'AuthExchange',
+    queue: 'AuthQueue',
+  };
+};

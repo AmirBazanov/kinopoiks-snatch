@@ -1,4 +1,4 @@
-
+export * from './lib/auth/auth.google';
 export * from './lib/users/create.user.contract';
 export * from './lib/users/email.user.contract';
 export * from './lib/auth/auth.register';
