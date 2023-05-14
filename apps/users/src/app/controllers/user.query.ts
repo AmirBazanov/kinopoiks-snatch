@@ -17,7 +17,6 @@ export class UserQuery {
 
   @RabbitRPC(getUserRMQConfig())
   async getUserById(@Payload() user_id: number) {
-    console.log(user_id);
     return this.userService.getUserById(user_id);
   }
 
