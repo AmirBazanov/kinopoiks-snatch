@@ -3,9 +3,9 @@ import { TypeormModuleConfig, UsersEntity } from '@kinopoisk-snitch/typeorm';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
 import { UserCommand } from './api-gateway/user.command';
-import { rmqUserConfig } from './config/amqp.user.config';
 import { UserEvent } from './api-gateway/user.event';
 import { UserQuery } from './api-gateway/user.query';
+import { rmqUserConfig } from '@kinopoisk-snitch/rmq-configs';
 
 @Module({
   imports: [
