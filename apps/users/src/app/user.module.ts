@@ -8,7 +8,7 @@ import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
 import { ConfigModule } from '@nestjs/config';
 import { TypeormModuleConfig, UsersEntity } from '@kinopoisk-snitch/typeorm';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { rmqUserConfig } from './configs/amqp.user.config';
+import { rmqUserConfig } from '@kinopoisk-snitch/rmq-configs';
 
 @Module({
   imports: [
