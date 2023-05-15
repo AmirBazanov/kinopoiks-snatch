@@ -3,7 +3,7 @@ import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
 import { CreateUserDto } from '../dtos/create-user.dto';
 
 @Controller('/users')
-export class UserGatewayCommand {
+export class UserCommand {
   constructor(private readonly amqpConnection: AmqpConnection) {}
 
   @Post('/createUser')
