@@ -10,5 +10,7 @@ export class CommentCommand {
   constructor(private readonly commentService: CommentService) {}
 
   @RabbitRPC(createCommentRMQConfig())
-  async createComment(@Payload() commentInfo: CreateCommentContract.Request) {}
+  async createComment(@Payload() commentInfo: CreateCommentContract.Request) {
+    await this.commentService.createComment(commentInfo);
+  }
 }

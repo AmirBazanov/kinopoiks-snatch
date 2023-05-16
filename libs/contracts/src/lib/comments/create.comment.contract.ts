@@ -9,6 +9,9 @@ export namespace CreateCommentContract {
     @IsString()
     private readonly content: string;
 
+    @IsString()
+    private readonly type;
+
     @IsNumber()
     private readonly film_id: number;
 
