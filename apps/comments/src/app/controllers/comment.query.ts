@@ -4,6 +4,7 @@ import { RabbitRPC } from '@golevelup/nestjs-rabbitmq';
 import {
   getByFilmIdCommentsRMQConfig,
   getByIdCommentRMQConfig,
+  getByUserIdCommentsRMQConfig,
 } from '@kinopoisk-snitch/rmq-configs';
 import { Payload } from '@nestjs/microservices';
 
@@ -20,6 +21,12 @@ export class CommentQuery {
   @RabbitRPC(getByFilmIdCommentsRMQConfig())
   async getCommentsByFilmId(@Payload() film_id: number) {
     const comments = await this.commentService.getCommentsByFilmId(film_id);
+    return comments;
+  }
+
+  @RabbitRPC(getByUserIdCommentsRMQConfig())
+  async getCommentByUserId(@Payload() user_id: number) {
+    const comments = await this.commentService.getCommentsByUserId(user_id);
     return comments;
   }
 }

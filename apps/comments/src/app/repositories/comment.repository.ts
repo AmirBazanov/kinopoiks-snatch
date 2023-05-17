@@ -32,7 +32,16 @@ export class CommentRepository {
     return comment;
   }
 
-  async getCommentsByUserId() {}
+  async getCommentsByUserId(id: number) {
+    const comments = await this.CommentModel.find({
+      where: {
+        user: {
+          user_id: id,
+        },
+      },
+    });
+    return comments;
+  }
 
   async getCommentByFilmId(id: number) {
     const comments = await this.CommentModel.find({
