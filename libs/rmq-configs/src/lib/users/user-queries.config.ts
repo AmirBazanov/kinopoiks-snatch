@@ -4,7 +4,7 @@ export const getUserRMQConfig = (): RmqConfig => {
   return {
     exchange: 'GetUsersExchange',
     routingKey: 'get-user',
-    queue: 'UserQueriesQueue',
+    queue: 'UserQueriesQueueId',
   };
 };
 
@@ -12,6 +12,6 @@ export const getUserByEmailRMQConfig = (): RmqConfig => {
   return {
     exchange: 'GetUsersExchange',
     routingKey: 'get-user-by-email',
-    queue: 'UserQueriesQueue',
+    queue: 'UserQueriesQueueEmail',
   };
 };

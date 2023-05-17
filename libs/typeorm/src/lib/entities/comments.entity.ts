@@ -18,9 +18,15 @@ export class CommentsEntity {
   title: string;
 
   @Column()
-  likes: number;
+  content: string;
 
   @Column()
+  type: string;
+
+  @Column({ default: 0 })
+  likes: number;
+
+  @Column({ default: 0 })
   dislikes: number;
 
   @Column()

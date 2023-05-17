@@ -24,7 +24,7 @@ export class UserRepository {
   }
 
   async findUserById(id: number) {
-    const user = await this.UserModel.find({
+    const user = await this.UserModel.findOne({
       where: {
         user_id: id,
       },
@@ -33,7 +33,7 @@ export class UserRepository {
   }
 
   async findUserByEmail(email: string) {
-    const user = await this.UserModel.find({
+    const user = await this.UserModel.findOne({
       where: {
         email: email,
       },
