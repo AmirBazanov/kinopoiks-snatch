@@ -9,8 +9,12 @@ export class CommentService {
     private readonly commentRepository: CommentRepository
   ) {}
 
-  async createComment(commentInfo: CreateCommentContract.Request) {
-    await this.commentRepository.createComment(commentInfo);
+  async createComment(
+    commentInfo: CreateCommentContract.Request,
+    move_id: number,
+    user_id: number
+  ) {
+    await this.commentRepository.createComment(commentInfo, move_id, user_id);
   }
 
   async getCommentById(id: number) {
@@ -26,5 +30,13 @@ export class CommentService {
   async getCommentsByUserId(id: number) {
     const comments = await this.commentRepository.getCommentsByUserId(id);
     return comments;
+  }
+
+  async incLikes(comment_id: number) {
+    await this.commentRepository.incLikes(comment_id);
+  }
+
+  async incDis(comment_id: number) {
+    await this.commentRepository.incDis(comment_id);
   }
 }
