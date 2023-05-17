@@ -11,6 +11,7 @@ import { PersonsEntity } from './entities/persons.entity';
 import { RolesEntity } from './entities/roles.entity';
 import { UserMoviesInfoEntity } from './entities/user-movies-info.entity';
 import { UsersEntity } from './entities/users.entity';
+import { MoviesPersonsRolesEntity } from './entities/movies-persons-roles.entity';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { UsersEntity } from './entities/users.entity';
           RolesEntity,
           UserMoviesInfoEntity,
           UsersEntity,
+          MoviesPersonsRolesEntity,
         ],
         autoLoadEntities: true,
         synchronize: true,

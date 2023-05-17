@@ -14,6 +14,7 @@ import { GenresEntity } from './genres.entity';
 import { AwardsEntity } from './awards.entity';
 import { CommentsEntity } from './comments.entity';
 import { PersonsEntity } from './persons.entity';
+import { MoviesPersonsRolesEntity } from './movies-persons-roles.entity';
 
 @Entity('Movies')
 @Unique(['title', 'orig_title', 'production_year'])
@@ -67,7 +68,7 @@ export class MoviesEntity {
   @JoinTable()
   awards: AwardsEntity[];
 
-  @ManyToMany(() => GenresEntity, (genre) => genre.movies)
+  @ManyToMany(() => GenresEntity)
   @JoinTable()
   genres: GenresEntity[];
 
@@ -79,7 +80,6 @@ export class MoviesEntity {
   @JoinTable()
   comments: CommentsEntity[];
 
-  @ManyToMany(() => PersonsEntity, (person) => person.movies)
-  @JoinTable()
-  persons: PersonsEntity[];
+  @OneToMany(() => MoviesPersonsRolesEntity, (moviesPersonsRole) => moviesPersonsRole.movie)
+  moviesPersonsRole: MoviesPersonsRolesEntity[];
 }
