@@ -13,7 +13,6 @@ import { CountriesEntity } from './countries.entity';
 import { GenresEntity } from './genres.entity';
 import { AwardsEntity } from './awards.entity';
 import { CommentsEntity } from './comments.entity';
-import { PersonsEntity } from './persons.entity';
 import { MoviesPersonsRolesEntity } from './movies-persons-roles.entity';
 
 @Entity('Movies')
@@ -37,7 +36,7 @@ export class MoviesEntity {
   @Column()
   budget: number;
 
-  @Column()
+  @Column({ nullable: true })
   marketing: number;
 
   @Column('date')
@@ -49,8 +48,8 @@ export class MoviesEntity {
   @Column('int2')
   age_limit: number;
 
-  @Column('int2')
-  mpaa_rating: number;
+  @Column()
+  mpaa_rating: string;
 
   @Column('int2')
   duration_min: number;
