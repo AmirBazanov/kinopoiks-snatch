@@ -14,8 +14,6 @@ export class CommentRepository {
   async createComment(commentInfo: CreateCommentContract.Request) {
     const temp = this.CommentModel.create({
       ...commentInfo,
-      likes: 0,
-      dislikes: 0,
       replied_comment: 0,
       created_at: new Date(),
     });

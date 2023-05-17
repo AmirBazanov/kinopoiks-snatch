@@ -23,10 +23,10 @@ export class CommentsEntity {
   @Column()
   type: string;
 
-  @Column()
+  @Column({ default: 0 })
   likes: number;
 
-  @Column()
+  @Column({ default: 0 })
   dislikes: number;
 
   @Column()
