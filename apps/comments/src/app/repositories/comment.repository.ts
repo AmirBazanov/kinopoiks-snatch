@@ -34,5 +34,14 @@ export class CommentRepository {
 
   async getCommentsByUserId() {}
 
-  async getCommentByFilmId() {}
+  async getCommentByFilmId(id: number) {
+    const comments = await this.CommentModel.find({
+      where: {
+        movie: {
+          movie_id: id,
+        },
+      },
+    });
+    return comments;
+  }
 }

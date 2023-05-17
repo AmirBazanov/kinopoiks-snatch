@@ -7,3 +7,11 @@ export function getByIdCommentRMQConfig(): RmqConfig {
     queue: 'GetByIdCommentQueryQueue',
   };
 }
+
+export function getByFilmIdCommentsRMQConfig(): RmqConfig {
+  return {
+    exchange: 'GetCommentsExchange',
+    routingKey: 'get-by-film-id-comments',
+    queue: 'GetByFilmIdCommentsQueryQueue',
+  };
+}

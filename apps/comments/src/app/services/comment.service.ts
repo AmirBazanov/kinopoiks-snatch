@@ -17,4 +17,9 @@ export class CommentService {
     const comment = await this.commentRepository.getCommentById(id);
     return comment;
   }
+
+  async getCommentsByFilmId(id: number) {
+    const comments = await this.commentRepository.getCommentByFilmId(id);
+    return comments;
+  }
 }

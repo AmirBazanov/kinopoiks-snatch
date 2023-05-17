@@ -27,4 +27,21 @@ export class CommentQuery {
       return comment;
     }
   }
+
+  @Get('/:id')
+  async getCommentsByFilmId(@Param('id') film_id: string) {
+    if (isNaN(Number(film_id))) {
+      throw new HttpException(
+        'ID должен состоять из цифр',
+        HttpStatus.BAD_REQUEST
+      );
+    } else {
+      const comments = await this.amqpConnection.request({
+        exchange: 'GetCommentsExchange',
+        routingKey: 'get-by-film-id-comments',
+        payload: film_id,
+      });
+      return comments;
+    }
+  }
 }
