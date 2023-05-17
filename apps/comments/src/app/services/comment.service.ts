@@ -12,4 +12,9 @@ export class CommentService {
   async createComment(commentInfo: CreateCommentContract.Request) {
     await this.commentRepository.createComment(commentInfo);
   }
+
+  async getCommentById(id: number) {
+    const comment = await this.commentRepository.getCommentById(id);
+    return comment;
+  }
 }

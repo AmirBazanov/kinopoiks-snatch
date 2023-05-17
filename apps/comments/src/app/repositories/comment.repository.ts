@@ -21,4 +21,18 @@ export class CommentRepository {
     });
     await this.CommentModel.save(temp);
   }
+
+  async getCommentById(id: number) {
+    const comment = await this.CommentModel.findOne({
+      where: {
+        comment_id: id,
+      },
+    });
+
+    return comment;
+  }
+
+  async getCommentsByUserId() {}
+
+  async getCommentByFilmId() {}
 }
