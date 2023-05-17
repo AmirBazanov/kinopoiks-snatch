@@ -2,10 +2,10 @@ import { Module } from '@nestjs/common';
 import { TypeormModuleConfig, UsersEntity } from '@kinopoisk-snitch/typeorm';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
-import { UserGatewayCommand } from './user.api-gateway/user.gateway.command';
-import { rmqUserConfig } from './config/amqp.user.config';
-import { UserGatewayEvent } from './user.api-gateway/user.gateway.event';
-import { UserGatewayQuery } from './user.api-gateway/user.gateway.query';
+import { UserCommand } from './api-gateway/user.command';
+import { UserEvent } from './api-gateway/user.event';
+import { UserQuery } from './api-gateway/user.query';
+import { rmqUserConfig } from '@kinopoisk-snitch/rmq-configs';
 
 @Module({
   imports: [
@@ -13,6 +13,6 @@ import { UserGatewayQuery } from './user.api-gateway/user.gateway.query';
     TypeOrmModule.forFeature([UsersEntity]),
     RabbitMQModule.forRoot(RabbitMQModule, rmqUserConfig()),
   ],
-  controllers: [UserGatewayCommand, UserGatewayQuery, UserGatewayEvent],
+  controllers: [UserCommand, UserQuery, UserEvent],
 })
 export class UserModule {}
