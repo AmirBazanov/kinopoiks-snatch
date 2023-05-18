@@ -7,7 +7,7 @@ import {
 } from '@kinopoisk-snitch/rmq-configs';
 
 @Controller()
-export class UserQuery {
+export class PersonsQuery {
   constructor(
     private readonly personService: PersonsService,
     private readonly amqpConnection: AmqpConnection,
@@ -15,6 +15,6 @@ export class UserQuery {
 
   @RabbitRPC(getPersonByIdRMQConfig())
   async getPersonById(@Payload() person_id: number) {
-    return this.personService.getPersonById(person_id);
+    return await this.personService.getPersonById(person_id);
   }
 }

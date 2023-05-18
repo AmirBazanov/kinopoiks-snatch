@@ -1,5 +1,6 @@
 import { Controller, Get, Param} from '@nestjs/common';
 import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
+import { getPersonByIdRMQConfig } from '@kinopoisk-snitch/rmq-configs';
 
 @Controller('/persons')
 export class PersonQuery {
@@ -8,13 +9,12 @@ export class PersonQuery {
   @Get('/:id')
   async getPersonById(@Param('id') person_id: number)
   {
-    const person = await this.amqpConnection.request({
-      exchange: 'GetPersonsExchange',
-      routingKey: 'get-person-by-id',
+    return await this.amqpConnection.request({
+      exchange: getPersonByIdRMQConfig().exchange,
+      routingKey: getPersonByIdRMQConfig().routingKey,
       payload: person_id,
     });
-
-    return person;
+    //return {'ok': 200};
   }
 
 }
