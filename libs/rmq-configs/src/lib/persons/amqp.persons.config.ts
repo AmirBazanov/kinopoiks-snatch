@@ -1,6 +1,6 @@
 import { RabbitMQConfig } from '@golevelup/nestjs-rabbitmq';
 
-export function rmqPersonsConfig(): RabbitMQConfig {
+export function rmqPersonConfig(): RabbitMQConfig {
   return {
     exchanges: [
       {
