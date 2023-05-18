@@ -23,7 +23,5 @@ export namespace CreateUserContract {
     private readonly quote: string;
   }
 
-  export class Response {
-    access_token: string;
-  }
+  export class Response {}
 }

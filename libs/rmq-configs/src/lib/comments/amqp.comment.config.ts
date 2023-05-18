@@ -1,14 +1,14 @@
 import { RabbitMQConfig } from '@golevelup/nestjs-rabbitmq';
 
-export function rmqUserConfig(): RabbitMQConfig {
+export function rmqCommentConfig(): RabbitMQConfig {
   return {
     exchanges: [
       {
-        name: 'PostUsersExchange',
+        name: 'PostCommentsExchange',
         type: 'topic',
       },
       {
-        name: 'GetUsersExchange',
+        name: 'GetCommentsExchange',
         type: 'topic',
       },
     ],

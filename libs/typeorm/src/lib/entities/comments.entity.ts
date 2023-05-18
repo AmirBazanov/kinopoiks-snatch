@@ -18,6 +18,9 @@ export class CommentsEntity {
   title: string;
 
   @Column()
+  content: string;
+
+  @Column()
   likes: number;
 
   @Column()

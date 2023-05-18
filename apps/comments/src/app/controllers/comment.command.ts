@@ -1,14 +1,14 @@
-import {Body, Controller, Get} from '@nestjs/common';
-import {CommentService} from "../services/comment.service";
-import {CreateCommentDto} from "../dtos/create.comment.dto";
+import { Controller } from '@nestjs/common';
+import { CommentService } from '../services/comment.service';
+import { RabbitRPC } from '@golevelup/nestjs-rabbitmq';
+import { Payload } from '@nestjs/microservices';
+import { CreateCommentContract } from '@kinopoisk-snitch/contracts';
+import { createCommentRMQConfig } from '@kinopoisk-snitch/rmq-configs';
 
 @Controller()
 export class CommentCommand {
   constructor(private readonly commentService: CommentService) {}
 
-  //какие-то настройки rmq
-  async createComment(@Body() commentDto: CreateCommentDto) {
-    const comment = await this.commentService.createComment(commentDto);
-    return comment
-  }
+  @RabbitRPC(createCommentRMQConfig())
+  async createComment(@Payload() commentInfo: CreateCommentContract.Request) {}
 }
