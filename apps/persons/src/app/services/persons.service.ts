@@ -10,7 +10,9 @@ export class PersonsService {
     private readonly personRepository: Repository<PersonsEntity>
     ) {}
 
-  getInfo(): { message: string } {
-    return { message: `I'm Persons MICROSERVICE` };
+  async getPersonById(id: number) {
+    const person = await this.personRepository.findOne({where: {person_id: id}});
+
+    return person;
   }
 }

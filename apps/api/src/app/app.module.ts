@@ -3,21 +3,24 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import {
   CommentsEntity,
+  PersonsEntity,
   TypeormModuleConfig,
   UsersEntity,
 } from '@kinopoisk-snitch/typeorm';
 import { AuthModule } from '../auth/auth.module';
 import { UserModule } from '../users/user.module';
 import { CommentsModule } from '../comments/comment.module';
+import { PersonModule } from '../persons/persons.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
     TypeormModuleConfig,
-    TypeOrmModule.forFeature([UsersEntity, CommentsEntity]),
+    TypeOrmModule.forFeature([UsersEntity, CommentsEntity, PersonsEntity]),
     AuthModule,
     UserModule,
     CommentsModule,
+    PersonModule,
   ],
   controllers: [],
   providers: [],

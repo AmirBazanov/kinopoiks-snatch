@@ -36,7 +36,7 @@ export class MoviesEntity {
   @Column()
   budget: number;
 
-  @Column()
+  @Column({ nullable: true })
   marketing: number;
 
   @Column('date')

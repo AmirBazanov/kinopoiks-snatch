@@ -4,10 +4,6 @@ export function rmqPersonConfig(): RabbitMQConfig {
   return {
     exchanges: [
       {
-        name: 'PostPersonsExchange',
-        type: 'topic',
-      },
-      {
         name: 'GetPersonsExchange',
         type: 'topic',
       },

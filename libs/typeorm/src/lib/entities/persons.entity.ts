@@ -23,19 +23,19 @@ export class PersonsEntity {
   @Column()
   sur_name: string;
 
-  @Column('int2')
+  @Column('int2', { nullable: true })
   height: number;
 
-  @Column('date')
+  @Column('date', { nullable: true })
   date_birth: Date;
 
-  @Column()
+  @Column({ nullable: true })
   place_birth: string;
 
-  @Column()
+  @Column({ nullable: true })
   spouse: string;
 
-  @Column()
+  @Column({ nullable: true })
   photo: string;
 
   @Column({ default: false })
