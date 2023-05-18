@@ -15,4 +15,4 @@ import { rmqPersonConfig } from '@kinopoisk-snitch/rmq-configs'
   ],
   controllers: [PersonCommand, PersonQuery, PersonEvent],
 })
-export class PersonModule {}
+export class PersonsModule {}

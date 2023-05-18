@@ -10,7 +10,7 @@ import {
 import { AuthModule } from '../auth/auth.module';
 import { UserModule } from '../users/user.module';
 import { CommentsModule } from '../comments/comment.module';
-import { PersonModule } from '../persons/persons.module';
+import { PersonsModule } from '../persons/persons.module';
 
 @Module({
   imports: [
@@ -20,7 +20,7 @@ import { PersonModule } from '../persons/persons.module';
     AuthModule,
     UserModule,
     CommentsModule,
-    PersonModule,
+    PersonsModule,
   ],
   controllers: [],
   providers: [],
