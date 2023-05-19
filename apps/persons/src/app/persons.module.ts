@@ -1,21 +1,22 @@
 import { Module } from '@nestjs/common';
-
-import { PersonsController } from './base.controller';
 import { PersonsService } from './services/persons.service';
 import { ConfigModule } from '@nestjs/config';
 import { PersonsEntity, TypeormModuleConfig } from '@kinopoisk-snitch/typeorm';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
-import { rmqPersonsConfig } from './configs/amqp.persons.config';
+import { PersonsCommand } from './controllers/persons.command';
+import { PersonsEvent } from './controllers/persons.event';
+import { PersonsQuery } from './controllers/persons.query';
+import { rmqPersonConfig } from '@kinopoisk-snitch/rmq-configs';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
     TypeormModuleConfig,
     TypeOrmModule.forFeature([PersonsEntity]),
-    RabbitMQModule.forRoot(RabbitMQModule, rmqPersonsConfig()),
+    RabbitMQModule.forRoot(RabbitMQModule, rmqPersonConfig()),
   ],
-  controllers: [PersonsController],
+  controllers: [PersonsCommand, PersonsEvent, PersonsQuery],
   providers: [PersonsService],
 })
 export class PersonsModule {}

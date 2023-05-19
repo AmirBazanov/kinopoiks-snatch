@@ -10,6 +10,7 @@ import {
 import { AwardsEntity } from './awards.entity';
 import { RolesEntity } from './roles.entity';
 import { MoviesEntity } from './movies.entity';
+import { MoviesPersonsRolesEntity } from './movies-persons-roles.entity';
 
 @Entity('Persons')
 @Unique(['name', 'sur_name', 'date_birth', 'place_birth'])
@@ -23,19 +24,19 @@ export class PersonsEntity {
   @Column()
   sur_name: string;
 
-  @Column('int2')
+  @Column('int2', { nullable: true })
   height: number;
 
-  @Column('date')
+  @Column('date', { nullable: true })
   date_birth: Date;
 
-  @Column()
+  @Column({ nullable: true })
   place_birth: string;
 
-  @Column()
+  @Column({ nullable: true })
   spouse: string;
 
-  @Column()
+  @Column({ nullable: true })
   photo: string;
 
   @Column({ default: false })
@@ -45,11 +46,6 @@ export class PersonsEntity {
   @JoinTable()
   awards: AwardsEntity[];
 
-  @ManyToMany(() => RolesEntity, (role) => role.persons)
-  @JoinTable()
-  roles: RolesEntity[];
-
-  @ManyToMany(() => MoviesEntity, (movie) => movie.persons)
-  @JoinTable()
-  movies: MoviesEntity[];
+  @OneToMany(() => MoviesPersonsRolesEntity, (moviesPersonsRole) => moviesPersonsRole.person)
+  moviesPersonsRole: MoviesPersonsRolesEntity[];
 }
