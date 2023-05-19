@@ -11,7 +11,6 @@ import {
   authGoogleRMQConfig,
   authLoginRMQConfig,
   authRegisterRMQConfig,
-  createUserRMQConfig,
 } from '@kinopoisk-snitch/rmq-configs';
 import { generate } from 'generate-password';
 import { AuthService } from './auth.service';
@@ -45,10 +44,6 @@ export class AuthCommands {
         lowercase: true,
       }),
     };
-    return this.amqpService.request<CreateUserContract.Response>({
-      routingKey: createUserRMQConfig().routingKey,
-      exchange: createUserRMQConfig().exchange,
-      payload: userData,
-    });
+    return this.authService.googleAuth(userData);
   }
 }

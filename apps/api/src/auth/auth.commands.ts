@@ -22,6 +22,7 @@ import {
   authRegisterRMQConfig,
 } from '@kinopoisk-snitch/rmq-configs';
 import { GoogleOauthGuard } from '../guards/google-oauth.guard';
+import { VkOauthGuard } from '../guards/vk-oauth.guard';
 
 @Controller('/auth')
 @UsePipes(new ValidationPipe())
@@ -55,5 +56,11 @@ export class AuthCommands {
       routingKey: authGoogleRMQConfig().routingKey,
       payload: user,
     });
+  }
+
+  @Get('/vk')
+  @UseGuards(VkOauthGuard)
+  async vk(@Req() vkUser) {
+    console.log(vkUser.user);
   }
 }
