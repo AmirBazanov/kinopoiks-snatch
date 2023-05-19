@@ -2,8 +2,8 @@ import { RmqConfig } from '../types';
 
 export const getPersonByIdRMQConfig = (): RmqConfig => {
   return {
-    exchange: 'GetPersonsExchange',
+    exchange: 'PersonsExchange',
     routingKey: 'get-person-by-id',
-    queue: 'PersonQueriesQueueId',
+    queue: 'PersonQueue',
   };
 };

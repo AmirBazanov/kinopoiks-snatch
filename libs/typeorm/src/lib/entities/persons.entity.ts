@@ -2,14 +2,11 @@ import {
   Column,
   Entity,
   JoinTable,
-  ManyToMany,
   OneToMany,
   PrimaryGeneratedColumn,
   Unique,
 } from 'typeorm';
 import { AwardsEntity } from './awards.entity';
-import { RolesEntity } from './roles.entity';
-import { MoviesEntity } from './movies.entity';
 import { MoviesPersonsRolesEntity } from './movies-persons-roles.entity';
 
 @Entity('Persons')
