@@ -61,6 +61,7 @@ export class AuthCommands {
   @Get('/vk')
   @UseGuards(VkOauthGuard)
   async vk(@Req() vkUser) {
-    console.log(vkUser.user);
+    const { user } = vkUser;
+    console.log(user);
   }
 }
