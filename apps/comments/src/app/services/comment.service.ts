@@ -1,6 +1,9 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { CommentRepository } from '../repositories/comment.repository';
-import { CreateCommentContract } from '@kinopoisk-snitch/contracts';
+import {
+  CreateCommentContract,
+  CreateCommentOnCommentContract,
+} from '@kinopoisk-snitch/contracts';
 
 @Injectable()
 export class CommentService {
@@ -15,6 +18,13 @@ export class CommentService {
     user_id: number
   ) {
     await this.commentRepository.createComment(commentInfo, move_id, user_id);
+  }
+
+  async createOnComment(
+    commentInfo: CreateCommentOnCommentContract.Request,
+    user_id: number
+  ) {
+    await this.commentRepository.createOnComment(commentInfo, user_id);
   }
 
   async getCommentById(id: number) {

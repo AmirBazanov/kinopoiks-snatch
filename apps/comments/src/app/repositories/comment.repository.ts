@@ -2,7 +2,10 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CommentsEntity } from '@kinopoisk-snitch/typeorm';
-import { CreateCommentContract } from '@kinopoisk-snitch/contracts';
+import {
+  CreateCommentContract,
+  CreateCommentOnCommentContract,
+} from '@kinopoisk-snitch/contracts';
 
 @Injectable()
 export class CommentRepository {
@@ -13,10 +16,10 @@ export class CommentRepository {
 
   async createComment(
     commentInfo: CreateCommentContract.Request,
-    movie_id,
-    user_id
+    movie_id: number,
+    user_id: number
   ) {
-    const temp = this.CommentModel.create({
+    const comment = await this.CommentModel.create({
       ...commentInfo,
       movie: {
         movie_id: movie_id,
@@ -24,10 +27,35 @@ export class CommentRepository {
       user: {
         user_id: user_id,
       },
-      replied_comment: 0,
       created_at: new Date(),
     });
-    await this.CommentModel.save(temp);
+    await this.CommentModel.save(comment);
+  }
+
+  async createOnComment(
+    commentInfo: CreateCommentOnCommentContract.Request,
+    user_id: number
+  ) {
+    // const commentForFilmId = await this.CommentModel.findOne({
+    //   where: {
+    //     comment_id: Number(commentInfo.comment_id),
+    //   },
+    // });
+    //нужен сервис фильмов для полноценной работы
+    const comment_id = commentInfo.comment_id;
+    delete commentInfo.comment_id;
+    const comment = await this.CommentModel.create({
+      ...commentInfo,
+      replied_comment: comment_id,
+      movie: {
+        movie_id: 1,
+      },
+      user: {
+        user_id: user_id,
+      },
+      created_at: new Date(),
+    });
+    await this.CommentModel.save(comment);
   }
 
   async getCommentById(id: number) {

@@ -26,6 +26,23 @@ export class CommentCommand {
     }
   }
 
+  @Post('/createOnComment/:comment_id')
+  async createOnComment(
+    @Body() commentInfo: CreateCommentDto,
+    @Param('comment_id') comment_id: string
+  ) {
+    commentInfo.comment_id = Number(comment_id);
+    try {
+      const response = await this.amqpConnection.request({
+        exchange: 'PostCommentsExchange',
+        routingKey: 'create-comment-on-comment',
+        payload: commentInfo,
+      });
+    } catch (e) {
+      throw new Error(e);
+    }
+  }
+
   @Post('/incLike/:id')
   async incLikes(@Param('id') comment_id: string) {
     if (isNaN(Number(comment_id))) {
