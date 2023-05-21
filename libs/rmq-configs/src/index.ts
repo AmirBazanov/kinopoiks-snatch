@@ -5,3 +5,6 @@ export * from './lib/auth/auth-commands.config';
 export * from './lib/types';
 export * from './lib/comments/comment-command.config';
 export * from './lib/comments/amqp.comment.config';
+export * from './lib/comments/comment-query.config';
+export * from './lib/persons/amqp.persons.config';
+export * from './lib/persons/person-queries.config';

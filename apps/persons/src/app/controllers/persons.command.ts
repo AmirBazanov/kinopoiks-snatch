@@ -9,10 +9,10 @@ export class PersonsCommand {
     private readonly amqpConnection: AmqpConnection
   ) {}
 
-  @RabbitRPC({
-    exchange: 'PostPersonsExchange',
-    routingKey: 'create-person',
-    queue: 'queue1',
-  })
-  async createPerson(/* */) { /* */ return {} }
+  // @RabbitRPC({
+  //   exchange: 'PostPersonsExchange',
+  //   routingKey: 'create-person',
+  //   queue: 'queue1',
+  // })
+  // async createPerson(/* */) { /* */ return {} }
 }

@@ -21,12 +21,15 @@ export class CommentsEntity {
   content: string;
 
   @Column()
+  type: string;
+
+  @Column({ default: 0 })
   likes: number;
 
-  @Column()
+  @Column({ default: 0 })
   dislikes: number;
 
-  @Column()
+  @Column({ default: 0 })
   replied_comment: number;
 
   @CreateDateColumn()
