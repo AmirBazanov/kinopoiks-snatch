@@ -33,11 +33,7 @@ export class UserRepository {
   }
 
   async findUserByEmail(email: string) {
-    const user = await this.UserModel.findOne({
-      where: {
-        email: email,
-      },
-    });
+    const user = await this.UserModel.findOneBy({ email: email });
     return user;
   }
 }
