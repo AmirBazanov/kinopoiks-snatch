@@ -29,7 +29,7 @@ export class CommentsEntity {
   @Column({ default: 0 })
   dislikes: number;
 
-  @Column()
+  @Column({ default: 0 })
   replied_comment: number;
 
   @CreateDateColumn()
