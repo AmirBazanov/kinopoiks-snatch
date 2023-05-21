@@ -9,6 +9,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
 import { rmqCommentConfig } from '@kinopoisk-snitch/rmq-configs';
 import { CommentRepository } from './repositories/comment.repository';
+import { JwtService } from '@nestjs/jwt';
 
 @Module({
   imports: [
@@ -18,6 +19,6 @@ import { CommentRepository } from './repositories/comment.repository';
     RabbitMQModule.forRoot(RabbitMQModule, rmqCommentConfig()),
   ],
   controllers: [CommentCommand, CommentQuery, CommentEvent],
-  providers: [CommentService, CommentRepository],
+  providers: [CommentService, CommentRepository, JwtService],
 })
 export class CommentModule {}
