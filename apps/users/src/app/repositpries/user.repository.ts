@@ -36,4 +36,13 @@ export class UserRepository {
     const user = await this.UserModel.findOneBy({ email: email });
     return user;
   }
+
+  async deleteProfile(id: number) {
+    const user = await this.UserModel.findOne({
+      where: {
+        user_id: id,
+      },
+    });
+    await this.UserModel.remove(user);
+  }
 }

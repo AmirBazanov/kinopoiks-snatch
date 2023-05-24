@@ -14,5 +14,6 @@ import { rmqCommentConfig } from '@kinopoisk-snitch/rmq-configs';
     RabbitMQModule.forRoot(RabbitMQModule, rmqCommentConfig()),
   ],
   controllers: [CommentCommand, CommentQuery, CommentEvent],
+  providers: [],
 })
 export class CommentsModule {}

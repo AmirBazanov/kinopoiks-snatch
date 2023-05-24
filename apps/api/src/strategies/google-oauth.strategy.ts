@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy, VerifyCallback } from 'passport-google-oauth2';
+import { Profile } from 'passport-vkontakte';
 
 @Injectable()
 export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
@@ -18,7 +19,12 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
     });
   }
   и;
-  async validate(_accessToken, _refreshToken, profile, done: VerifyCallback) {
+  async validate(
+    _accessToken,
+    _refreshToken,
+    profile: Profile,
+    done: VerifyCallback
+  ) {
     const { id, name, emails } = profile;
     const user = {
       providerId: id,

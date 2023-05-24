@@ -6,6 +6,8 @@ export namespace CreateCommentOnCommentContract {
     @IsNumber()
     comment_id: number;
     @IsString()
+    user_id: string;
+    @IsString()
     private readonly title: string;
     @IsString()
     private readonly content: string;
@@ -13,8 +15,6 @@ export namespace CreateCommentOnCommentContract {
     private readonly type: string;
     @IsNumber()
     private readonly film_id: number;
-    @IsNumber()
-    private readonly user_id: number;
   }
 
   export class Response {}
