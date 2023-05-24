@@ -11,6 +11,7 @@ import { AuthModule } from '../auth/auth.module';
 import { UserModule } from '../users/user.module';
 import { CommentsModule } from '../comments/comment.module';
 import { PersonsModule } from '../persons/persons.module';
+import {MoviesModule} from "../movies/movies.module";
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { PersonsModule } from '../persons/persons.module';
     UserModule,
     CommentsModule,
     PersonsModule,
+    MoviesModule
   ],
   controllers: [],
   providers: [],

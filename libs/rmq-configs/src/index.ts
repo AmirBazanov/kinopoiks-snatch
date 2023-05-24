@@ -8,3 +8,6 @@ export * from './lib/comments/amqp.comment.config';
 export * from './lib/comments/comment-query.config';
 export * from './lib/persons/amqp.persons.config';
 export * from './lib/persons/person-queries.config';
+export * from './lib/movies/amqp.movie.config';
+export * from './lib/movies/movie-commands.config';
+export * from './lib/movies/movie-queries.config';
