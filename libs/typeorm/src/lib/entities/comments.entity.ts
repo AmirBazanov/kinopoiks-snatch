@@ -29,17 +29,19 @@ export class CommentsEntity {
   @Column({ default: 0 })
   dislikes: number;
 
-  @Column({ default: 0 })
-  replied_comment: number;
-
   @CreateDateColumn()
   created_at: Date;
+
+  @ManyToOne(() => CommentsEntity, (comment) => comment.comment_id)
+  replied_comments: CommentsEntity[];
 
   @ManyToOne(() => MoviesEntity, (movie) => movie.comments)
   @JoinColumn({ name: 'movie_id' })
   movie: MoviesEntity;
 
-  @ManyToOne(() => UsersEntity, (user) => user.comments)
+  @ManyToOne(() => UsersEntity, (user) => user.comments, {
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({ name: 'user_id' })
   user: UsersEntity;
 

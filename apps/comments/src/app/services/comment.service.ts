@@ -4,26 +4,33 @@ import {
   CreateCommentContract,
   CreateCommentOnCommentContract,
 } from '@kinopoisk-snitch/contracts';
+import { JwtService } from '@nestjs/jwt';
+import * as process from 'process';
 
 @Injectable()
 export class CommentService {
   constructor(
     @Inject(CommentRepository)
-    private readonly commentRepository: CommentRepository
+    private readonly commentRepository: CommentRepository,
+    private jwtService: JwtService
   ) {}
 
   async createComment(
     commentInfo: CreateCommentContract.Request,
-    move_id: number,
-    user_id: number
+    move_id: number
   ) {
+    const user = this.jwtService.verify(commentInfo.user_id, {
+      secret: process.env.JWT_SECRET,
+    });
+    const user_id = Number(user['user_id']);
     await this.commentRepository.createComment(commentInfo, move_id, user_id);
   }
 
-  async createOnComment(
-    commentInfo: CreateCommentOnCommentContract.Request,
-    user_id: number
-  ) {
+  async createOnComment(commentInfo: CreateCommentOnCommentContract.Request) {
+    const user = this.jwtService.verify(commentInfo.user_id, {
+      secret: process.env.JWT_SECRET,
+    });
+    const user_id = Number(user['user_id']);
     await this.commentRepository.createOnComment(commentInfo, user_id);
   }
 
