@@ -7,7 +7,7 @@ import {
   Param,
 } from '@nestjs/common';
 import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
-import { TitleMovieContract } from '@kinopoisk-snitch/contracts';
+import {IdMovieContract, TitleMovieContract} from '@kinopoisk-snitch/contracts';
 import {getMovieByTitleRMQConfig, getMovieRMQConfig} from "@kinopoisk-snitch/rmq-configs";
 
 @Controller('/movies')
@@ -22,7 +22,7 @@ export class MovieQuery {
         HttpStatus.BAD_REQUEST
       );
     } else {
-      const movie = await this.amqpConnection.request({
+      const movie = await this.amqpConnection.request<IdMovieContract.Response>({
         exchange: getMovieRMQConfig().exchange,
         routingKey: getMovieRMQConfig().routingKey,
         payload: movie_id,
@@ -33,7 +33,7 @@ export class MovieQuery {
 
   @Get('/getMovieByTitle')
   async getMovieByTitle(@Body() movie_title: TitleMovieContract.Request) {
-    const movie = await this.amqpConnection.request({
+    const movie = await this.amqpConnection.request<TitleMovieContract.Response>({
       exchange: getMovieByTitleRMQConfig().exchange,
       routingKey: getMovieByTitleRMQConfig().routingKey,
       payload: movie_title,

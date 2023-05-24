@@ -8,3 +8,4 @@ export * from './lib/auth/auth.google';
 export * from './lib/auth/jwt.payload';
 export * from './lib/movies/create.movie.contract';
 export * from './lib/movies/title.movie.contract';
+export * from './lib/movies/id.movie.contract';

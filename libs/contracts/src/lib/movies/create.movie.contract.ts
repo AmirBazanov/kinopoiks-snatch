@@ -1,5 +1,6 @@
-import {IsBoolean, IsDate, IsOptional, IsString} from 'class-validator';
+import {IsBoolean, IsDate, IsEnum, IsOptional, IsString} from 'class-validator';
 import {Type} from "class-transformer";
+import {HttpStatus} from "@nestjs/common";
 
 // eslint-disable-next-line @typescript-eslint/no-namespace
 export namespace CreateMovieContract {
@@ -36,8 +37,13 @@ export namespace CreateMovieContract {
     private readonly is_serial: boolean;
 
     @IsOptional()
-    country_id: string;
+    country_id: number;
   }
 
-  export class Response {}
+  export class Response {
+    @IsEnum(HttpStatus)
+    httpStatus: HttpStatus;
+    @IsString()
+    message: string;
+  }
 }

@@ -42,5 +42,5 @@ export class CreateMovieDto {
   private readonly is_serial: boolean;
 
   @IsOptional()
-  country_id: string;
+  country_id: number;
 }

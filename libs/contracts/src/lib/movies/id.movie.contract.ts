@@ -2,10 +2,10 @@ import {IsEnum, IsString} from 'class-validator';
 import {HttpStatus} from "@nestjs/common";
 
 // eslint-disable-next-line @typescript-eslint/no-namespace
-export namespace TitleMovieContract {
+export namespace IdMovieContract {
   export class Request {
     @IsString()
-    title: string;
+    movie_id: number;
   }
 
   export class Response {
