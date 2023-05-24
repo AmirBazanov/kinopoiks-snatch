@@ -5,12 +5,14 @@ import {
   AuthGoogle,
   AuthLogin,
   AuthRegister,
+  AuthVk,
   CreateUserContract,
 } from '@kinopoisk-snitch/contracts';
 import {
   authGoogleRMQConfig,
   authLoginRMQConfig,
   authRegisterRMQConfig,
+  authVkRMQConfig,
 } from '@kinopoisk-snitch/rmq-configs';
 import { generate } from 'generate-password';
 import { AuthService } from './auth.service';
@@ -37,6 +39,7 @@ export class AuthCommands {
     const userData: Partial<CreateUserContract.Request> = {
       email: data.email,
       user_name: data.name,
+      external_service_id: data.providerId,
       password: generate({
         length: 15,
         numbers: true,
@@ -45,5 +48,24 @@ export class AuthCommands {
       }),
     };
     return this.authService.googleAuth(userData);
+  }
+
+  @RabbitRPC(authVkRMQConfig())
+  vk(@Payload() data: AuthVk.Request) {
+    if (!data.email) {
+      data.email = data.name + data.providerId + '@vk.ru';
+    }
+    const userData: Partial<CreateUserContract.Request> = {
+      email: data.email,
+      user_name: data.name,
+      external_service_id: data.providerId,
+      password: generate({
+        length: 15,
+        numbers: true,
+        symbols: true,
+        lowercase: true,
+      }),
+    };
+    return this.authService.vkAuth(userData);
   }
 }
