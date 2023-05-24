@@ -9,3 +9,5 @@ export * from './lib/auth/jwt.payload';
 export * from './lib/movies/create.movie.contract';
 export * from './lib/movies/title.movie.contract';
 export * from './lib/movies/id.movie.contract';
+export * from './lib/countres/create.country.contract';
+export * from './lib/countres/id.country.contract';
