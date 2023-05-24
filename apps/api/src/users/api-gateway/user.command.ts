@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Param, Post } from '@nestjs/common';
 import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
 import { CreateUserDto } from '../dtos/create-user.dto';
 
@@ -13,6 +13,19 @@ export class UserCommand {
         exchange: 'PostUsersExchange',
         routingKey: 'create-user',
         payload: userDto,
+      });
+    } catch (e) {
+      throw new Error(e);
+    }
+  }
+
+  @Delete('/deleteUser/:id')
+  async deleteUser(@Param('id') id: string) {
+    try {
+      const response = await this.amqpConnection.request({
+        exchange: 'PostUsersExchange',
+        routingKey: 'delete-user',
+        payload: id,
       });
     } catch (e) {
       throw new Error(e);
