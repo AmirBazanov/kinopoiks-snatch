@@ -1,5 +1,5 @@
 import { Controller } from '@nestjs/common';
-import { AmqpConnection, RabbitRPC } from '@golevelup/nestjs-rabbitmq';
+import { RabbitRPC } from '@golevelup/nestjs-rabbitmq';
 import { Payload } from '@nestjs/microservices';
 import {
   AuthGoogle,
@@ -19,10 +19,7 @@ import { AuthService } from './auth.service';
 
 @Controller()
 export class AuthCommands {
-  constructor(
-    private readonly authService: AuthService,
-    private readonly amqpService: AmqpConnection
-  ) {}
+  constructor(private readonly authService: AuthService) {}
 
   @RabbitRPC(authLoginRMQConfig())
   login(@Payload() data: AuthLogin.Request) {
@@ -31,7 +28,7 @@ export class AuthCommands {
 
   @RabbitRPC(authRegisterRMQConfig())
   register(@Payload() data: AuthRegister.Request) {
-    return data;
+    return this.authService.register(data);
   }
 
   @RabbitRPC(authGoogleRMQConfig())

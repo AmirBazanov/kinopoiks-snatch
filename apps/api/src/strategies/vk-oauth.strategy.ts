@@ -11,7 +11,7 @@ export class VKStrategy extends PassportStrategy(Strategy, 'vkontakte') {
         clientID: configService.get('VK_CLIENT_ID'),
         clientSecret: configService.get('VK_SECRET'),
         callbackURL: configService.get('VK_REDIRECT_URI'),
-        scope: ['profile'],
+        scope: ['profile', 'email'],
       },
       function (
         accessToken: string,
