@@ -36,12 +36,6 @@ export class CommentRepository {
     commentInfo: CreateCommentOnCommentContract.Request,
     user_id: number
   ) {
-    // const commentForFilmId = await this.CommentModel.findOne({
-    //   where: {
-    //     comment_id: Number(commentInfo.comment_id),
-    //   },
-    // });
-    //нужен сервис фильмов для полноценной работы
     const comment_id = commentInfo.comment_id;
     delete commentInfo.comment_id;
     const comment = await this.CommentModel.create({
