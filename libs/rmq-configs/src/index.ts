@@ -11,3 +11,6 @@ export * from './lib/persons/person-queries.config';
 export * from './lib/movies/amqp.movie.config';
 export * from './lib/movies/movie-commands.config';
 export * from './lib/movies/movie-queries.config';
+export * from './lib/countries/amqp.country.config';
+export * from './lib/countries/country-commands.config';
+export * from './lib/countries/country-queries.config';

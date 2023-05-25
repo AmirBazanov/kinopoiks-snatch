@@ -21,7 +21,7 @@ export class PersonsService {
     //   payload: person_id,
     // })
 
-    // const genres = await this.amqpConnection.request({
+    // const countries = await this.amqpConnection.request({
     //   exchange: getGenresArrayOfPerson().exchange,
     //   routingKey: getGenresArrayOfPerson().routingKey,
     //   payload: person_id,

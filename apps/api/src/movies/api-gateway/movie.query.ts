@@ -15,7 +15,7 @@ export class MovieQuery {
   constructor(private readonly amqpConnection: AmqpConnection) {}
 
   @Get('/getMovie/:id')
-  async getMovieById(@Param('id') movie_id: string) {
+  async getMovieById(@Param('id') movie_id: number) {
     if (isNaN(Number(movie_id))) {
       throw new HttpException(
         'ID must be a number',

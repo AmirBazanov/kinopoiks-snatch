@@ -1,10 +1,10 @@
-import {IsEnum, IsString} from 'class-validator';
+import {IsEnum, IsNumber, IsString} from 'class-validator';
 import {HttpStatus} from "@nestjs/common";
 
 // eslint-disable-next-line @typescript-eslint/no-namespace
 export namespace IdMovieContract {
   export class Request {
-    @IsString()
+    @IsNumber()
     movie_id: number;
   }
 
