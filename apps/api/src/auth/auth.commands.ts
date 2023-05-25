@@ -60,6 +60,7 @@ export class AuthCommands {
   @Get('/vk')
   @UseGuards(VkOauthGuard)
   async vk(@Req() vkUser) {
+    console.log('vk');
     const { user } = vkUser;
     return this.amqpService.request<AuthVk.Response>({
       ...authVkRMQConfig(),
