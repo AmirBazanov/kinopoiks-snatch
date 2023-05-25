@@ -4,6 +4,14 @@ export const createUserRMQConfig = (): RmqConfig => {
   return {
     exchange: 'PostUsersExchange',
     routingKey: 'create-user',
-    queue: 'UserCommandsQueue',
+    queue: 'CreateUserCommandsQueue',
+  };
+};
+
+export const deleteUserRMQConfig = (): RmqConfig => {
+  return {
+    exchange: 'PostUsersExchange',
+    routingKey: 'delete-user',
+    queue: 'DeleteUserCommandQueue',
   };
 };

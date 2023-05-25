@@ -20,4 +20,8 @@ export class UserService {
     const user = await this.userRepository.findUserByEmail(email);
     return user;
   }
+
+  async deleteProfile(id: number) {
+    await this.userRepository.deleteProfile(id);
+  }
 }

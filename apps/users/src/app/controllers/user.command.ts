@@ -3,7 +3,10 @@ import { UserService } from '../services/user.service';
 import { RabbitRPC } from '@golevelup/nestjs-rabbitmq';
 import { Payload } from '@nestjs/microservices';
 import { CreateUserContract } from '@kinopoisk-snitch/contracts';
-import { createUserRMQConfig } from '@kinopoisk-snitch/rmq-configs';
+import {
+  createUserRMQConfig,
+  deleteUserRMQConfig,
+} from '@kinopoisk-snitch/rmq-configs';
 
 @Controller()
 export class UserCommand {
@@ -13,5 +16,10 @@ export class UserCommand {
   async createUser(@Payload() userDto: CreateUserContract.Request) {
     const newUser = await this.userService.createUser(userDto);
     return newUser;
+  }
+
+  @RabbitRPC(deleteUserRMQConfig())
+  async deleteUser(@Payload() id: number) {
+    await this.userService.deleteProfile(id);
   }
 }
