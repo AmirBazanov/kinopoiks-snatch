@@ -1306,5 +1306,5 @@ Thumbs.db
 /db/data/postmaster.opts
 /db
 /migrations
-!/package-lock.json
+package-lock.json
 

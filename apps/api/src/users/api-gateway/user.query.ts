@@ -30,6 +30,7 @@ export class UserQuery {
     }
   }
 
+  //da
   @Get('/getUserByEmail')
   async getUserByEmail(@Body() user_email: EmailUserContract.Request) {
     const user = await this.amqpConnection.request({

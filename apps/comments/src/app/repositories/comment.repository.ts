@@ -46,9 +46,8 @@ export class CommentRepository {
     delete commentInfo.comment_id;
     const comment = await this.CommentModel.create({
       ...commentInfo,
-      replied_comment: comment_id,
       movie: {
-        movie_id: 1,
+        movie_id: 123,
       },
       user: {
         user_id: user_id,
@@ -59,13 +58,13 @@ export class CommentRepository {
   }
 
   async getCommentById(id: number) {
-    const comment = await this.CommentModel.findOne({
+    const comments = await this.CommentModel.find({
       where: {
         comment_id: id,
       },
+      order: { comment_id: 'DESC' },
     });
-
-    return comment;
+    return comments;
   }
 
   async getCommentsByUserId(id: number) {

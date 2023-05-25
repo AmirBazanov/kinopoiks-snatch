@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy, VerifyCallback } from 'passport-google-oauth2';
+import { Profile } from 'passport-vkontakte';
 
 @Injectable()
 export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
@@ -16,17 +17,15 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
         'https://www.googleapis.com/auth/user.birthday.read',
       ],
     });
-  }
-  и;
+  };
   async validate(_accessToken, _refreshToken, profile, done: VerifyCallback) {
-    const { id, name, emails } = profile;
+    const { id, name, emails, provider } = profile;
     const user = {
-      providerId: id,
       email: emails[0].value,
       name: `${name.givenName}${name.familyName}`,
+      providerId: provider + id,
     };
 
-    //TODO Google auth error handler
     done(null, user);
   }
 }
