@@ -40,4 +40,13 @@ export class MovieQuery {
     });
     return movie;
   }
+
+  @Get('/getAllMovies')
+  async getAllMovies() {
+    const movies = await this.amqpConnection.request<TitleMovieContract.Response>({
+      exchange: getMovieByTitleRMQConfig().exchange,
+      routingKey: getMovieByTitleRMQConfig().routingKey,
+    });
+    return movies;
+  }
 }

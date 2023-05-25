@@ -9,6 +9,7 @@ import {CountriesEntity, MoviesEntity, TypeormModuleConfig} from "@kinopoisk-sni
 import {TypeOrmModule} from "@nestjs/typeorm";
 import {RabbitMQModule} from "@golevelup/nestjs-rabbitmq";
 import {rmqMovieConfig} from "@kinopoisk-snitch/rmq-configs";
+import {MovieRepository} from "./repositories/movie.repository";
 
 
 @Module({
@@ -19,6 +20,6 @@ import {rmqMovieConfig} from "@kinopoisk-snitch/rmq-configs";
     RabbitMQModule.forRoot(RabbitMQModule, rmqMovieConfig()),
   ],
   controllers: [MoviesCommand, MoviesEvent, MoviesQuery],
-  providers: [MoviesService],
+  providers: [MoviesService, MovieRepository],
 })
 export class AppModule {}

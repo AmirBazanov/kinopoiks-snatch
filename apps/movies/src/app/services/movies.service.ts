@@ -22,4 +22,9 @@ export class MoviesService {
     const response = await this.movieRepository.getMovieByTitle(movieDto.title);
     return response;
   }
+
+  async getAllMovies() {
+    const response = await this.movieRepository.getAllMovies();
+    return response;
+  }
 }

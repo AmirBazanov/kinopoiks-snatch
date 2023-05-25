@@ -8,6 +8,6 @@ export class MoviesEvent {
 
   @Get()
   getData() {
-    return this.moviesService.getData();
+    //return this.moviesService.getData();
   }
 }

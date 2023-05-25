@@ -53,4 +53,8 @@ export class MovieRepository {
       return {httpStatus: HttpStatus.NOT_FOUND}
     }
   }
+
+  async getAllMovies() {
+    return await this.MovieModel.find();
+  }
 }
