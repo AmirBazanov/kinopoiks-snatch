@@ -12,5 +12,6 @@ export namespace EmailUserContract {
     email: string;
     is_admin: boolean;
     password: string;
+    external_service_id: string;
   }
 }

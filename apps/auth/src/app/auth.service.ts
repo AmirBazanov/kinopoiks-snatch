@@ -40,6 +40,13 @@ export class AuthService {
     return new NotFoundException('user');
   }
 
+  async register(userDto: CreateUserContract.Request) {
+    return this.amqpService.request<CreateUserContract.Response>({
+      ...createUserRMQConfig(),
+      payload: userDto,
+    });
+  }
+
   async googleAuth(userGoogle) {
     const user = await this.amqpService.request<EmailUserContract.Response>({
       ...getUserByEmailRMQConfig(),
@@ -52,6 +59,20 @@ export class AuthService {
       routingKey: createUserRMQConfig().routingKey,
       exchange: createUserRMQConfig().exchange,
       payload: userGoogle,
+    });
+  }
+
+  async vkAuth(userVk) {
+    const user = await this.amqpService.request<EmailUserContract.Response>({
+      ...getUserByEmailRMQConfig(),
+      payload: { email: userVk.email },
+    });
+    if (user) {
+      return this.singJwt(user);
+    }
+    return this.amqpService.request<CreateUserContract.Response>({
+      ...createUserRMQConfig(),
+      payload: userVk,
     });
   }
 }
