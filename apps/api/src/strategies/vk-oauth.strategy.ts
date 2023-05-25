@@ -20,13 +20,13 @@ export class VKStrategy extends PassportStrategy(Strategy, 'vkontakte') {
         profile: Profile,
         done: VerifyCallback
       ) {
-        const { id, name, gender, emails } = profile;
-        done(null, {
-          providerId: id,
-          gender: gender,
-          email: emails[0].value,
+        const { id, name, emails, provider } = profile;
+        const user = {
+          email: emails ? emails[0].value : null,
           name: `${name.givenName}${name.familyName}`,
-        });
+          providerId: provider + id,
+        };
+        done(null, user);
       }
     );
   }

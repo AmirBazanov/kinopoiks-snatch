@@ -13,6 +13,7 @@ import {
   AuthGoogle,
   AuthLogin,
   AuthRegister,
+  AuthVk,
 } from '@kinopoisk-snitch/contracts';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
@@ -20,6 +21,7 @@ import {
   authGoogleRMQConfig,
   authLoginRMQConfig,
   authRegisterRMQConfig,
+  authVkRMQConfig,
 } from '@kinopoisk-snitch/rmq-configs';
 import { GoogleOauthGuard } from '../guards/google-oauth.guard';
 import { VkOauthGuard } from '../guards/vk-oauth.guard';
@@ -32,8 +34,7 @@ export class AuthCommands {
   @Post('/register')
   async register(@Body() registerDto: RegisterDto) {
     return this.amqpService.request<AuthRegister.Response>({
-      exchange: authRegisterRMQConfig().exchange,
-      routingKey: authRegisterRMQConfig().routingKey,
+      ...authRegisterRMQConfig(),
       payload: registerDto,
     });
   }
@@ -41,8 +42,7 @@ export class AuthCommands {
   @Post('/login')
   async login(@Body() loginDto: LoginDto) {
     return this.amqpService.request<AuthLogin.Response>({
-      exchange: authLoginRMQConfig().exchange,
-      routingKey: authLoginRMQConfig().routingKey,
+      ...authLoginRMQConfig(),
       payload: loginDto,
     });
   }
@@ -52,8 +52,7 @@ export class AuthCommands {
   async google(@Req() googleUser) {
     const { user } = googleUser;
     return this.amqpService.request<AuthGoogle.Response>({
-      exchange: authGoogleRMQConfig().exchange,
-      routingKey: authGoogleRMQConfig().routingKey,
+      ...authGoogleRMQConfig(),
       payload: user,
     });
   }
@@ -62,6 +61,9 @@ export class AuthCommands {
   @UseGuards(VkOauthGuard)
   async vk(@Req() vkUser) {
     const { user } = vkUser;
-    console.log(user);
+    return this.amqpService.request<AuthVk.Response>({
+      ...authVkRMQConfig(),
+      payload: user,
+    });
   }
 }
