@@ -8,7 +8,7 @@ import {
 } from '@nestjs/common';
 import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
 import {IdMovieContract, TitleMovieContract} from '@kinopoisk-snitch/contracts';
-import {getMovieByTitleRMQConfig, getMovieRMQConfig} from "@kinopoisk-snitch/rmq-configs";
+import {getAllMoviesRMQConfig, getMovieByTitleRMQConfig, getMovieRMQConfig} from "@kinopoisk-snitch/rmq-configs";
 
 @Controller('/movies')
 export class MovieQuery {
@@ -44,8 +44,8 @@ export class MovieQuery {
   @Get('/getAllMovies')
   async getAllMovies() {
     const movies = await this.amqpConnection.request<TitleMovieContract.Response>({
-      exchange: getMovieByTitleRMQConfig().exchange,
-      routingKey: getMovieByTitleRMQConfig().routingKey,
+      exchange: getAllMoviesRMQConfig().exchange,
+      routingKey: getAllMoviesRMQConfig().routingKey,
     });
     return movies;
   }

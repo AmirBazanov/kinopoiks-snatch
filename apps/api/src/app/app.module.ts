@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import {
-  CommentsEntity, CountriesEntity,
+  CommentsEntity, CountriesEntity, MoviesEntity,
   PersonsEntity,
   TypeormModuleConfig,
   UsersEntity,
@@ -18,7 +18,7 @@ import {CountriesModule} from "../countries/countries.module";
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
     TypeormModuleConfig,
-    TypeOrmModule.forFeature([UsersEntity, CommentsEntity, PersonsEntity]),
+    TypeOrmModule.forFeature([UsersEntity, CommentsEntity, PersonsEntity, MoviesEntity]),
     AuthModule,
     UserModule,
     CommentsModule,

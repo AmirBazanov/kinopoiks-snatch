@@ -3,7 +3,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { AuthCommands } from './auth.commands';
 import { AppService } from './app.service';
 
-describe('MoviesCommand', () => {
+describe('CountriesCommand', () => {
   let app: TestingModule;
 
   beforeAll(async () => {

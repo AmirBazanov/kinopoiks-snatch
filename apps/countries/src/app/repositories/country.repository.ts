@@ -5,7 +5,7 @@ import {MoviesEntity} from '@kinopoisk-snitch/typeorm';
 import {CreateMovieContract} from '@kinopoisk-snitch/contracts';
 
 @Injectable()
-export class MovieRepository {
+export class CountryRepository {
   constructor(
     @InjectRepository(MoviesEntity)
     private readonly MovieModel: Repository<MoviesEntity>
@@ -18,7 +18,7 @@ export class MovieRepository {
       const movie = await this.MovieModel.create({
         ...movieInfo,
         country: {
-          country_id: null, //не забыть вставить country_id
+          country_id: movieInfo.country_id,
         }
       });
       await this.MovieModel.save(movie);
