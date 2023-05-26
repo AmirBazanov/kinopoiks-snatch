@@ -4,6 +4,7 @@ import {
   Get,
   Post,
   Req,
+  UseFilters,
   UseGuards,
   UsePipes,
   ValidationPipe,
@@ -25,6 +26,7 @@ import {
 } from '@kinopoisk-snitch/rmq-configs';
 import { GoogleOauthGuard } from '../guards/google-oauth.guard';
 import { VkOauthGuard } from '../guards/vk-oauth.guard';
+import { PassportTokenErrorFilter } from '../exceptions-filters/oauth-exceptions';
 
 @Controller('/auth')
 @UsePipes(new ValidationPipe())
@@ -49,6 +51,7 @@ export class AuthCommands {
 
   @Get('/google')
   @UseGuards(GoogleOauthGuard)
+  @UseFilters(new PassportTokenErrorFilter())
   async google(@Req() googleUser) {
     const { user } = googleUser;
     return this.amqpService.request<AuthGoogle.Response>({
@@ -59,8 +62,8 @@ export class AuthCommands {
 
   @Get('/vk')
   @UseGuards(VkOauthGuard)
+  @UseFilters(new PassportTokenErrorFilter())
   async vk(@Req() vkUser) {
-    console.log('vk');
     const { user } = vkUser;
     return this.amqpService.request<AuthVk.Response>({
       ...authVkRMQConfig(),
