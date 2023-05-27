@@ -18,7 +18,7 @@ export class CountriesService {
   }
 
   async getCountryById(countryDto: IdCountryContract.Request) {
-    const response = await this.countryRepository.getCountryById(countryDto.country_id);
+    const response = await this.countryRepository.getCountryById(countryDto);
     return response;
   }
 

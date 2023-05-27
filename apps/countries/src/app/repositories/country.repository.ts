@@ -2,7 +2,7 @@ import {HttpStatus, Injectable} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import {CountriesEntity} from '@kinopoisk-snitch/typeorm';
-import {CreateCountryContract} from '@kinopoisk-snitch/contracts';
+import {CreateCountryContract, IdCountryContract} from '@kinopoisk-snitch/contracts';
 
 @Injectable()
 export class CountryRepository {
@@ -25,10 +25,11 @@ export class CountryRepository {
     }
   }
 
-  async getCountryById(id: number) {
+  async getCountryById(id: IdCountryContract.Request) {
     try {
+      console.log(id)
       const country = await this.CountryModel.findOne({
-        where: {country_id: id},
+        where: {country_id: Number(id)},
         relations: {movies: true}
       });
 

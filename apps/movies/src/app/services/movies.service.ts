@@ -14,7 +14,7 @@ export class MoviesService {
   }
 
   async getMovieById(movieDto: IdMovieContract.Request) {
-    const response = await this.movieRepository.getMovieById(movieDto.movie_id);
+    const response = await this.movieRepository.getMovieById(movieDto);
     return response;
   }
 

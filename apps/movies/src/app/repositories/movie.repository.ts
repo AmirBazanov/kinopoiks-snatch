@@ -2,7 +2,7 @@ import {HttpStatus, Injectable} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import {MoviesEntity} from '@kinopoisk-snitch/typeorm';
-import {CreateMovieContract} from '@kinopoisk-snitch/contracts';
+import {CreateMovieContract, IdMovieContract} from '@kinopoisk-snitch/contracts';
 
 @Injectable()
 export class MovieRepository {
@@ -28,16 +28,14 @@ export class MovieRepository {
     }
   }
 
-  async getMovieById(id: number) {
+  async getMovieById(id: IdMovieContract.Request) {
     try {
       const movie = await this.MovieModel.findOne({
         where: {
-          movie_id: id,
+          movie_id: Number(id),
         },
-        relations: {country: true},
-        lock: { mode: "optimistic", version: 1 },
+        relations: {country: true}
       });
-
       return {httpStatus: HttpStatus.OK, ...movie};
     } catch (e) {
       return {httpStatus: HttpStatus.NOT_FOUND}
