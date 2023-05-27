@@ -2,8 +2,7 @@ import {Inject, Injectable} from '@nestjs/common';
 import {CountryRepository} from "../repositories/country.repository";
 import {
   CreateCountryContract,
-  CreateMovieContract,
-  IdMovieContract,
+  IdCountryContract,
   TitleMovieContract
 } from "@kinopoisk-snitch/contracts";
 import {AmqpConnection} from "@golevelup/nestjs-rabbitmq";
@@ -14,22 +13,22 @@ export class CountriesService {
               private readonly countryRepository: CountryRepository,
               private readonly amqpService: AmqpConnection,) {}
   async createCountry(countryDto: CreateCountryContract.Request) {
-    //const response = await this.countryRepository.createMovie(countryDto);
-    //return response;
+    const response = await this.countryRepository.createCountry(countryDto);
+    return response;
   }
 
-  async getMovieById(movieDto: IdMovieContract.Request) {
-    //const response = await this.movieRepository.getMovieById(movieDto.movie_id);
-    //return response;
+  async getCountryById(countryDto: IdCountryContract.Request) {
+    const response = await this.countryRepository.getCountryById(countryDto.country_id);
+    return response;
   }
 
-  async getMovieByTitle(movieDto: TitleMovieContract.Request) {
-    //const response = await this.movieRepository.getMovieByTitle(movieDto.title);
-    //return response;
+  async getCountryByName(name: string) {
+    const response = await this.countryRepository.getCountryByName(name);
+    return response;
   }
 
-  async getAllMovies() {
-    //const response = await this.movieRepository.getAllMovies();
-    //return response;
+  async getAllCountries() {
+    const response = await this.countryRepository.getAllCountries();
+    return response;
   }
 }

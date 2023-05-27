@@ -16,6 +16,7 @@ export class CountryCommand {
         routingKey: createCountryRMQConfig().routingKey,
         payload: countryDto,
       });
+      return response;
     } catch (e) {
       throw new Error(e);
     }

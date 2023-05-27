@@ -1,60 +1,61 @@
 import {HttpStatus, Injectable} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import {MoviesEntity} from '@kinopoisk-snitch/typeorm';
-import {CreateMovieContract} from '@kinopoisk-snitch/contracts';
+import {CountriesEntity} from '@kinopoisk-snitch/typeorm';
+import {CreateCountryContract} from '@kinopoisk-snitch/contracts';
 
 @Injectable()
 export class CountryRepository {
   constructor(
-    @InjectRepository(MoviesEntity)
-    private readonly MovieModel: Repository<MoviesEntity>
+    @InjectRepository(CountriesEntity)
+    private readonly CountryModel: Repository<CountriesEntity>
   ) {}
 
-  async createMovie(
-    movieInfo: CreateMovieContract.Request,
+  async createCountry(
+    countryInfo: CreateCountryContract.Request,
   ) {
     try {
-      const movie = await this.MovieModel.create({
-        ...movieInfo,
-        country: {
-          country_id: movieInfo.country_id,
-        }
+      const country = await this.CountryModel.create({
+        ...countryInfo
       });
-      await this.MovieModel.save(movie);
-      return {httpStatus: HttpStatus.OK, message: "Movie crated successfully"}
+      await this.CountryModel.save(country);
+      return {httpStatus: HttpStatus.OK, message: "Country crated successfully"}
     } catch (e) {
       return {httpStatus: HttpStatus.INTERNAL_SERVER_ERROR, message: "Internal Server Error"}
     }
   }
 
-  async getMovieById(id: number) {
+  async getCountryById(id: number) {
     try {
-      const movie = await this.MovieModel.findBy({
-        movie_id: id,
+      const country = await this.CountryModel.findOne({
+        where: {country_id: id},
+        relations: {movies: true}
       });
 
-      return {httpStatus: HttpStatus.OK, ...movie};
+      return {httpStatus: HttpStatus.OK, ...country};
     } catch (e) {
       return {httpStatus: HttpStatus.NOT_FOUND}
     }
   }
 
-  async getMovieByTitle(title: string) {
+  async getCountryByName(name: string) {
     try {
-    const comments = await this.MovieModel.findBy({
-      title: title
+    const comments = await this.CountryModel.findOne({
+      where: {name: name},
+      relations: {
+        movies: true,
+      }
     });
     if (comments) return comments;
-    return await this.MovieModel.findBy({
-      orig_title: title
+    return await this.CountryModel.findBy({
+      name: name
     });
   } catch (e) {
       return {httpStatus: HttpStatus.NOT_FOUND}
     }
   }
 
-  async getAllMovies() {
-    return await this.MovieModel.find();
+  async getAllCountries() {
+    return await this.CountryModel.find();
   }
 }

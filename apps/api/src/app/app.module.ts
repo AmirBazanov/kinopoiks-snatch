@@ -18,7 +18,7 @@ import {CountriesModule} from "../countries/countries.module";
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
     TypeormModuleConfig,
-    TypeOrmModule.forFeature([UsersEntity, CommentsEntity, PersonsEntity, MoviesEntity]),
+    TypeOrmModule.forFeature([UsersEntity, CommentsEntity, PersonsEntity]),
     AuthModule,
     UserModule,
     CommentsModule,

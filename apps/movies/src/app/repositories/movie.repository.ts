@@ -18,7 +18,7 @@ export class MovieRepository {
       const movie = await this.MovieModel.create({
         ...movieInfo,
         country: {
-          country_id: null, //не забыть вставить country_id
+          country_id: movieInfo.country_id,
         }
       });
       await this.MovieModel.save(movie);
@@ -30,8 +30,12 @@ export class MovieRepository {
 
   async getMovieById(id: number) {
     try {
-      const movie = await this.MovieModel.findBy({
-        movie_id: id,
+      const movie = await this.MovieModel.findOne({
+        where: {
+          movie_id: id,
+        },
+        relations: {country: true},
+        lock: { mode: "optimistic", version: 1 },
       });
 
       return {httpStatus: HttpStatus.OK, ...movie};
@@ -42,10 +46,11 @@ export class MovieRepository {
 
   async getMovieByTitle(title: string) {
     try {
-    const comments = await this.MovieModel.findBy({
-      title: title
+    const movies = await this.MovieModel.findOne({
+      where: {title: title},
+      relations: {country: true}
     });
-    if (comments) return comments;
+    if (movies) return movies;
     return await this.MovieModel.findBy({
       orig_title: title
     });
@@ -55,6 +60,6 @@ export class MovieRepository {
   }
 
   async getAllMovies() {
-    return await this.MovieModel.find();
+    return await this.MovieModel.find({relations: {country: true}});
   }
 }

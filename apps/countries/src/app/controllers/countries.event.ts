@@ -8,5 +8,6 @@ export class CountriesEvent {
 
   @Get()
   getData() {
+    return;
   }
 }

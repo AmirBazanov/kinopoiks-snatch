@@ -12,7 +12,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   await app.init();
   Logger.log(
-    `🚀 Application is running`
+    `🚀 Movies service is running`
   );
 }
 

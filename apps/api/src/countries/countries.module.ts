@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import {TypeormModuleConfig, MoviesEntity, CountriesEntity} from '@kinopoisk-snitch/typeorm';
+import {TypeormModuleConfig, CountriesEntity} from '@kinopoisk-snitch/typeorm';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
 import { CountryCommand } from './api-gateway/country.command';

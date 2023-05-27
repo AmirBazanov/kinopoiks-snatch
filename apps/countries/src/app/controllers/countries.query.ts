@@ -2,26 +2,31 @@ import { Controller, Get } from '@nestjs/common';
 
 import { CountriesService } from '../services/countries.service';
 import {RabbitRPC} from "@golevelup/nestjs-rabbitmq";
-import {getAllMoviesRMQConfig, getMovieByTitleRMQConfig, getMovieRMQConfig} from "@kinopoisk-snitch/rmq-configs";
+import {
+  getAllCountriesRMQConfig,
+  getCountryByNameRMQConfig,
+  getCountryRMQConfig
+} from "@kinopoisk-snitch/rmq-configs";
 import {Payload} from "@nestjs/microservices";
-import {IdMovieContract, TitleMovieContract} from "@kinopoisk-snitch/contracts";
+import {IdCountryContract} from "@kinopoisk-snitch/contracts";
+import {NameCountryContract} from "../../../../../libs/contracts/src/lib/countres/name.country.contract";
 
 @Controller()
 export class CountriesQuery {
-  constructor(private readonly moviesService: CountriesService) {}
+  constructor(private readonly countriesService: CountriesService) {}
 
-  @RabbitRPC(getMovieRMQConfig())
-  async getMovieById(@Payload() movieDto: IdMovieContract.Request) {
-    return await this.moviesService.getMovieById(movieDto);
+  @RabbitRPC(getCountryRMQConfig())
+  async getCountryById(@Payload() countryDto: IdCountryContract.Request) {
+    return await this.countriesService.getCountryById(countryDto);
   }
 
-  @RabbitRPC(getMovieByTitleRMQConfig())
-  async getMovieByTitle(@Payload() movieDto: TitleMovieContract.Request) {
-    return await this.moviesService.getMovieByTitle(movieDto);
+  @RabbitRPC(getCountryByNameRMQConfig())
+  async getCountryByName(@Payload() countryName: NameCountryContract.Request) {
+    return await this.countriesService.getCountryByName(countryName.name);
   }
 
-  @RabbitRPC(getAllMoviesRMQConfig())
-  async getAllMovies() {
-    return await this.moviesService.getAllMovies();
+  @RabbitRPC(getAllCountriesRMQConfig())
+  async getAllCountries() {
+    return await this.countriesService.getAllCountries();
   }
 }

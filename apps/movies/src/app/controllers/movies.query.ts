@@ -12,7 +12,6 @@ export class MoviesQuery {
 
   @RabbitRPC(getMovieRMQConfig())
   async getMovieById(@Payload() movieDto: IdMovieContract.Request) {
-    console.log(movieDto)
     return await this.moviesService.getMovieById(movieDto);
   }
 

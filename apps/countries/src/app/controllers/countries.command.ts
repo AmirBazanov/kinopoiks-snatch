@@ -14,6 +14,6 @@ export class CountriesCommand {
 
   @RabbitRPC(createCountryRMQConfig())
   async createCountry(@Payload() countryDto: CreateCountryContract.Request) {
-    //return await this.countriesService.createMovie(countryDto);
+    return await this.countriesService.createCountry(countryDto);
   }
 }
