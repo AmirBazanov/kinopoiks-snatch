@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { TreeRepository } from 'typeorm';
 import { CommentsEntity } from '@kinopoisk-snitch/typeorm';
 import {
   CreateCommentContract,
@@ -11,7 +11,7 @@ import {
 export class CommentRepository {
   constructor(
     @InjectRepository(CommentsEntity)
-    private readonly CommentModel: Repository<CommentsEntity>
+    private readonly CommentModel: TreeRepository<CommentsEntity>
   ) {}
 
   async createComment(
@@ -36,10 +36,13 @@ export class CommentRepository {
     commentInfo: CreateCommentOnCommentContract.Request,
     user_id: number
   ) {
-    const comment_id = commentInfo.comment_id;
+    const comment_id_for_reply = commentInfo.comment_id;
     delete commentInfo.comment_id;
     const comment = await this.CommentModel.create({
       ...commentInfo,
+      parent: {
+        comment_id: comment_id_for_reply,
+      },
       movie: {
         movie_id: 123,
       },
@@ -51,14 +54,14 @@ export class CommentRepository {
     await this.CommentModel.save(comment);
   }
 
-  async getCommentById(id: number) {
-    const comments = await this.CommentModel.find({
+  async getCommentById(comment_id: number) {
+    const comments = await this.CommentModel.findOne({
       where: {
-        comment_id: id,
+        comment_id: comment_id,
       },
-      order: { comment_id: 'DESC' },
     });
-    return comments;
+    const childrenTree = await this.CommentModel.findDescendantsTree(comments);
+    return childrenTree;
   }
 
   async getCommentsByUserId(id: number) {

@@ -20,7 +20,7 @@ export class CommentService {
       secret: process.env.JWT_SECRET,
     });
     const user_id = Number(user['user_id']);
-    const move_id = Number(commentInfo['movie_id']);
+    const move_id = Number(commentInfo['film_id']);
     await this.commentRepository.createComment(commentInfo, move_id, user_id);
   }
 
