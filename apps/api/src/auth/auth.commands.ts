@@ -2,8 +2,10 @@ import {
   Body,
   Controller,
   Get,
+  HttpStatus,
   Post,
   Req,
+  UseFilters,
   UseGuards,
   UsePipes,
   ValidationPipe,
@@ -15,8 +17,8 @@ import {
   AuthRegister,
   AuthVk,
 } from '@kinopoisk-snitch/contracts';
-import { LoginDto } from './dto/login.dto';
-import { RegisterDto } from './dto/register.dto';
+import { LoginDto, LoginDtoResponse } from './dto/login.dto';
+import { RegisterDto, RegisterDtoResponse } from './dto/register.dto';
 import {
   authGoogleRMQConfig,
   authLoginRMQConfig,
@@ -25,13 +27,25 @@ import {
 } from '@kinopoisk-snitch/rmq-configs';
 import { GoogleOauthGuard } from '../guards/google-oauth.guard';
 import { VkOauthGuard } from '../guards/vk-oauth.guard';
+import { PassportTokenErrorFilter } from '../exceptions-filters/oauth-exceptions';
+import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { BAD_REQUEST, USER_NOT_FOUND } from '../constants/errors-constants';
 
+@ApiTags('Auth')
 @Controller('/auth')
 @UsePipes(new ValidationPipe())
 export class AuthCommands {
   constructor(private readonly amqpService: AmqpConnection) {}
 
   @Post('/register')
+  @ApiOperation({ summary: 'Register new user' })
+  @ApiBody({ type: RegisterDto })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Success',
+    type: RegisterDtoResponse,
+  })
+  @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: BAD_REQUEST })
   async register(@Body() registerDto: RegisterDto) {
     return this.amqpService.request<AuthRegister.Response>({
       ...authRegisterRMQConfig(),
@@ -40,6 +54,14 @@ export class AuthCommands {
   }
 
   @Post('/login')
+  @ApiOperation({ summary: 'Login' })
+  @ApiBody({ type: LoginDto })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Success',
+    type: LoginDtoResponse,
+  })
+  @ApiResponse({ status: HttpStatus.NOT_FOUND, description: USER_NOT_FOUND })
   async login(@Body() loginDto: LoginDto) {
     return this.amqpService.request<AuthLogin.Response>({
       ...authLoginRMQConfig(),
@@ -48,7 +70,15 @@ export class AuthCommands {
   }
 
   @Get('/google')
+  @ApiOperation({ summary: 'Login or register via google' })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Success',
+    type: LoginDtoResponse,
+  })
+  @ApiResponse({ status: HttpStatus.NOT_FOUND, description: USER_NOT_FOUND })
   @UseGuards(GoogleOauthGuard)
+  @UseFilters(new PassportTokenErrorFilter())
   async google(@Req() googleUser) {
     const { user } = googleUser;
     return this.amqpService.request<AuthGoogle.Response>({
@@ -58,7 +88,15 @@ export class AuthCommands {
   }
 
   @Get('/vk')
+  @ApiOperation({ summary: 'Login or register via vk' })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Success',
+    type: LoginDtoResponse,
+  })
+  @ApiResponse({ status: HttpStatus.NOT_FOUND, description: USER_NOT_FOUND })
   @UseGuards(VkOauthGuard)
+  @UseFilters(new PassportTokenErrorFilter())
   async vk(@Req() vkUser) {
     const { user } = vkUser;
     return this.amqpService.request<AuthVk.Response>({
