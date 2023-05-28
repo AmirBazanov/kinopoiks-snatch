@@ -14,13 +14,15 @@ import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
 export class CommentCommand {
   constructor(private readonly amqpConnection: AmqpConnection) {}
 
-  @Post('/createComment')
+  @Post('/film/:id')
   async createComment(
     @Body() commentInfo: CreateCommentDto,
+    @Param('id') movie_id: string,
     @Req() req: Request
   ) {
     const token = req.headers['authorization'].replace('Bearer ', '');
     commentInfo.user_id = token;
+    commentInfo.film_id = movie_id;
     try {
       const response = await this.amqpConnection.request({
         exchange: 'PostCommentsExchange',

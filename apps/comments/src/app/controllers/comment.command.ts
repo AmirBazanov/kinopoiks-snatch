@@ -19,8 +19,7 @@ export class CommentCommand {
 
   @RabbitRPC(createCommentRMQConfig())
   async createComment(@Payload() commentInfo: CreateCommentContract.Request) {
-    //Брать movie_id из сервиса movies
-    await this.commentService.createComment(commentInfo, 123);
+    await this.commentService.createComment(commentInfo);
   }
 
   @RabbitRPC(createCommentOnCommentRMQConfig())
