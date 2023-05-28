@@ -17,12 +17,13 @@ import {
 import {NameCountryContract} from "../../../../../libs/contracts/src/lib/countres/name.country.contract";
 import {AllCountriesContract} from "../../../../../libs/contracts/src/lib/countres/all.countries.contract";
 
+
 @Controller('/countries')
 export class CountryQuery {
   constructor(private readonly amqpConnection: AmqpConnection) {}
 
   @Get('/getCountry/:id')
-  async getCountryById(@Param('id') country_id: string) {
+  async getCountryById(@Param('id') country_id: number) {
     if (isNaN(Number(country_id))) {
       throw new HttpException(
         'ID must be a number',
@@ -32,7 +33,7 @@ export class CountryQuery {
       const response = await this.amqpConnection.request<IdCountryContract.Response>({
         exchange: getCountryRMQConfig().exchange,
         routingKey: getCountryRMQConfig().routingKey,
-        payload: Number(country_id),
+        payload: country_id,
       });
       return response;
     }

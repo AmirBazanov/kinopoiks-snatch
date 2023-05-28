@@ -14,5 +14,6 @@ export namespace IdCountryContract {
     httpStatus: HttpStatus;
     country_id: number;
     is_eng: boolean;
+    movies: IdMovieContract.Response[];
   }
 }
