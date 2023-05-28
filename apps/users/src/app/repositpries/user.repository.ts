@@ -3,7 +3,10 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UsersEntity } from '@kinopoisk-snitch/typeorm';
 import * as bcrypt from 'bcryptjs';
-import { CreateUserContract } from '@kinopoisk-snitch/contracts';
+import {
+  CreateUserContract,
+  EditUserContract,
+} from '@kinopoisk-snitch/contracts';
 
 @Injectable()
 export class UserRepository {
@@ -35,6 +38,16 @@ export class UserRepository {
   async findUserByEmail(email: string) {
     const user = await this.UserModel.findOneBy({ email: email });
     return user;
+  }
+
+  async editUser(userInfo: EditUserContract.Request, user_id: number) {
+    const user = await this.UserModel.findOne({
+      where: {
+        user_id: user_id,
+      },
+    });
+    Object.assign(user, userInfo);
+    await this.UserModel.save(user);
   }
 
   async deleteProfile(id: number) {

@@ -5,11 +5,15 @@ import {
   JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
+  Tree,
+  TreeChildren,
+  TreeParent,
 } from 'typeorm';
 import { MoviesEntity } from './movies.entity';
 import { UsersEntity } from './users.entity';
 
 @Entity('Comments')
+@Tree('closure-table')
 export class CommentsEntity {
   @PrimaryGeneratedColumn()
   comment_id: number;
@@ -32,8 +36,11 @@ export class CommentsEntity {
   @CreateDateColumn()
   created_at: Date;
 
-  @ManyToOne(() => CommentsEntity, (comment) => comment.comment_id)
-  replied_comments: CommentsEntity[];
+  @TreeChildren()
+  children: CommentsEntity[];
+
+  @TreeParent()
+  parent: CommentsEntity;
 
   @ManyToOne(() => MoviesEntity, (movie) => movie.comments)
   @JoinColumn({ name: 'movie_id' })

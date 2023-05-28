@@ -11,6 +11,14 @@ export function rmqUserConfig(): RabbitMQConfig {
         name: 'GetUsersExchange',
         type: 'topic',
       },
+      {
+        name: 'PutUsersExchange',
+        type: 'topic',
+      },
+      {
+        name: 'DeleteUsersExchange',
+        type: 'topic',
+      },
     ],
     uri: 'amqp://nestjs:nestjs@localhost:5672',
     connectionInitOptions: { wait: false },

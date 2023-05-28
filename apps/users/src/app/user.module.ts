@@ -9,6 +9,7 @@ import { ConfigModule } from '@nestjs/config';
 import { TypeormModuleConfig, UsersEntity } from '@kinopoisk-snitch/typeorm';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { rmqUserConfig } from '@kinopoisk-snitch/rmq-configs';
+import { JwtService } from '@nestjs/jwt';
 
 @Module({
   imports: [
@@ -18,6 +19,6 @@ import { rmqUserConfig } from '@kinopoisk-snitch/rmq-configs';
     RabbitMQModule.forRoot(RabbitMQModule, rmqUserConfig()),
   ],
   controllers: [UserCommand, UserQuery, UserEvent],
-  providers: [UserService, UserRepository],
+  providers: [UserService, UserRepository, JwtService],
 })
 export class UserModule {}
