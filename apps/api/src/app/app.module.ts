@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import {
-  CommentsEntity, CountriesEntity,
+  CommentsEntity, CountriesEntity, MoviesEntity,
   PersonsEntity,
   TypeormModuleConfig,
   UsersEntity,

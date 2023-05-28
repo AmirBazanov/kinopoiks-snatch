@@ -16,6 +16,7 @@ export class MovieCommand {
         routingKey: createMovieRMQConfig().routingKey,
         payload: movieDto,
       });
+      return response;
     } catch (e) {
       throw new Error(e);
     }

@@ -2,7 +2,7 @@ import {HttpStatus, Injectable} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import {MoviesEntity} from '@kinopoisk-snitch/typeorm';
-import {CreateMovieContract} from '@kinopoisk-snitch/contracts';
+import {CreateMovieContract, IdMovieContract} from '@kinopoisk-snitch/contracts';
 
 @Injectable()
 export class MovieRepository {
@@ -28,12 +28,14 @@ export class MovieRepository {
     }
   }
 
-  async getMovieById(id: number) {
+  async getMovieById(id: IdMovieContract.Request) {
     try {
-      const movie = await this.MovieModel.findBy({
-        movie_id: id,
+      const movie = await this.MovieModel.findOne({
+        where: {
+          movie_id: Number(id),
+        },
+        relations: {country: true}
       });
-
       return {httpStatus: HttpStatus.OK, ...movie};
     } catch (e) {
       return {httpStatus: HttpStatus.NOT_FOUND}
@@ -42,15 +44,20 @@ export class MovieRepository {
 
   async getMovieByTitle(title: string) {
     try {
-    const comments = await this.MovieModel.findBy({
-      title: title
+    const movies = await this.MovieModel.findOne({
+      where: {title: title},
+      relations: {country: true}
     });
-    if (comments) return comments;
+    if (movies) return movies;
     return await this.MovieModel.findBy({
       orig_title: title
     });
   } catch (e) {
       return {httpStatus: HttpStatus.NOT_FOUND}
     }
+  }
+
+  async getAllMovies() {
+    return await this.MovieModel.find({relations: {country: true}});
   }
 }

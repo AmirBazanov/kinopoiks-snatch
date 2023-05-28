@@ -14,12 +14,17 @@ export class MoviesService {
   }
 
   async getMovieById(movieDto: IdMovieContract.Request) {
-    const response = await this.movieRepository.getMovieById(movieDto.movie_id);
+    const response = await this.movieRepository.getMovieById(movieDto);
     return response;
   }
 
   async getMovieByTitle(movieDto: TitleMovieContract.Request) {
     const response = await this.movieRepository.getMovieByTitle(movieDto.title);
+    return response;
+  }
+
+  async getAllMovies() {
+    const response = await this.movieRepository.getAllMovies();
     return response;
   }
 }

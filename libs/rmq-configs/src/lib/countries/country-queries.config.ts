@@ -8,6 +8,19 @@ export const getCountryRMQConfig = (): RmqConfig => {
   };
 };
 
+export const getCountryByNameRMQConfig = (): RmqConfig => {
+  return {
+    exchange: 'GetCountriesExchange',
+    routingKey: 'get-country-by-name',
+    queue: 'CountryQueriesQueueName',
+  };
+};
+
+export const getAllCountriesRMQConfig = (): RmqConfig => {
+  return {
+    exchange: 'GetCountriesExchange',
+    routingKey: 'get-all-countries',
+    queue: 'CountryQueriesQueueAll',
 export const getCountryByTitleRMQConfig = (): RmqConfig => {
   return {
     exchange: 'GetCountriesExchange',

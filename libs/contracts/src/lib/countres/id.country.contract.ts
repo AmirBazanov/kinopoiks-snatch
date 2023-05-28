@@ -13,6 +13,7 @@ export namespace IdCountryContract {
     @IsEnum(HttpStatus)
     httpStatus: HttpStatus;
     country_id: number;
+    is_eng: boolean;
     movies: IdMovieContract.Response[];
   }
 }

@@ -23,3 +23,11 @@ export const authGoogleRMQConfig = (): RmqConfig => {
     queue: 'GoogleAuthQueue',
   };
 };
+
+export const authVkRMQConfig = (): RmqConfig => {
+  return {
+    routingKey: 'vk-auth',
+    exchange: 'AuthExchange',
+    queue: 'VkAuthQueue',
+  };
+};
