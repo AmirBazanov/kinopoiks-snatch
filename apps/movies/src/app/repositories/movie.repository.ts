@@ -2,7 +2,7 @@ import {HttpStatus, Injectable} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import {GenresEntity, MoviesEntity} from '@kinopoisk-snitch/typeorm';
-import {CreateMovieContract, IdMovieContract} from '@kinopoisk-snitch/contracts';
+import {CreateMovieContract, DeleteMovieContract, IdMovieContract} from '@kinopoisk-snitch/contracts';
 import {UpdateMovieContract} from "../../../../../libs/contracts/src/lib/movies/update.movie.contract";
 
 @Injectable()
@@ -96,5 +96,19 @@ export class MovieRepository {
 
   async getAllMovies() {
     return await this.MovieModel.find({relations: {country: true, genres: true, awards: true}});
+  }
+
+  async deleteMovie(id: number) {
+    try {
+      const movie = await this.MovieModel.findOne({
+        where: {
+          movie_id: id
+        },
+      });
+      await this.MovieModel.remove(movie);
+      return {httpStatus: HttpStatus.OK, message: "Movie deleted successfully"}
+    } catch(e) {
+      return {httpStatus: HttpStatus.INTERNAL_SERVER_ERROR, message: "Could not delete movie"}
+    }
   }
 }

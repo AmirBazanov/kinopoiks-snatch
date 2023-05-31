@@ -1,6 +1,11 @@
 import {Inject, Injectable} from '@nestjs/common';
 import {MovieRepository} from "../repositories/movie.repository";
-import {CreateMovieContract, IdMovieContract, TitleMovieContract} from "@kinopoisk-snitch/contracts";
+import {
+  CreateMovieContract,
+  DeleteMovieContract,
+  IdMovieContract,
+  TitleMovieContract
+} from "@kinopoisk-snitch/contracts";
 import {AmqpConnection} from "@golevelup/nestjs-rabbitmq";
 import {UpdateMovieContract} from "../../../../../libs/contracts/src/lib/movies/update.movie.contract";
 
@@ -32,5 +37,9 @@ export class MoviesService {
   async getAllMovies() {
     const response = await this.movieRepository.getAllMovies();
     return response;
+  }
+
+  async deleteMovie(id: number) {
+    return await this.movieRepository.deleteMovie(id);
   }
 }

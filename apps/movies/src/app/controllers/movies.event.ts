@@ -1,15 +1,18 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller } from '@nestjs/common';
 
 import { MoviesService } from '../services/movies.service';
 import {RabbitRPC} from "@golevelup/nestjs-rabbitmq";
-import {updateMovieRMQConfig} from "@kinopoisk-snitch/rmq-configs";
+import {deleteMovieRMQConfig, updateMovieRMQConfig} from "@kinopoisk-snitch/rmq-configs";
 import {Payload} from "@nestjs/microservices";
-import {UpdateMovieContract} from "../../../../../libs/contracts/src/lib/movies/update.movie.contract";
+import {DeleteMovieContract, UpdateMovieContract} from "@kinopoisk-snitch/contracts";
 
 @Controller()
 export class MoviesEvent {
   constructor(private readonly moviesService: MoviesService) {}
-
+  @RabbitRPC(deleteMovieRMQConfig())
+  async deleteMovie(@Payload() id: number) {
+    return await this.moviesService.deleteMovie(id);
+  }
   @RabbitRPC(updateMovieRMQConfig())
   async updateMovie(@Payload() movieDto: UpdateMovieContract.Request) {
     return await this.moviesService.updateMovie(movieDto);

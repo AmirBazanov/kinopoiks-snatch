@@ -15,6 +15,10 @@ export function rmqMovieConfig(): RabbitMQConfig {
         name: 'PutMoviesExchange',
         type: 'topic',
       },
+      {
+        name: 'DeleteMoviesExchange',
+        type: 'topic',
+      }
     ],
     uri: 'amqp://nestjs:nestjs@localhost:5672',
     connectionInitOptions: { wait: false },

@@ -1,14 +1,19 @@
 import {
   Body,
-  Controller,
+  Controller, Delete,
   Get,
   HttpException,
   HttpStatus,
   Param,
 } from '@nestjs/common';
 import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
-import {AllMoviesContract, IdMovieContract, TitleMovieContract} from '@kinopoisk-snitch/contracts';
-import {getAllMoviesRMQConfig, getMovieByTitleRMQConfig, getMovieRMQConfig} from "@kinopoisk-snitch/rmq-configs";
+import {AllMoviesContract, DeleteMovieContract, IdMovieContract, TitleMovieContract} from '@kinopoisk-snitch/contracts';
+import {
+  deleteMovieRMQConfig,
+  getAllMoviesRMQConfig,
+  getMovieByTitleRMQConfig,
+  getMovieRMQConfig
+} from "@kinopoisk-snitch/rmq-configs";
 
 @Controller('/movies')
 export class MovieQuery {
