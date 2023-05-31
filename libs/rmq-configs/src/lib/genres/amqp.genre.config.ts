@@ -1,18 +1,14 @@
 import { RabbitMQConfig } from '@golevelup/nestjs-rabbitmq';
 
-export function rmqMovieConfig(): RabbitMQConfig {
+export function rmqGenreConfig(): RabbitMQConfig {
   return {
     exchanges: [
       {
-        name: 'PostMoviesExchange',
+        name: 'PostGenresExchange',
         type: 'topic',
       },
       {
-        name: 'GetMoviesExchange',
-        type: 'topic',
-      },
-      {
-        name: 'PutMoviesExchange',
+        name: 'GetGenresExchange',
         type: 'topic',
       },
     ],

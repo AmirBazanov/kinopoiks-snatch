@@ -13,6 +13,7 @@ import { CommentsModule } from '../comments/comment.module';
 import { PersonsModule } from '../persons/persons.module';
 import {MoviesModule} from "../movies/movies.module";
 import {CountriesModule} from "../countries/countries.module";
+import {GenresModule} from "../genres/genres.module";
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import {CountriesModule} from "../countries/countries.module";
     PersonsModule,
     MoviesModule,
     CountriesModule,
+    GenresModule,
   ],
   controllers: [],
   providers: [],
