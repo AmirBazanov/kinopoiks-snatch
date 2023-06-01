@@ -25,11 +25,15 @@ import {
   authRegisterRMQConfig,
   authVkRMQConfig,
 } from '@kinopoisk-snitch/rmq-configs';
-import { GoogleOauthGuard } from '../guards/google-oauth.guard';
-import { VkOauthGuard } from '../guards/vk-oauth.guard';
-import { PassportTokenErrorFilter } from '../exceptions-filters/oauth-exceptions';
+import { GoogleOauthGuard } from '../assets/guards/google-oauth.guard';
+import { VkOauthGuard } from '../assets/guards/vk-oauth.guard';
+import { PassportTokenErrorFilter } from '../assets/exceptions-filters/oauth-exceptions';
 import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { BAD_REQUEST, USER_NOT_FOUND } from '../constants/errors-constants';
+import {
+  BAD_REQUEST,
+  USER_NOT_FOUND,
+} from '../assets/constants/errors-constants';
+import { OwnerGuard } from '../assets/guards/role.guard';
 
 @ApiTags('Auth')
 @Controller('/auth')
@@ -103,5 +107,11 @@ export class AuthCommands {
       ...authVkRMQConfig(),
       payload: user,
     });
+  }
+
+  @Get('/admin')
+  @UseGuards(OwnerGuard)
+  async testAdmin(@Req() user) {
+    return user.user_id;
   }
 }
