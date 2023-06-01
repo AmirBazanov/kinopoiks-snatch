@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import {
-  CommentsEntity,
+  CommentsEntity, CountriesEntity, MoviesEntity,
   PersonsEntity,
   TypeormModuleConfig,
   UsersEntity,
@@ -11,7 +11,10 @@ import { AuthModule } from '../auth/auth.module';
 import { UserModule } from '../users/user.module';
 import { CommentsModule } from '../comments/comment.module';
 import { PersonsModule } from '../persons/persons.module';
-import { MoviesModule } from '../movies/movies.module';
+import {MoviesModule} from "../movies/movies.module";
+import {CountriesModule} from "../countries/countries.module";
+import {GenresModule} from "../genres/genres.module";
+
 
 @Module({
   imports: [
@@ -23,6 +26,8 @@ import { MoviesModule } from '../movies/movies.module';
     CommentsModule,
     PersonsModule,
     MoviesModule,
+    CountriesModule,
+    GenresModule,
   ],
   controllers: [],
   providers: [],

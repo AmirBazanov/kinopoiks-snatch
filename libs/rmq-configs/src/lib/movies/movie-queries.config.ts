@@ -15,3 +15,11 @@ export const getMovieByTitleRMQConfig = (): RmqConfig => {
     queue: 'MovieQueriesQueueTitle',
   };
 };
+
+export const getAllMoviesRMQConfig = (): RmqConfig => {
+  return {
+    exchange: 'GetMoviesExchange',
+    routingKey: 'get-all-movies',
+    queue: 'MovieQueriesQueueAll',
+  };
+};
