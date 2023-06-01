@@ -21,10 +21,5 @@ export const getAllCountriesRMQConfig = (): RmqConfig => {
     exchange: 'GetCountriesExchange',
     routingKey: 'get-all-countries',
     queue: 'CountryQueriesQueueAll',
-export const getCountryByTitleRMQConfig = (): RmqConfig => {
-  return {
-    exchange: 'GetCountriesExchange',
-    routingKey: 'get-country-by-title',
-    queue: 'CountryQueriesQueueTitle',
-  };
+  }
 };

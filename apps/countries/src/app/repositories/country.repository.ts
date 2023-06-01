@@ -27,7 +27,6 @@ export class CountryRepository {
 
   async getCountryById(id: IdCountryContract.Request) {
     try {
-      console.log(id)
       const country = await this.CountryModel.findOne({
         where: {country_id: Number(id)},
         relations: {movies: true}
@@ -41,13 +40,13 @@ export class CountryRepository {
 
   async getCountryByName(name: string) {
     try {
-    const comments = await this.CountryModel.findOne({
+    const countries = await this.CountryModel.findOne({
       where: {name: name},
       relations: {
         movies: true,
       }
     });
-    if (comments) return comments;
+    if (countries) return countries;
     return await this.CountryModel.findBy({
       name: name
     });

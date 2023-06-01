@@ -1,10 +1,10 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller } from '@nestjs/common';
 
 import { MoviesService } from '../services/movies.service';
 import {RabbitRPC} from "@golevelup/nestjs-rabbitmq";
-import {createMovieRMQConfig, getMovieByTitleRMQConfig, getMovieRMQConfig} from "@kinopoisk-snitch/rmq-configs";
+import {createMovieRMQConfig, updateMovieRMQConfig} from "@kinopoisk-snitch/rmq-configs";
 import {Payload} from "@nestjs/microservices";
-import {CreateMovieContract} from "@kinopoisk-snitch/contracts";
+import {CreateMovieContract, UpdateMovieContract} from "@kinopoisk-snitch/contracts";
 
 @Controller()
 export class MoviesCommand {

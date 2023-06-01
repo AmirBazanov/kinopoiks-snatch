@@ -7,15 +7,12 @@ import {
   Param,
 } from '@nestjs/common';
 import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
-import {IdCountryContract} from '@kinopoisk-snitch/contracts';
+import {AllCountriesContract, IdCountryContract, NameCountryContract} from '@kinopoisk-snitch/contracts';
 import {
   getAllCountriesRMQConfig,
   getCountryByNameRMQConfig,
-  getCountryRMQConfig,
-  getMovieRMQConfig
+  getCountryRMQConfig
 } from "@kinopoisk-snitch/rmq-configs";
-import {NameCountryContract} from "../../../../../libs/contracts/src/lib/countres/name.country.contract";
-import {AllCountriesContract} from "../../../../../libs/contracts/src/lib/countres/all.countries.contract";
 
 
 @Controller('/countries')

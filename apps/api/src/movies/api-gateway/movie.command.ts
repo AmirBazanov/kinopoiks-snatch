@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import {Body, Controller, Post} from '@nestjs/common';
 import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
 import { CreateMovieDto } from '../dtos/create-movie.dto';
 import {createMovieRMQConfig} from "@kinopoisk-snitch/rmq-configs";

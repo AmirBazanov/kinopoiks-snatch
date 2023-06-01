@@ -8,8 +8,7 @@ import {
   getCountryRMQConfig
 } from "@kinopoisk-snitch/rmq-configs";
 import {Payload} from "@nestjs/microservices";
-import {IdCountryContract} from "@kinopoisk-snitch/contracts";
-import {NameCountryContract} from "../../../../../libs/contracts/src/lib/countres/name.country.contract";
+import {IdCountryContract, NameCountryContract} from "@kinopoisk-snitch/contracts";
 
 @Controller()
 export class CountriesQuery {
