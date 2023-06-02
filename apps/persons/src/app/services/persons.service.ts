@@ -1,4 +1,4 @@
-import { AwardsEntity, PersonsEntity } from '@kinopoisk-snitch/typeorm';
+import { AwardsEntity, MoviesPersonsRolesEntity, PersonsEntity } from '@kinopoisk-snitch/typeorm';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -9,27 +9,29 @@ export class PersonsService {
     @InjectRepository(PersonsEntity)
     private readonly personRepository: Repository<PersonsEntity>,
     @InjectRepository(AwardsEntity)
-    private readonly awardsRepository: Repository<AwardsEntity>
+    private readonly awardsRepository: Repository<AwardsEntity>,
+    @InjectRepository(MoviesPersonsRolesEntity)
+    private readonly moviesPersonsRolesRepository: Repository<MoviesPersonsRolesEntity>,
     ) {}
 
   async getPersonById(id: number) {
     const person = await this.personRepository.findOne({where: {person_id: id}, relations: {awards: true}});
 
     // const career = await this.amqpConnection.request({
-    //   exchange: getCareerArrayOfPerson().exchange,
-    //   routingKey: getCareerArrayOfPerson().routingKey,
+    //   exchange: getCareerArrayOfPersonRMQConfig().exchange,
+    //   routingKey: getCareerArrayOfPersonRMQConfig().routingKey,
     //   payload: person_id,
     // })
 
     // const genres = await this.amqpConnection.request({
-    //   exchange: getGenresArrayOfPerson().exchange,
-    //   routingKey: getGenresArrayOfPerson().routingKey,
+    //   exchange: getGenresArrayOfPersonRMQConfig().exchange,
+    //   routingKey: getGenresArrayOfPersonRMQConfig().routingKey,
     //   payload: person_id,
     // })
 
     const countMovies = 100; //= await this.amqpConnection.request({
-    //   exchange: getCountMoviesArrayOfPerson().exchange,
-    //   routingKey: getCountMoviesArrayOfPerson().routingKey,
+    //   exchange: getCountMoviesArrayOfPersonRMQConfig().exchange,
+    //   routingKey: getCountMoviesArrayOfPersonRMQConfig().routingKey,
     //   payload: person_id,
     // })
 
@@ -49,4 +51,6 @@ export class PersonsService {
       isEng: person.is_eng,
     }
   }
+
+  
 }

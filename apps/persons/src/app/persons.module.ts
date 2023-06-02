@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { PersonsService } from './services/persons.service';
 import { ConfigModule } from '@nestjs/config';
-import { AwardsEntity, PersonsEntity, TypeormModuleConfig } from '@kinopoisk-snitch/typeorm';
+import { AwardsEntity, MoviesPersonsRolesEntity, PersonsEntity, TypeormModuleConfig } from '@kinopoisk-snitch/typeorm';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
 import { PersonsCommand } from './controllers/persons.command';
@@ -13,7 +13,7 @@ import { rmqPersonConfig } from '@kinopoisk-snitch/rmq-configs';
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
     TypeormModuleConfig,
-    TypeOrmModule.forFeature([PersonsEntity, AwardsEntity]),
+    TypeOrmModule.forFeature([PersonsEntity, AwardsEntity, MoviesPersonsRolesEntity]),
     RabbitMQModule.forRoot(RabbitMQModule, rmqPersonConfig()),
   ],
   controllers: [PersonsCommand, PersonsEvent, PersonsQuery],
