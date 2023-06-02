@@ -1,17 +1,17 @@
 import { MigrationInterface, QueryRunner } from "typeorm"
 
-export class Movie3Kinopoisk implements MigrationInterface {
+export class Movie4Kinopoisk implements MigrationInterface {
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.query(`
             INSERT INTO "Movies" (title, orig_title, production_year, tagline, budget, dvd_release, blueray_release, age_limit, mpaa_rating, duration_min, film_description,
                 is_serial, is_eng, country_id) VALUES
-            ('Вызов', 'Вызов', '01.01.2023', NULL, NULL, NULL, NULL, 12, NULL, 164,
-                'Торакальный хирург Женя за месяц должна подготовиться к космическому полету, чтобы отправиться на МКС и спасти заболевшего космонавта. Ей придётся преодолеть неуверенность и страхи, а также провести сложнейшую операцию в условиях невесомости, от которой зависят шансы космонавта вернуться на Землю живым.',
-                false, false, 29),
-            ('Challenge', 'Вызов', '01.01.2023', NULL, NULL, NULL, NULL, 12, NULL, 164,
-                'Thoracic surgeon Zhenya has to prepare for a space flight in a month to go to the ISS and save a sick cosmonaut. She will have to overcome uncertainty and fears, as well as carry out a complex operation in zero gravity, on which the chances of an astronaut returning to Earth alive depend.',
-                false, true, 30);
+            ('Трио в перьях', 'Richard the Stork and the Mystery of the Great Jewel', '01.01.2023', NULL, NULL, NULL, NULL, 6, NULL, 84,
+                'Наслаждаясь зимовкой на Большом озере в Северной Африке, Ричард узнает, что в этот раз ему не доверят такую почетную и ответственную миссию, как возглавить перелет стаи аистов домой, на север. Не желая с этим мириться, он убегает в самостоятельное путешествие, полное опасностей и приключений. По пути Ричарду предстоит встретить попавшую в беду стаю воробьев, угодившую в плен злобных птиц марабу под предводительством жадного павлина Замано. Для обретения свободы пернатым придется объединиться в дружную команду, проявить смелость, изобретательность и смекалку, чтобы разгадать ребус и найти таинственный клад с драгоценностями.',
+                false, false, 17),
+            ('Trio in feathures 2', 'Richard the Stork and the Mystery of the Great Jewel', '01.01.2023', NULL, NULL, NULL, NULL, 6, NULL, 84,
+                'Enjoying wintering on a Large lake in North Africa, Richard learns that this time he will not be entrusted with such an honorable and responsible mission as to lead the flight of a flock of storks home to the north. Unwilling to put up with this, he runs away on an independent journey full of dangers and adventures. Along the way, Richard will have to meet a flock of sparrows in trouble, captured by the evil marabou birds led by the greedy peacock Zamano. To gain freedom, the birds will have to unite in a friendly team, show courage, ingenuity and ingenuity to solve the puzzle and find a mysterious treasure with jewels.',
+                false, true, 18);
         `);
         await queryRunner.query(`
             INSERT INTO movies_genres_genres VALUES
