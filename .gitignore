@@ -4,7 +4,7 @@
 dist
 tmp
 /out-tsc
-package-lock.json
+/package-lock.json
 # dependencies
 node_modules
 
@@ -1305,3 +1305,6 @@ Thumbs.db
 /db/data/postgresql.conf
 /db/data/postmaster.opts
 /db
+/migrations
+package-lock.json
+

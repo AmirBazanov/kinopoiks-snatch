@@ -8,6 +8,14 @@ export function createCommentRMQConfig(): RmqConfig {
   };
 }
 
+export function createCommentOnCommentRMQConfig(): RmqConfig {
+  return {
+    exchange: 'PostCommentsExchange',
+    routingKey: 'create-comment-on-comment',
+    queue: 'CommentOnCommentCommandsQueue',
+  };
+}
+
 export function incLikeCommentRMQConfig(): RmqConfig {
   return {
     exchange: 'PostCommentsExchange',

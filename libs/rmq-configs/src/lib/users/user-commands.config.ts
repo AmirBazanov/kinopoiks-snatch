@@ -1,9 +1,25 @@
 import { RmqConfig } from '../types';
 
-export const createUserRMQConfig = (): RmqConfig => {
+export function createUserRMQConfig(): RmqConfig {
   return {
     exchange: 'PostUsersExchange',
     routingKey: 'create-user',
-    queue: 'UserCommandsQueue',
+    queue: 'CreateUserCommandsQueue',
   };
-};
+}
+
+export function editUserRMQConfig(): RmqConfig {
+  return {
+    exchange: 'PutUsersExchange',
+    routingKey: 'edit-user',
+    queue: 'EditUserCommandQueue',
+  };
+}
+
+export function deleteUserRMQConfig(): RmqConfig {
+  return {
+    exchange: 'DeleteUsersExchange',
+    routingKey: 'delete-user',
+    queue: 'DeleteUserCommandQueue',
+  };
+}

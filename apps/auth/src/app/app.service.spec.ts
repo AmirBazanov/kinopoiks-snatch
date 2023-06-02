@@ -2,7 +2,7 @@ import { Test } from '@nestjs/testing';
 
 import { AppService } from './app.service';
 
-describe('AppService', () => {
+describe('CountriesService', () => {
   let service: AppService;
 
   beforeAll(async () => {

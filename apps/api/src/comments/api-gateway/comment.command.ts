@@ -5,6 +5,7 @@ import {
   HttpStatus,
   Param,
   Post,
+  Req,
 } from '@nestjs/common';
 import { CreateCommentDto } from '../dtos/create-comment.dto';
 import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
@@ -13,12 +14,39 @@ import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
 export class CommentCommand {
   constructor(private readonly amqpConnection: AmqpConnection) {}
 
-  @Post('/createComment')
-  async createComment(@Body() commentInfo: CreateCommentDto) {
+  @Post('/film/:id')
+  async createComment(
+    @Body() commentInfo: CreateCommentDto,
+    @Param('id') movie_id: string,
+    @Req() req: Request
+  ) {
+    const token = req.headers['authorization'].replace('Bearer ', '');
+    commentInfo.user_id = token;
+    commentInfo.film_id = movie_id;
     try {
       const response = await this.amqpConnection.request({
         exchange: 'PostCommentsExchange',
         routingKey: 'create-comment',
+        payload: commentInfo,
+      });
+    } catch (e) {
+      throw new Error(e);
+    }
+  }
+
+  @Post('/createOnComment/:comment_id')
+  async createOnComment(
+    @Body() commentInfo: CreateCommentDto,
+    @Param('comment_id') comment_id: string,
+    @Req() req: Request
+  ) {
+    commentInfo.comment_id = Number(comment_id);
+    const token = req.headers['authorization'].replace('Bearer ', '');
+    commentInfo.user_id = token;
+    try {
+      const response = await this.amqpConnection.request({
+        exchange: 'PostCommentsExchange',
+        routingKey: 'create-comment-on-comment',
         payload: commentInfo,
       });
     } catch (e) {

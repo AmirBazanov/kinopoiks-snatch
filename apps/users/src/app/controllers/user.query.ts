@@ -22,6 +22,6 @@ export class UserQuery {
 
   @RabbitRPC(getUserByEmailRMQConfig())
   async getUserByEmail(@Payload() email: EmailUserContract.Request) {
-    return this.userService.getUserByEmail(email['email']);
+    return this.userService.getUserByEmail(email.email);
   }
 }

@@ -1,22 +1,25 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { TreeRepository } from 'typeorm';
 import { CommentsEntity } from '@kinopoisk-snitch/typeorm';
-import { CreateCommentContract } from '@kinopoisk-snitch/contracts';
+import {
+  CreateCommentContract,
+  CreateCommentOnCommentContract,
+} from '@kinopoisk-snitch/contracts';
 
 @Injectable()
 export class CommentRepository {
   constructor(
     @InjectRepository(CommentsEntity)
-    private readonly CommentModel: Repository<CommentsEntity>
+    private readonly CommentModel: TreeRepository<CommentsEntity>
   ) {}
 
   async createComment(
     commentInfo: CreateCommentContract.Request,
-    movie_id,
-    user_id
+    movie_id: number,
+    user_id: number
   ) {
-    const temp = this.CommentModel.create({
+    const comment = await this.CommentModel.create({
       ...commentInfo,
       movie: {
         movie_id: movie_id,
@@ -24,20 +27,41 @@ export class CommentRepository {
       user: {
         user_id: user_id,
       },
-      replied_comment: 0,
       created_at: new Date(),
     });
-    await this.CommentModel.save(temp);
+    await this.CommentModel.save(comment);
   }
 
-  async getCommentById(id: number) {
-    const comment = await this.CommentModel.findOne({
+  async createOnComment(
+    commentInfo: CreateCommentOnCommentContract.Request,
+    user_id: number
+  ) {
+    const comment_id_for_reply = commentInfo.comment_id;
+    delete commentInfo.comment_id;
+    const comment = await this.CommentModel.create({
+      ...commentInfo,
+      parent: {
+        comment_id: comment_id_for_reply,
+      },
+      movie: {
+        movie_id: 123,
+      },
+      user: {
+        user_id: user_id,
+      },
+      created_at: new Date(),
+    });
+    await this.CommentModel.save(comment);
+  }
+
+  async getCommentById(comment_id: number) {
+    const comments = await this.CommentModel.findOne({
       where: {
-        comment_id: id,
+        comment_id: comment_id,
       },
     });
-
-    return comment;
+    const childrenTree = await this.CommentModel.findDescendantsTree(comments);
+    return childrenTree;
   }
 
   async getCommentsByUserId(id: number) {
