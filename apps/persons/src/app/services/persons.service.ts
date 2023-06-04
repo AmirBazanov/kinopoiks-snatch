@@ -1,7 +1,7 @@
 import { AwardsEntity, MoviesPersonsRolesEntity, PersonsEntity } from '@kinopoisk-snitch/typeorm';
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Like, Repository } from 'typeorm';
 
 @Injectable()
 export class PersonsService {
@@ -55,5 +55,33 @@ export class PersonsService {
     }
   }
 
-  
+  async getPersonByName(fullName: string) {
+     /*const person = await this.personRepository.find({where: [
+      {
+        name: Like(`%${fullName}%`)
+      },
+    ], 
+    relations: {awards: true }});*/
+
+    const person: PersonsEntity[] = await 
+      this.personRepository
+        .createQueryBuilder('person')
+        .where(
+          `CONCAT(person.name, ' ', person.sur_name) LIKE :personFullName`, 
+          { 
+            personFullName: `%${fullName}%`
+          },
+        )
+        .getMany();
+
+    for (let i = 0; i < person.length; i++) {
+      const currentPerson = await this.personRepository.findOne({where: {person_id: person[i].person_id}, relations: {awards: true}});
+
+      const awards: AwardsEntity[] = currentPerson.awards;
+
+      person[i].awards = awards;
+    }
+
+    return person;
+  }
 }
