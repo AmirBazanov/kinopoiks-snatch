@@ -23,15 +23,12 @@ export class PersonsService {
     //   payload: person_id,
     // })
 
-<<<<<<< HEAD
     // const genres = await this.amqpConnection.request({
     //   exchange: getGenresArrayOfPersonRMQConfig().exchange,
     //   routingKey: getGenresArrayOfPersonRMQConfig().routingKey,
-=======
     // const countries = await this.amqpConnection.request({
     //   exchange: getGenresArrayOfPerson().exchange,
     //   routingKey: getGenresArrayOfPerson().routingKey,
->>>>>>> 1b66479cfd8a2e69eca6390e35c2dd81fc328c9e
     //   payload: person_id,
     // })
 
@@ -41,13 +38,13 @@ export class PersonsService {
     //   payload: person_id,
     // })
 
-    const awards = person.awards;
+    //const awards = person.awards;
 
     return {
       fullName: person.name + ' ' + person.sur_name,
       career: [],
       genres: [],
-      awards: awards,
+      awards: person.awards,
       height: person.height,
       dateBirth: person.date_birth,
       placeBirth: person.place_birth,
