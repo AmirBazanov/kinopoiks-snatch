@@ -1,7 +1,9 @@
+import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
+import { getGenresArrayOfPersonRMQConfig } from '@kinopoisk-snitch/rmq-configs';
 import { AwardsEntity, MoviesPersonsRolesEntity, PersonsEntity } from '@kinopoisk-snitch/typeorm';
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Like, Repository } from 'typeorm';
 
 @Injectable()
 export class PersonsService {
@@ -12,6 +14,7 @@ export class PersonsService {
     private readonly awardsRepository: Repository<AwardsEntity>,
     @InjectRepository(MoviesPersonsRolesEntity)
     private readonly moviesPersonsRolesRepository: Repository<MoviesPersonsRolesEntity>,
+    private readonly amqpConnection: AmqpConnection,
     ) {}
 
   async getPersonById(id: number) {
@@ -23,15 +26,12 @@ export class PersonsService {
     //   payload: person_id,
     // })
 
-<<<<<<< HEAD
     // const genres = await this.amqpConnection.request({
     //   exchange: getGenresArrayOfPersonRMQConfig().exchange,
     //   routingKey: getGenresArrayOfPersonRMQConfig().routingKey,
-=======
     // const countries = await this.amqpConnection.request({
     //   exchange: getGenresArrayOfPerson().exchange,
     //   routingKey: getGenresArrayOfPerson().routingKey,
->>>>>>> 1b66479cfd8a2e69eca6390e35c2dd81fc328c9e
     //   payload: person_id,
     // })
 
@@ -41,13 +41,13 @@ export class PersonsService {
     //   payload: person_id,
     // })
 
-    const awards = person.awards;
+    //const awards = person.awards;
 
     return {
       fullName: person.name + ' ' + person.sur_name,
       career: [],
-      genres: [],
-      awards: awards,
+      genres: await this.getGenresOfPerson(person),
+      awards: person.awards,
       height: person.height,
       dateBirth: person.date_birth,
       placeBirth: person.place_birth,
@@ -58,5 +58,54 @@ export class PersonsService {
     }
   }
 
-  
+  async getPersonByName(fullName: string) {
+    const person: PersonsEntity[] = await 
+      this.personRepository
+        .createQueryBuilder('person')
+        .where(
+          `CONCAT(person.name, ' ', person.sur_name) LIKE :personFullName`, 
+          { 
+            personFullName: `%${fullName}%`
+          },
+        )
+        .getMany();
+
+    for (let i = 0; i < person.length; i++) {
+      const currentPerson = await this.personRepository.findOne({where: {person_id: person[i].person_id}, relations: {awards: true}});
+
+      const awards: AwardsEntity[] = currentPerson.awards;
+
+      person[i].awards = awards;
+    }
+
+    return person;
+  }
+
+  private async getGenresOfPerson(person: PersonsEntity)//: Promise<string[]>
+  {
+    const arrayIdsMoviesForPerson = await this.moviesPersonsRolesRepository.find({
+      where: {person: {
+        person_id: person.person_id
+      }},
+      relations: {
+        movie: true
+      },
+      select: {
+        movie: {
+          movie_id: true,
+      }}
+    });
+
+    const arrayIdsMovies: number[] = [];
+
+    for (let i = 0; i < (await arrayIdsMoviesForPerson).length; i++) {
+      arrayIdsMovies[i] = arrayIdsMoviesForPerson[i].movie.movie_id;
+    };
+
+   return await this.amqpConnection.request({
+      exchange: getGenresArrayOfPersonRMQConfig().exchange,
+      routingKey: getGenresArrayOfPersonRMQConfig().routingKey,
+      payload: arrayIdsMovies,
+    });
+  }
 }
