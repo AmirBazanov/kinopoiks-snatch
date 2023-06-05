@@ -4,16 +4,21 @@ import {
   CreateMovieContract,
   DeleteMovieContract,
   IdMovieContract,
-  TitleMovieContract
+  TitleMovieContract,
+  UpdateMovieContract
 } from "@kinopoisk-snitch/contracts";
 import {AmqpConnection} from "@golevelup/nestjs-rabbitmq";
-import {UpdateMovieContract} from "../../../../../libs/contracts/src/lib/movies/update.movie.contract";
+import { MoviesEntity } from '@kinopoisk-snitch/typeorm';
+import { Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class MoviesService {
   constructor(@Inject(MovieRepository)
               private readonly movieRepository: MovieRepository,
-              private readonly amqpService: AmqpConnection,) {}
+              private readonly amqpService: AmqpConnection,
+              @InjectRepository(MoviesEntity)
+              private readonly moviesRepo: Repository<MoviesEntity>) {}
   async createMovie(movieDto: CreateMovieContract.Request) {
     const response = await this.movieRepository.createMovie(movieDto);
     return response;
@@ -41,5 +46,33 @@ export class MoviesService {
 
   async deleteMovie(id: number) {
     return await this.movieRepository.deleteMovie(id);
+  }
+
+  async getGenresIdsArrayOfMovies(arrayIdsMovies: number[]) {
+    const arrayIdsGenresForMovies = [];
+
+    for (let i = 0; i < arrayIdsMovies.length; i++) {
+      const curMovie = await this.moviesRepo.findOne({
+        where: {
+          movie_id: arrayIdsMovies[i]
+        },
+        relations: {
+          genres: true,
+        },
+        select: {
+          genres: {
+            genre_id: true,
+          }
+        }
+      });
+
+      const lengthGenres = curMovie.genres.length;
+
+      for (let j = 0; j < lengthGenres; j++) {
+        arrayIdsGenresForMovies.push(await curMovie.genres[j].genre_id);
+      }
+    }
+
+    return arrayIdsGenresForMovies;
   }
 }

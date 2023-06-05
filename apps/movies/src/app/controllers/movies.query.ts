@@ -5,6 +5,7 @@ import {RabbitRPC} from "@golevelup/nestjs-rabbitmq";
 import {
   deleteMovieRMQConfig,
   getAllMoviesRMQConfig,
+  getGenresIdsArrayOfMoviesRMQConfig,
   getMovieByTitleRMQConfig,
   getMovieRMQConfig
 } from "@kinopoisk-snitch/rmq-configs";
@@ -28,5 +29,10 @@ export class MoviesQuery {
   @RabbitRPC(getAllMoviesRMQConfig())
   async getAllMovies() {
     return await this.moviesService.getAllMovies();
+  }
+
+  @RabbitRPC(getGenresIdsArrayOfMoviesRMQConfig())
+  async getGenresIdsArrayOfMovies(@Payload() arrayIdsMovies: number[]) {
+    return await this.moviesService.getGenresIdsArrayOfMovies(arrayIdsMovies);
   }
 }

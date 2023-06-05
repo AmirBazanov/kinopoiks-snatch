@@ -1,3 +1,5 @@
+import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
+import { getGenresArrayOfPersonRMQConfig } from '@kinopoisk-snitch/rmq-configs';
 import { AwardsEntity, MoviesPersonsRolesEntity, PersonsEntity } from '@kinopoisk-snitch/typeorm';
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -12,6 +14,7 @@ export class PersonsService {
     private readonly awardsRepository: Repository<AwardsEntity>,
     @InjectRepository(MoviesPersonsRolesEntity)
     private readonly moviesPersonsRolesRepository: Repository<MoviesPersonsRolesEntity>,
+    private readonly amqpConnection: AmqpConnection,
     ) {}
 
   async getPersonById(id: number) {
@@ -43,7 +46,7 @@ export class PersonsService {
     return {
       fullName: person.name + ' ' + person.sur_name,
       career: [],
-      genres: [],
+      genres: await this.getGenresOfPerson(person),
       awards: person.awards,
       height: person.height,
       dateBirth: person.date_birth,
@@ -56,13 +59,6 @@ export class PersonsService {
   }
 
   async getPersonByName(fullName: string) {
-     /*const person = await this.personRepository.find({where: [
-      {
-        name: Like(`%${fullName}%`)
-      },
-    ], 
-    relations: {awards: true }});*/
-
     const person: PersonsEntity[] = await 
       this.personRepository
         .createQueryBuilder('person')
@@ -83,5 +79,33 @@ export class PersonsService {
     }
 
     return person;
+  }
+
+  private async getGenresOfPerson(person: PersonsEntity)//: Promise<string[]>
+  {
+    const arrayIdsMoviesForPerson = await this.moviesPersonsRolesRepository.find({
+      where: {person: {
+        person_id: person.person_id
+      }},
+      relations: {
+        movie: true
+      },
+      select: {
+        movie: {
+          movie_id: true,
+      }}
+    });
+
+    const arrayIdsMovies: number[] = [];
+
+    for (let i = 0; i < (await arrayIdsMoviesForPerson).length; i++) {
+      arrayIdsMovies[i] = arrayIdsMoviesForPerson[i].movie.movie_id;
+    };
+
+   return await this.amqpConnection.request({
+      exchange: getGenresArrayOfPersonRMQConfig().exchange,
+      routingKey: getGenresArrayOfPersonRMQConfig().routingKey,
+      payload: arrayIdsMovies,
+    });
   }
 }
