@@ -7,7 +7,7 @@ import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
 import { PersonsCommand } from './controllers/persons.command';
 import { PersonsEvent } from './controllers/persons.event';
 import { PersonsQuery } from './controllers/persons.query';
-import { rmqPersonConfig } from '@kinopoisk-snitch/rmq-configs';
+import { rmqGenreConfig, rmqPersonConfig } from '@kinopoisk-snitch/rmq-configs';
 
 @Module({
   imports: [
@@ -15,6 +15,7 @@ import { rmqPersonConfig } from '@kinopoisk-snitch/rmq-configs';
     TypeormModuleConfig,
     TypeOrmModule.forFeature([PersonsEntity, AwardsEntity, MoviesPersonsRolesEntity]),
     RabbitMQModule.forRoot(RabbitMQModule, rmqPersonConfig()),
+    RabbitMQModule.forRoot(RabbitMQModule, rmqGenreConfig())
   ],
   controllers: [PersonsCommand, PersonsEvent, PersonsQuery],
   providers: [PersonsService],

@@ -23,3 +23,11 @@ export const getAllGenresRMQConfig = (): RmqConfig => {
     queue: 'GenreQueriesQueueAll',
   };
 };
+
+export const getGenresArrayOfPersonRMQConfig = (): RmqConfig => {
+  return {
+    exchange: 'GetGenresExchange',
+    routingKey: 'get-genres-of-person',
+    queue: 'GenreQueriesQueue'
+  }
+}

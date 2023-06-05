@@ -23,3 +23,11 @@ export const getAllMoviesRMQConfig = (): RmqConfig => {
     queue: 'MovieQueriesQueueAll',
   };
 };
+
+export const getGenresIdsArrayOfMoviesRMQConfig = (): RmqConfig => {
+  return {
+    exchange: 'GetMoviesExchange',
+    routingKey: 'get-genres-ids-array-of-movies',
+    queue: 'MovieQueriesQueue'
+  }
+}

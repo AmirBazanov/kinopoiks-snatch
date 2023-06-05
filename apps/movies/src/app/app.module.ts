@@ -8,7 +8,7 @@ import {ConfigModule} from "@nestjs/config";
 import {CountriesEntity, GenresEntity, MoviesEntity, TypeormModuleConfig} from "@kinopoisk-snitch/typeorm";
 import {TypeOrmModule} from "@nestjs/typeorm";
 import {RabbitMQModule} from "@golevelup/nestjs-rabbitmq";
-import {rmqMovieConfig} from "@kinopoisk-snitch/rmq-configs";
+import {rmqGenreConfig, rmqMovieConfig} from "@kinopoisk-snitch/rmq-configs";
 import {MovieRepository} from "./repositories/movie.repository";
 
 
@@ -18,6 +18,7 @@ import {MovieRepository} from "./repositories/movie.repository";
     TypeormModuleConfig,
     TypeOrmModule.forFeature([MoviesEntity, GenresEntity, CountriesEntity]),
     RabbitMQModule.forRoot(RabbitMQModule, rmqMovieConfig()),
+    RabbitMQModule.forRoot(RabbitMQModule, rmqGenreConfig())
   ],
   controllers: [MoviesCommand, MoviesEvent, MoviesQuery],
   providers: [MoviesService, MovieRepository],
