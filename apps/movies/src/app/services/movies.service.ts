@@ -69,6 +69,9 @@ export class MoviesService {
       const lengthGenres = curMovie.genres.length;
 
       for (let j = 0; j < lengthGenres; j++) {
+        if (arrayIdsGenresForMovies.includes(curMovie.genres[j].genre_id))
+          continue;
+        
         arrayIdsGenresForMovies.push(await curMovie.genres[j].genre_id);
       }
     }
