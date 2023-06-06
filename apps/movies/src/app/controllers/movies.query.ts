@@ -5,6 +5,7 @@ import {RabbitRPC} from "@golevelup/nestjs-rabbitmq";
 import {
   deleteMovieRMQConfig,
   getAllMoviesRMQConfig,
+  getCountMoviesOfPersonRMQConfig,
   getGenresIdsArrayOfMoviesRMQConfig,
   getMovieByTitleRMQConfig,
   getMovieRMQConfig
@@ -34,5 +35,10 @@ export class MoviesQuery {
   @RabbitRPC(getGenresIdsArrayOfMoviesRMQConfig())
   async getGenresIdsArrayOfMovies(@Payload() arrayIdsMovies: number[]) {
     return await this.moviesService.getGenresIdsArrayOfMovies(arrayIdsMovies);
+  }
+
+  @RabbitRPC(getCountMoviesOfPersonRMQConfig())
+  async getCountMoviesOfPerson(@Payload() person_id: number) {
+    return await this.moviesService.getCountMoviesOfPerson(person_id);
   }
 }

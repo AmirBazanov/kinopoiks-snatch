@@ -30,25 +30,25 @@ export class MoviesEntity {
   @Column()
   production_year: Date;
 
-  @Column()
+  @Column({ nullable: true })
   tagline: string;
 
-  @Column()
+  @Column({ nullable: true })
   budget: number;
 
   @Column({ nullable: true })
   marketing: number;
 
-  @Column('date')
+  @Column('date', { nullable: true })
   dvd_release: Date;
 
-  @Column('date')
+  @Column('date', { nullable: true })
   blueray_release: Date;
 
   @Column('int2')
   age_limit: number;
 
-  @Column()
+  @Column({ nullable: true })
   mpaa_rating: string;
 
   @Column('int2')
