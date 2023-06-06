@@ -1,5 +1,6 @@
 import {IsEnum, IsNumber, IsString} from 'class-validator';
 import {HttpStatus} from "@nestjs/common";
+import {CommentsEntity} from "@kinopoisk-snitch/typeorm";
 
 // eslint-disable-next-line @typescript-eslint/no-namespace
 export namespace IdMovieContract {
@@ -33,5 +34,6 @@ export namespace IdMovieContract {
     private readonly is_eng: boolean;
     private readonly is_serial: boolean;
     country_id: number;
+    private readonly comments: CommentsEntity[];
   }
 }

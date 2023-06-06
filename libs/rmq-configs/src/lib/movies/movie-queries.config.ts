@@ -28,7 +28,7 @@ export const getGenresIdsArrayOfMoviesRMQConfig = (): RmqConfig => {
   return {
     exchange: 'GetMoviesExchange',
     routingKey: 'get-genres-ids-array-of-movies',
-    queue: 'MovieQueriesQueue',
+    queue: 'MovieQueriesQueueGenresIdsArrayOfMovies',
   }
 }
 
@@ -36,6 +36,6 @@ export const getCountMoviesOfPersonRMQConfig = (): RmqConfig => {
   return {
     exchange: 'GetMoviesExchange',
     routingKey: 'get-count-movies-of-person',
-    queue: 'MovieQueriesQueue',
+    queue: 'MovieQueriesQueueCountMoviesOfPerson',
   }
 }

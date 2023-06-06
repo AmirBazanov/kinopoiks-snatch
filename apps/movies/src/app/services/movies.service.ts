@@ -11,6 +11,7 @@ import {AmqpConnection} from "@golevelup/nestjs-rabbitmq";
 import { MoviesEntity, MoviesPersonsRolesEntity } from '@kinopoisk-snitch/typeorm';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
+import {getByFilmIdCommentsRMQConfig} from "@kinopoisk-snitch/rmq-configs";
 
 @Injectable()
 export class MoviesService {
@@ -20,7 +21,8 @@ export class MoviesService {
               @InjectRepository(MoviesEntity)
               private readonly moviesRepo: Repository<MoviesEntity>,
               @InjectRepository(MoviesPersonsRolesEntity)
-              private readonly moviesPersonsRolesRepository: Repository<MoviesPersonsRolesEntity>
+              private readonly moviesPersonsRolesRepository: Repository<MoviesPersonsRolesEntity>,
+              private readonly amqpConnection: AmqpConnection
               ) {}
   async createMovie(movieDto: CreateMovieContract.Request) {
     const response = await this.movieRepository.createMovie(movieDto);
@@ -34,7 +36,16 @@ export class MoviesService {
 
   async getMovieById(movieDto: IdMovieContract.Request) {
     const response = await this.movieRepository.getMovieById(movieDto);
-    return response;
+    try {
+      const comments = this.amqpConnection.request({
+        exchange: getByFilmIdCommentsRMQConfig().exchange,
+        routingKey: getByFilmIdCommentsRMQConfig().routingKey,
+        payload: Number(movieDto)
+      });
+      return {...response, comments: comments};
+    } catch (e) {
+      return {...response, comments: null};
+    }
   }
 
   async getMovieByTitle(movieDto: TitleMovieContract.Request) {
@@ -74,7 +85,7 @@ export class MoviesService {
       for (let j = 0; j < lengthGenres; j++) {
         if (arrayIdsGenresForMovies.includes(curMovie.genres[j].genre_id))
           continue;
-        
+
         arrayIdsGenresForMovies.push(await curMovie.genres[j].genre_id);
       }
     }
