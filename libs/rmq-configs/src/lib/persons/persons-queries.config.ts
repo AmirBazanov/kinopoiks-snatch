@@ -15,3 +15,11 @@ export const getPersonByNameRMQConfig = (): RmqConfig => {
     queue: 'PersonsQueue',
   }
 }
+
+export const getArrayPersonsOfMovieRMQConfig = (): RmqConfig => {
+  return {
+    exchange: 'PersonsExchange',
+    routingKey: 'get-persons-by-movie',
+    queue: 'PersonsQueue',
+  }
+}
