@@ -72,6 +72,68 @@ export class PersonsService {
     return person;
   }
 
+  async getPersonsOfMovie(id: number) {
+    const arrayIdsPersons = [];
+    const arrayPersons = [];
+
+    const arrayIdsPersonsOfMovie = await this.moviesPersonsRolesRepository.find({
+      where: {
+        movie: {
+          movie_id: id,
+        }},
+        relations: {
+          person: true,
+        },
+        select: {
+          person: {
+            person_id: true,
+          }
+        }
+    });
+
+    for (let i = 0; i < arrayIdsPersonsOfMovie.length; i++) {
+      if (arrayIdsPersons.includes(arrayIdsPersonsOfMovie[i].person.person_id))
+        continue;
+
+      arrayIdsPersons.push(arrayIdsPersonsOfMovie[i].person.person_id);
+    }
+
+    for (let j = 0; j < arrayIdsPersons.length; j++) {
+      const curPerson = await this.moviesPersonsRolesRepository.findOne({
+        where: {
+          person: {
+            person_id: arrayIdsPersons[j],
+          }
+        },
+        relations: {
+          person: true,
+          role: true,
+        },
+        select: {
+          person: {
+            person_id: true,
+            name: true,
+            sur_name: true,
+          },
+          role: {
+            name: true,
+          }
+        }
+      });
+
+      const person = {
+        person_id: curPerson.person.person_id,
+        name: curPerson.person.name,
+        surname: curPerson.person.sur_name,
+        role: curPerson.role.name,
+      }
+
+      arrayPersons.push(person);
+    }
+
+    return arrayPersons;
+  }
+
   private async getGenresOfPerson(person: PersonsEntity) {
     const arrayIdsMoviesForPerson = await this.moviesPersonsRolesRepository.find({
       where: {person: {

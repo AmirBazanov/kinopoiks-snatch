@@ -1,9 +1,11 @@
-import {HttpStatus, Injectable} from '@nestjs/common';
+import {HttpStatus, Injectable, Logger} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import {GenresEntity, MoviesEntity} from '@kinopoisk-snitch/typeorm';
 import {CreateMovieContract, DeleteMovieContract, IdMovieContract} from '@kinopoisk-snitch/contracts';
 import {UpdateMovieContract} from "../../../../../libs/contracts/src/lib/movies/update.movie.contract";
+import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
+import { getArrayPersonsOfMovieRMQConfig } from '@kinopoisk-snitch/rmq-configs';
 
 @Injectable()
 export class MovieRepository {
@@ -11,7 +13,8 @@ export class MovieRepository {
     @InjectRepository(MoviesEntity)
     private readonly MovieModel: Repository<MoviesEntity>,
     @InjectRepository(GenresEntity)
-    private readonly GenreModel: Repository<GenresEntity>
+    private readonly GenreModel: Repository<GenresEntity>,
+    private readonly amqpConnection: AmqpConnection
   ) {}
 
   async createMovie(
@@ -73,7 +76,16 @@ export class MovieRepository {
         },
         relations: {country: true, genres: true, awards: true}
       });
-      return {httpStatus: HttpStatus.OK, ...movie};
+
+      const persons = await this.amqpConnection.request({
+        exchange: getArrayPersonsOfMovieRMQConfig().exchange,
+        routingKey: getArrayPersonsOfMovieRMQConfig().routingKey,
+        payload: id,
+      });
+
+      Logger.log(persons);
+
+      return {httpStatus: HttpStatus.OK, ...movie, persons};
     } catch (e) {
       return {httpStatus: HttpStatus.NOT_FOUND}
     }
