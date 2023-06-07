@@ -1,9 +1,9 @@
 import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
 import { getCountMoviesOfPersonRMQConfig, getGenresArrayOfPersonRMQConfig, getMoviesOfPersonRMQConfig } from '@kinopoisk-snitch/rmq-configs';
 import { AwardsEntity, MoviesPersonsRolesEntity, PersonsEntity } from '@kinopoisk-snitch/typeorm';
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Like, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class PersonsService {
@@ -51,6 +51,8 @@ export class PersonsService {
   }
 
   async getPersonByName(fullName: string) {
+    const arrayPersons = [];
+
     const person: PersonsEntity[] = await 
       this.personRepository
         .createQueryBuilder('person')
@@ -63,14 +65,23 @@ export class PersonsService {
         .getMany();
 
     for (let i = 0; i < person.length; i++) {
-      const currentPerson = await this.personRepository.findOne({where: {person_id: person[i].person_id}, relations: {awards: true}});
+      const currentPerson = await this.personRepository.findOne({
+        where: {
+          person_id: person[i].person_id
+        }, 
+        select: {
+          person_id: true,
+          name: true,
+          sur_name: true,
+          photo: true,
+          date_birth: true,
+        }
+      });
 
-      const awards: AwardsEntity[] = currentPerson.awards;
-
-      person[i].awards = awards;
+      arrayPersons.push(currentPerson);
     }
 
-    return person;
+    return arrayPersons;
   }
 
   async getPersonsOfMovie(id: number) {
