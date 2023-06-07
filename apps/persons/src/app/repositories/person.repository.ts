@@ -1,6 +1,6 @@
-import { AmqpConnection } from "@golevelup/nestjs-rabbitmq";
+import { IdPersonContract, NamePersonContract } from "@kinopoisk-snitch/contracts";
 import { AwardsEntity, MoviesPersonsRolesEntity, PersonsEntity } from "@kinopoisk-snitch/typeorm";
-import { HttpStatus, Injectable } from "@nestjs/common";
+import { HttpStatus, Injectable, Logger } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 
@@ -12,14 +12,13 @@ export class PersonRepository {
         @InjectRepository(AwardsEntity)
         private readonly awardsRepository: Repository<AwardsEntity>,
         @InjectRepository(MoviesPersonsRolesEntity)
-        private readonly moviesPersonsRolesRepository: Repository<MoviesPersonsRolesEntity>,
-        private readonly amqpConnection: AmqpConnection,
+        private readonly moviesPersonsRolesRepository: Repository<MoviesPersonsRolesEntity>
     ) {}
 
-    async getPersonById(person_id: number) {
+    async getPersonById(personDto: IdPersonContract.Request) {
         const person = await this.personRepository.findOne({
             where: {
-                person_id: person_id,
+                person_id: personDto.person_id,
             },
             relations: {
                 awards: true,
@@ -36,7 +35,7 @@ export class PersonRepository {
         return person;
     }
 
-    async getPersonByName(fullName: string) {
+    async getPersonByName(personDto: string) {
         try {
             const arrayPersons = [];
 
@@ -46,7 +45,7 @@ export class PersonRepository {
                     .where(
                     `CONCAT(person.name, ' ', person.sur_name) LIKE :personFullName`, 
                     { 
-                        personFullName: `%${fullName}%`
+                        personFullName: `%${personDto}%`
                     },
                     )
                     .getMany();
@@ -54,14 +53,14 @@ export class PersonRepository {
             for (let i = 0; i < person.length; i++) {
                 const currentPerson = await this.personRepository.findOne({
                     where: {
-                    person_id: person[i].person_id
+                        person_id: person[i].person_id
                     }, 
                     select: {
-                    person_id: true,
-                    name: true,
-                    sur_name: true,
-                    photo: true,
-                    date_birth: true,
+                        person_id: true,
+                        name: true,
+                        sur_name: true,
+                        photo: true,
+                        date_birth: true,
                     }
                 });
 

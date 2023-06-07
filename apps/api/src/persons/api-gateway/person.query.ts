@@ -25,11 +25,11 @@ export class PersonsQuery {
   }
 
   @Get('/getPersonByName/:fullName')
-  async getPersonByName(@Param('fullName') fullName: NamePersonContract.Request) {
+  async getPersonByName(@Param('fullName') personDto: string) {
     return await this.amqpConnection.request<NamePersonContract.Response>({
       exchange: getPersonByNameRMQConfig().exchange,
       routingKey: getPersonByNameRMQConfig().routingKey,
-      payload: fullName,
+      payload: personDto,
     });
   }
 }

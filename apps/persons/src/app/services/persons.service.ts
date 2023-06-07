@@ -5,6 +5,7 @@ import { HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { PersonRepository } from '../repositories/person.repository';
+import { IdPersonContract, NamePersonContract } from '@kinopoisk-snitch/contracts';
 
 @Injectable()
 export class PersonsService {
@@ -13,9 +14,9 @@ export class PersonsService {
     private readonly amqpConnection: AmqpConnection
     ) {}
 
-  async getPersonById(id: number) {
+  async getPersonById(personDto: IdPersonContract.Request) {
     try {
-      const person = await this.personRepository.getPersonById(id);
+      const person = await this.personRepository.getPersonById(personDto);
 
       const carrer = await this.getCareerOfPerson(person);
       const genres = await this.getGenresOfPerson(person);
@@ -29,8 +30,8 @@ export class PersonsService {
     }
   }
 
-  async getPersonByName(fullName: string) {
-    return await this.personRepository.getPersonByName(fullName);
+  async getPersonByName(personDto: string) {
+    return await this.personRepository.getPersonByName(personDto);
   }
 
   async getPersonsOfMovie(id: number) {
