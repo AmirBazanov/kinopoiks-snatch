@@ -1,0 +1,2 @@
+import { RmqConfig } from '../types';
+

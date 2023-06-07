@@ -4,7 +4,8 @@ import {RabbitRPC} from "@golevelup/nestjs-rabbitmq";
 import {
   getAllGenresRMQConfig,
   getGenreByNameRMQConfig,
-  getGenreRMQConfig
+  getGenreRMQConfig,
+  getGenresArrayOfPersonRMQConfig
 } from "@kinopoisk-snitch/rmq-configs";
 import {Payload} from "@nestjs/microservices";
 import {IdGenreContract, NameGenreContract} from "@kinopoisk-snitch/contracts";
@@ -25,5 +26,10 @@ export class GenresQuery {
   @RabbitRPC(getAllGenresRMQConfig())
   async getAllGenres() {
     return await this.genresService.getAllGenres();
+  }
+
+  @RabbitRPC(getGenresArrayOfPersonRMQConfig())
+  async getGenresArrayOfPerson(@Payload() arrayIdsMovies: number[]) {
+    return await this.genresService.getArrayGenresOfPerson(arrayIdsMovies);
   }
 }

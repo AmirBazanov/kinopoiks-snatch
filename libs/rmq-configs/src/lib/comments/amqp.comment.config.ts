@@ -12,7 +12,7 @@ export function rmqCommentConfig(): RabbitMQConfig {
         type: 'topic',
       },
     ],
-    uri: 'amqp://nestjs:nestjs@localhost:5672',
+    uri: process.env.RABBITMQ_URI,
     connectionInitOptions: { wait: false },
     enableControllerDiscovery: true,
   };

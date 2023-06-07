@@ -2,8 +2,7 @@ import { Controller } from '@nestjs/common';
 import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
 
 @Controller('/persons')
-export class PersonsCommand {
+export class PersonsEvent {
   constructor(private readonly amqpConnection: AmqpConnection) {}
 
-  
 }

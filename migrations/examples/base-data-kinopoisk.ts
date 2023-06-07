@@ -16,7 +16,9 @@ export class BaseDataKinopoisk implements MigrationInterface {
             ('Драма', false), ('Drama', true),
             ('Фантастика', false), ('Fantastic', true),
             ('Фэнтези', false), ('Fantasy', true),
-            ('Мюзикл', false), ('Musical', true);    
+            ('Мюзикл', false), ('Musical', true),
+            ('Мультфильм', false), ('Cartoon', true),
+            ('Криминал', false), ('Crime', true);   
         `);
         await queryRunner.query(`
             INSERT INTO "Roles" (name, is_eng) VALUES

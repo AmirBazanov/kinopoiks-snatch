@@ -1,52 +1,68 @@
-import { AwardsEntity, PersonsEntity } from '@kinopoisk-snitch/typeorm';
-import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
+import { getCountMoviesOfPersonRMQConfig, getGenresArrayOfPersonRMQConfig, getMoviesOfPersonRMQConfig } from '@kinopoisk-snitch/rmq-configs';
+import { PersonsEntity } from '@kinopoisk-snitch/typeorm';
+import { HttpStatus, Injectable } from '@nestjs/common';
+import { PersonRepository } from '../repositories/person.repository';
+import { IdPersonContract } from '@kinopoisk-snitch/contracts';
 
 @Injectable()
 export class PersonsService {
   constructor(
-    @InjectRepository(PersonsEntity)
-    private readonly personRepository: Repository<PersonsEntity>,
-    @InjectRepository(AwardsEntity)
-    private readonly awardsRepository: Repository<AwardsEntity>
+    private readonly personRepository: PersonRepository,
+    private readonly amqpConnection: AmqpConnection
     ) {}
 
-  async getPersonById(id: number) {
-    const person = await this.personRepository.findOne({where: {person_id: id}, relations: {awards: true}});
+  async getPersonById(personDto: IdPersonContract.Request) {
+    try {
+      const person = await this.personRepository.getPersonById(personDto);
 
-    // const career = await this.amqpConnection.request({
-    //   exchange: getCareerArrayOfPerson().exchange,
-    //   routingKey: getCareerArrayOfPerson().routingKey,
-    //   payload: person_id,
-    // })
+      const carrer = await this.getCareerOfPerson(person);
+      const genres = await this.getGenresOfPerson(person);
+      const countMovies = await this.getCountMoviesOfPerson(person);
+      const movies = await this.getMoviesOfPerson(person);
 
-    // const countries = await this.amqpConnection.request({
-    //   exchange: getGenresArrayOfPerson().exchange,
-    //   routingKey: getGenresArrayOfPerson().routingKey,
-    //   payload: person_id,
-    // })
-
-    const countMovies = 100; //= await this.amqpConnection.request({
-    //   exchange: getCountMoviesArrayOfPerson().exchange,
-    //   routingKey: getCountMoviesArrayOfPerson().routingKey,
-    //   payload: person_id,
-    // })
-
-    const awards = person.awards;
-
-    return {
-      fullName: person.name + ' ' + person.sur_name,
-      career: [],
-      genres: [],
-      awards: awards,
-      height: person.height,
-      dateBirth: person.date_birth,
-      placeBirth: person.place_birth,
-      spouse: person.spouse,
-      photoLink: person.photo,
-      countMovies: countMovies,
-      isEng: person.is_eng,
+      return {HttpStatus: HttpStatus.OK, ...person, carrer, genres, countMovies, movies }
     }
+    catch (e) {
+      return { HttpStatus: HttpStatus.NOT_FOUND }
+    }
+  }
+
+  async getPersonByName(fullName: string) {
+    return await this.personRepository.getPersonByName(fullName);
+  }
+
+  async getPersonsOfMovie(id: number) {
+    return await this.personRepository.getPersonsOfMovie(id);
+  }
+
+  private async getGenresOfPerson(person: PersonsEntity) {
+    const arrayIdsMovies = await this.personRepository.getArrayIdsMoviesForGenresPersons(person);
+
+    return await this.amqpConnection.request({
+      exchange: getGenresArrayOfPersonRMQConfig().exchange,
+      routingKey: getGenresArrayOfPersonRMQConfig().routingKey,
+      payload: arrayIdsMovies,
+    });
+  }
+
+  private async getCareerOfPerson(person: PersonsEntity) {
+    return await this.personRepository.getCareerOfPerson(person);
+  }
+
+  private async getCountMoviesOfPerson(person: PersonsEntity) {
+    return await this.amqpConnection.request({
+      exchange: getCountMoviesOfPersonRMQConfig().exchange,
+      routingKey: getCountMoviesOfPersonRMQConfig().routingKey,
+      payload: person.person_id,
+    });
+  }
+
+  private async getMoviesOfPerson(person: PersonsEntity) {
+    return await this.amqpConnection.request({
+      exchange: getMoviesOfPersonRMQConfig().exchange,
+      routingKey: getMoviesOfPersonRMQConfig().routingKey,
+      payload: person.person_id,
+    });
   }
 }

@@ -23,3 +23,27 @@ export const getAllMoviesRMQConfig = (): RmqConfig => {
     queue: 'MovieQueriesQueueAll',
   };
 };
+
+export const getGenresIdsArrayOfMoviesRMQConfig = (): RmqConfig => {
+  return {
+    exchange: 'GetMoviesExchange',
+    routingKey: 'get-genres-ids-array-of-movies',
+    queue: 'MovieQueriesQueueGenresIdsArrayOfMovies',
+  }
+}
+
+export const getCountMoviesOfPersonRMQConfig = (): RmqConfig => {
+  return {
+    exchange: 'GetMoviesExchange',
+    routingKey: 'get-count-movies-of-person',
+    queue: 'MovieQueriesQueueCountMoviesOfPerson',
+  }
+}
+
+export const getMoviesOfPersonRMQConfig = (): RmqConfig => {
+  return {
+    exchange: 'GetMoviesExchange',
+    routingKey: 'get-movies-of-person',
+    queue: 'MovieQueriesQueueMoviesOfPerson',
+  }
+}
