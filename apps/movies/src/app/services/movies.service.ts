@@ -37,7 +37,7 @@ export class MoviesService {
   async getMovieById(movieDto: IdMovieContract.Request) {
     const response = await this.movieRepository.getMovieById(movieDto);
     try {
-      const comments = this.amqpConnection.request({
+      const comments = await this.amqpConnection.request({
         exchange: getByFilmIdCommentsRMQConfig().exchange,
         routingKey: getByFilmIdCommentsRMQConfig().routingKey,
         payload: Number(movieDto)
