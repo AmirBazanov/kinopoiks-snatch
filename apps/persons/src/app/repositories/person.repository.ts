@@ -1,6 +1,6 @@
 import { IdPersonContract } from "@kinopoisk-snitch/contracts";
 import { AwardsEntity, MoviesPersonsRolesEntity, PersonsEntity } from "@kinopoisk-snitch/typeorm";
-import { HttpStatus, Injectable, Logger } from "@nestjs/common";
+import { HttpStatus, Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 
