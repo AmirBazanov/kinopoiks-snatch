@@ -83,8 +83,6 @@ export class MovieRepository {
         payload: id,
       });
 
-      Logger.log(persons);
-
       return {httpStatus: HttpStatus.OK, ...movie, persons};
     } catch (e) {
       return {httpStatus: HttpStatus.NOT_FOUND}

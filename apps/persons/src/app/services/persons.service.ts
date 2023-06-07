@@ -1,5 +1,5 @@
 import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
-import { getCountMoviesOfPersonRMQConfig, getGenresArrayOfPersonRMQConfig } from '@kinopoisk-snitch/rmq-configs';
+import { getCountMoviesOfPersonRMQConfig, getGenresArrayOfPersonRMQConfig, getMoviesOfPersonRMQConfig } from '@kinopoisk-snitch/rmq-configs';
 import { AwardsEntity, MoviesPersonsRolesEntity, PersonsEntity } from '@kinopoisk-snitch/typeorm';
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -46,6 +46,7 @@ export class PersonsService {
       photoLink: person.photo,
       countMovies: await this.getCountMoviesOfPerson(person),
       isEng: person.is_eng,
+      movies: await this.getMoviesOfPerson(person),
     }
   }
 
@@ -193,6 +194,14 @@ export class PersonsService {
     return await this.amqpConnection.request({
       exchange: getCountMoviesOfPersonRMQConfig().exchange,
       routingKey: getCountMoviesOfPersonRMQConfig().routingKey,
+      payload: person.person_id,
+    });
+  }
+
+  private async getMoviesOfPerson(person: PersonsEntity) {
+    return await this.amqpConnection.request({
+      exchange: getMoviesOfPersonRMQConfig().exchange,
+      routingKey: getMoviesOfPersonRMQConfig().routingKey,
       payload: person.person_id,
     });
   }
