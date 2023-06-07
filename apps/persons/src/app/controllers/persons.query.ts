@@ -1,15 +1,14 @@
 import { Controller } from '@nestjs/common';
-import { AmqpConnection, RabbitRPC } from '@golevelup/nestjs-rabbitmq';
+import { RabbitRPC } from '@golevelup/nestjs-rabbitmq';
 import { PersonsService } from '../services/persons.service';
 import { getArrayPersonsOfMovieRMQConfig, getPersonByIdRMQConfig, getPersonByNameRMQConfig } from '@kinopoisk-snitch/rmq-configs';
 import { Payload } from '@nestjs/microservices';
-import { IdPersonContract, NamePersonContract } from '@kinopoisk-snitch/contracts';
+import { IdPersonContract } from '@kinopoisk-snitch/contracts';
 
 @Controller()
 export class PersonsQuery {
   constructor(
     private readonly personService: PersonsService,
-    private readonly amqpConnection: AmqpConnection,
   ) {}
 
   @RabbitRPC(getPersonByIdRMQConfig())
@@ -18,8 +17,8 @@ export class PersonsQuery {
   }
 
   @RabbitRPC(getPersonByNameRMQConfig())
-  async getPersonByName(@Payload() personDto: string) {
-    return await this.personService.getPersonByName(personDto);
+  async getPersonByName(@Payload() fullName: string) {
+    return await this.personService.getPersonByName(fullName);
   }
 
   @RabbitRPC(getArrayPersonsOfMovieRMQConfig())

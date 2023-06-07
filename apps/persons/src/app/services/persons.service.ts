@@ -1,11 +1,9 @@
 import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
 import { getCountMoviesOfPersonRMQConfig, getGenresArrayOfPersonRMQConfig, getMoviesOfPersonRMQConfig } from '@kinopoisk-snitch/rmq-configs';
-import { AwardsEntity, MoviesPersonsRolesEntity, PersonsEntity } from '@kinopoisk-snitch/typeorm';
+import { PersonsEntity } from '@kinopoisk-snitch/typeorm';
 import { HttpStatus, Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
 import { PersonRepository } from '../repositories/person.repository';
-import { IdPersonContract, NamePersonContract } from '@kinopoisk-snitch/contracts';
+import { IdPersonContract } from '@kinopoisk-snitch/contracts';
 
 @Injectable()
 export class PersonsService {
@@ -30,8 +28,8 @@ export class PersonsService {
     }
   }
 
-  async getPersonByName(personDto: string) {
-    return await this.personRepository.getPersonByName(personDto);
+  async getPersonByName(fullName: string) {
+    return await this.personRepository.getPersonByName(fullName);
   }
 
   async getPersonsOfMovie(id: number) {

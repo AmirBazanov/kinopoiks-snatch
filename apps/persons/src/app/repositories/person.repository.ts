@@ -1,4 +1,4 @@
-import { IdPersonContract, NamePersonContract } from "@kinopoisk-snitch/contracts";
+import { IdPersonContract } from "@kinopoisk-snitch/contracts";
 import { AwardsEntity, MoviesPersonsRolesEntity, PersonsEntity } from "@kinopoisk-snitch/typeorm";
 import { HttpStatus, Injectable, Logger } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
@@ -35,9 +35,9 @@ export class PersonRepository {
         return person;
     }
 
-    async getPersonByName(personDto: string) {
+    async getPersonByName(fullName: string) {
         try {
-            const arrayPersons = [];
+            const arrayPersons: PersonsEntity[] = [];
 
             const person: PersonsEntity[] = await 
                 this.personRepository
@@ -45,7 +45,7 @@ export class PersonRepository {
                     .where(
                     `CONCAT(person.name, ' ', person.sur_name) LIKE :personFullName`, 
                     { 
-                        personFullName: `%${personDto}%`
+                        personFullName: `%${fullName}%`
                     },
                     )
                     .getMany();
@@ -63,7 +63,7 @@ export class PersonRepository {
                         date_birth: true,
                     }
                 });
-
+                
                 arrayPersons.push(currentPerson);
             }
 

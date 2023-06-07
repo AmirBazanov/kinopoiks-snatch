@@ -6,7 +6,7 @@ async function bootstrap() {
   const app = await NestFactory.create(PersonsModule)
   await app.init();
   Logger.log(
-    `🚀 Application persons is running`
+    `🚀 Persons application is running`
   );
 }
 
