@@ -8,6 +8,7 @@ import { PersonsCommand } from './controllers/persons.command';
 import { PersonsEvent } from './controllers/persons.event';
 import { PersonsQuery } from './controllers/persons.query';
 import { rmqGenreConfig, rmqMovieConfig, rmqPersonConfig } from '@kinopoisk-snitch/rmq-configs';
+import { PersonRepository } from './repositories/person.repository';
 
 @Module({
   imports: [
@@ -19,6 +20,6 @@ import { rmqGenreConfig, rmqMovieConfig, rmqPersonConfig } from '@kinopoisk-snit
     RabbitMQModule.forRoot(RabbitMQModule, rmqMovieConfig()),
   ],
   controllers: [PersonsCommand, PersonsEvent, PersonsQuery],
-  providers: [PersonsService],
+  providers: [PersonsService, PersonRepository],
 })
 export class PersonsModule {}

@@ -121,4 +121,48 @@ export class MoviesService {
 
     return arrayIdsMovies.length;
   }
+
+  async getMoviesOfPerson(person_id: number) {
+    const arrayMovies = [];
+    const arrayIdsMovies = [];
+
+    const arrayMoviesOfPerson = await this.moviesPersonsRolesRepository.find({
+      where: {
+        person: {
+          person_id: person_id,
+        },
+      },
+      relations: {
+        person: true,
+        role: true,
+        movie: true,
+      },
+      select: {
+        movie: {
+          movie_id: true,
+          title: true,
+        },
+        role: {
+          name: true,
+        }
+      }
+    });
+
+    for (let i = 0; i < arrayMoviesOfPerson.length; i++) {
+      const curMovie = arrayMoviesOfPerson[i];
+
+      const movie = {
+        movie_id: curMovie.movie.movie_id,
+        title: curMovie.movie.title,
+        role: curMovie.role.name,
+      }
+
+      if (arrayMovies.includes(movie))
+        continue;
+
+      arrayMovies.push(movie);
+    }
+
+    return arrayMovies;
+  }
 }

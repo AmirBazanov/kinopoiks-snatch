@@ -8,7 +8,8 @@ import {
   getCountMoviesOfPersonRMQConfig,
   getGenresIdsArrayOfMoviesRMQConfig,
   getMovieByTitleRMQConfig,
-  getMovieRMQConfig
+  getMovieRMQConfig,
+  getMoviesOfPersonRMQConfig
 } from "@kinopoisk-snitch/rmq-configs";
 import {Payload} from "@nestjs/microservices";
 import {IdMovieContract, TitleMovieContract} from "@kinopoisk-snitch/contracts";
@@ -40,5 +41,10 @@ export class MoviesQuery {
   @RabbitRPC(getCountMoviesOfPersonRMQConfig())
   async getCountMoviesOfPerson(@Payload() person_id: number) {
     return await this.moviesService.getCountMoviesOfPerson(person_id);
+  }
+
+  @RabbitRPC(getMoviesOfPersonRMQConfig())
+  async getMoviesOfPerson(@Payload() person_id: number) {
+    return await this.moviesService.getMoviesOfPerson(person_id);
   }
 }

@@ -39,3 +39,11 @@ export const getCountMoviesOfPersonRMQConfig = (): RmqConfig => {
     queue: 'MovieQueriesQueueCountMoviesOfPerson',
   }
 }
+
+export const getMoviesOfPersonRMQConfig = (): RmqConfig => {
+  return {
+    exchange: 'GetMoviesExchange',
+    routingKey: 'get-movies-of-person',
+    queue: 'MovieQueriesQueueMoviesOfPerson',
+  }
+}
