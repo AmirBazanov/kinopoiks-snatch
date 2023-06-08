@@ -21,18 +21,16 @@ import {
 export class CommentCommand {
   constructor(private readonly amqpConnection: AmqpConnection) {}
 
-  @UsePipes(new ParseIntPipe({ errorHttpStatusCode: HttpStatus.BAD_REQUEST }))
   @Post('/film/:id')
   async createComment(
     @Body() commentInfo: CreateCommentDto,
-    @Param('id') movie_id: string,
+    @Param('id', ParseIntPipe) movie_id: string,
     @Req() req: Request
   ) {
     const token = req.headers['authorization'].replace('Bearer ', '');
     commentInfo.user_id = token;
     commentInfo.film_id = movie_id;
     try {
-      console.log(commentInfo);
       await this.amqpConnection.publish(
         createCommentRMQConfig().exchange,
         createCommentRMQConfig().routingKey,
@@ -43,11 +41,10 @@ export class CommentCommand {
     }
   }
 
-  @UsePipes(new ParseIntPipe({ errorHttpStatusCode: HttpStatus.BAD_REQUEST }))
   @Post('/createOnComment/:comment_id')
   async createOnComment(
     @Body() commentInfo: CreateCommentDto,
-    @Param('comment_id') comment_id: string,
+    @Param('comment_id', ParseIntPipe) comment_id: string,
     @Req() req: Request
   ) {
     commentInfo.comment_id = Number(comment_id);
