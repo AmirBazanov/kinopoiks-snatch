@@ -9,6 +9,12 @@ import {
 } from '@nestjs/common';
 import { CreateCommentDto } from '../dtos/create-comment.dto';
 import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
+import {
+  createCommentOnCommentRMQConfig,
+  createCommentRMQConfig,
+  incDisCommentRMQConfig,
+  incLikeCommentRMQConfig,
+} from '@kinopoisk-snitch/rmq-configs';
 
 @Controller('/reviews')
 export class CommentCommand {
@@ -24,11 +30,11 @@ export class CommentCommand {
     commentInfo.user_id = token;
     commentInfo.film_id = movie_id;
     try {
-      const response = await this.amqpConnection.request({
-        exchange: 'PostCommentsExchange',
-        routingKey: 'create-comment',
-        payload: commentInfo,
-      });
+      await this.amqpConnection.publish(
+        createCommentRMQConfig().exchange,
+        createCommentRMQConfig().routingKey,
+        commentInfo
+      );
     } catch (e) {
       throw new Error(e);
     }
@@ -44,11 +50,11 @@ export class CommentCommand {
     const token = req.headers['authorization'].replace('Bearer ', '');
     commentInfo.user_id = token;
     try {
-      const response = await this.amqpConnection.request({
-        exchange: 'PostCommentsExchange',
-        routingKey: 'create-comment-on-comment',
-        payload: commentInfo,
-      });
+      await this.amqpConnection.publish(
+        createCommentOnCommentRMQConfig().exchange,
+        createCommentOnCommentRMQConfig().routingKey,
+        commentInfo
+      );
     } catch (e) {
       throw new Error(e);
     }
@@ -63,8 +69,8 @@ export class CommentCommand {
       );
     } else {
       await this.amqpConnection.publish(
-        'PostCommentsExchange',
-        'inc-like-comment',
+        incLikeCommentRMQConfig().exchange,
+        incLikeCommentRMQConfig().routingKey,
         comment_id
       );
     }
@@ -79,8 +85,8 @@ export class CommentCommand {
       );
     } else {
       await this.amqpConnection.publish(
-        'PostCommentsExchange',
-        'inc-dis-comment',
+        incDisCommentRMQConfig().exchange,
+        incDisCommentRMQConfig().routingKey,
         comment_id
       );
     }
