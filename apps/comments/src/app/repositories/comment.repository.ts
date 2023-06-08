@@ -92,8 +92,10 @@ export class CommentRepository {
         comment_id: id,
       },
     });
-    comment.likes = comment.likes + 1;
-    await this.CommentModel.save(comment);
+    if (comment !== null) {
+      comment.likes = comment.likes + 1;
+      await this.CommentModel.save(comment);
+    }
   }
 
   async incDis(id: number) {
@@ -102,7 +104,9 @@ export class CommentRepository {
         comment_id: id,
       },
     });
-    comment.dislikes = comment.dislikes + 1;
-    await this.CommentModel.save(comment);
+    if (comment !== null) {
+      comment.dislikes = comment.dislikes + 1;
+      await this.CommentModel.save(comment);
+    }
   }
 }

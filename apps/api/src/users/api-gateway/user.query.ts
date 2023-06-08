@@ -2,9 +2,10 @@ import {
   Body,
   Controller,
   Get,
-  HttpException,
   HttpStatus,
   Param,
+  ParseIntPipe,
+  UsePipes,
 } from '@nestjs/common';
 import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
 import { EmailUserContract, IdUserContract } from '@kinopoisk-snitch/contracts';
@@ -17,20 +18,14 @@ import {
 export class UserQuery {
   constructor(private readonly amqpConnection: AmqpConnection) {}
 
+  @UsePipes(new ParseIntPipe({ errorHttpStatusCode: HttpStatus.BAD_REQUEST }))
   @Get('/getUser/:id')
   async getUserById(@Param('id') user_id: string) {
-    if (isNaN(Number(user_id))) {
-      throw new HttpException(
-        'ID должен состоять из цифр',
-        HttpStatus.BAD_REQUEST
-      );
-    } else {
-      const user = await this.amqpConnection.request<IdUserContract.Response>({
-        ...getUserRMQConfig(),
-        payload: user_id,
-      });
-      return user;
-    }
+    const user = await this.amqpConnection.request<IdUserContract.Response>({
+      ...getUserRMQConfig(),
+      payload: user_id,
+    });
+    return user;
   }
 
   @Get('/getUserByEmail')

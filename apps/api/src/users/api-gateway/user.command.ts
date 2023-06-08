@@ -2,10 +2,13 @@ import {
   Body,
   Controller,
   Delete,
+  HttpStatus,
   Param,
+  ParseIntPipe,
   Post,
   Put,
   Req,
+  UsePipes,
 } from '@nestjs/common';
 import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
 import { CreateUserDto } from '../dtos/create-user.dto';
@@ -48,6 +51,7 @@ export class UserCommand {
     }
   }
 
+  @UsePipes(new ParseIntPipe({ errorHttpStatusCode: HttpStatus.BAD_REQUEST }))
   @Delete('/deleteUser/:id')
   async deleteUser(@Param('id') id: string) {
     try {
