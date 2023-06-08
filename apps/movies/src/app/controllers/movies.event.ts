@@ -4,7 +4,7 @@ import { MoviesService } from '../services/movies.service';
 import {RabbitRPC} from "@golevelup/nestjs-rabbitmq";
 import {deleteMovieRMQConfig, updateMovieRMQConfig} from "@kinopoisk-snitch/rmq-configs";
 import {Payload} from "@nestjs/microservices";
-import {DeleteMovieContract, UpdateMovieContract} from "@kinopoisk-snitch/contracts";
+import {UpdateMovieContract} from "@kinopoisk-snitch/contracts";
 
 @Controller()
 export class MoviesEvent {

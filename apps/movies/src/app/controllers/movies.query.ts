@@ -3,7 +3,6 @@ import { Controller } from '@nestjs/common';
 import { MoviesService } from '../services/movies.service';
 import {RabbitRPC} from "@golevelup/nestjs-rabbitmq";
 import {
-  deleteMovieRMQConfig,
   getAllMoviesRMQConfig,
   getCountMoviesOfPersonRMQConfig,
   getGenresIdsArrayOfMoviesRMQConfig,

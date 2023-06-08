@@ -2,7 +2,6 @@ import {Inject, Injectable} from '@nestjs/common';
 import {MovieRepository} from "../repositories/movie.repository";
 import {
   CreateMovieContract,
-  DeleteMovieContract,
   IdMovieContract,
   TitleMovieContract,
   UpdateMovieContract

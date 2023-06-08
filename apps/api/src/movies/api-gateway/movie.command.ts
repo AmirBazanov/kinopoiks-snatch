@@ -11,12 +11,11 @@ export class MovieCommand {
   @Post('/createMovie')
   async createMovie(@Body() movieDto: CreateMovieDto) {
     try {
-      const response = await this.amqpConnection.request<CreateMovieContract.Response>({
+      await this.amqpConnection.request({
         exchange: createMovieRMQConfig().exchange,
         routingKey: createMovieRMQConfig().routingKey,
         payload: movieDto,
       });
-      return response;
     } catch (e) {
       throw new Error(e);
     }
