@@ -2,7 +2,6 @@ import {Body, Controller, Post} from '@nestjs/common';
 import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
 import { CreateMovieDto } from '../dtos/create-movie.dto';
 import {createMovieRMQConfig} from "@kinopoisk-snitch/rmq-configs";
-import {CreateMovieContract} from "@kinopoisk-snitch/contracts";
 
 @Controller('/movies')
 export class MovieCommand {
@@ -11,11 +10,11 @@ export class MovieCommand {
   @Post('/createMovie')
   async createMovie(@Body() movieDto: CreateMovieDto) {
     try {
-      await this.amqpConnection.request({
-        exchange: createMovieRMQConfig().exchange,
-        routingKey: createMovieRMQConfig().routingKey,
-        payload: movieDto,
-      });
+      await this.amqpConnection.publish(
+        createMovieRMQConfig().exchange,
+        createMovieRMQConfig().routingKey,
+        movieDto,
+    );
     } catch (e) {
       throw new Error(e);
     }
