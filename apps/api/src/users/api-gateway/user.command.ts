@@ -16,8 +16,10 @@ import { EditUserDto } from '../dtos/edit-user.dto';
 import {
   createUserRMQConfig,
   deleteUserRMQConfig,
+  editTokenRMQConfig,
   editUserRMQConfig,
 } from '@kinopoisk-snitch/rmq-configs';
+import { EditTokenDto } from '../dtos/edit-token.dto';
 
 @Controller('/users')
 export class UserCommand {
@@ -45,6 +47,22 @@ export class UserCommand {
         editUserRMQConfig().exchange,
         editUserRMQConfig().routingKey,
         editUserDto
+      );
+    } catch (e) {
+      throw new Error(e);
+    }
+  }
+
+  @Put('/refresh_token/:id')
+  async editToken(
+    @Param('id', ParseIntPipe) user_id: EditTokenDto,
+    @Body() new_token: string
+  ) {
+    try {
+      await this.amqpConnection.publish(
+        editTokenRMQConfig().exchange,
+        editTokenRMQConfig().routingKey,
+        { user_id: user_id, new_token }
       );
     } catch (e) {
       throw new Error(e);

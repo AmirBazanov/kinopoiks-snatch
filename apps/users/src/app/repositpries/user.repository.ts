@@ -51,6 +51,17 @@ export class UserRepository {
     await this.UserModel.save(user);
   }
 
+  async editToken(info: object) {
+    const user = await this.UserModel.findOne({
+      where: {
+        user_id: info['user_id'],
+      },
+    });
+
+    user.refresh_token = info['new_token']['token'];
+    await this.UserModel.save(user);
+  }
+
   async deleteProfile(id: number) {
     const user = await this.UserModel.findOne({
       where: {
