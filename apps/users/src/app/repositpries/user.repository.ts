@@ -6,6 +6,7 @@ import * as bcrypt from 'bcryptjs';
 import {
   CreateUserContract,
   EditUserContract,
+  IdUserContract,
 } from '@kinopoisk-snitch/contracts';
 
 @Injectable()
@@ -26,10 +27,10 @@ export class UserRepository {
     return newUser;
   }
 
-  async findUserById(id: number) {
+  async findUserById(id: IdUserContract.Request) {
     const user = await this.UserModel.findOne({
       where: {
-        user_id: id,
+        user_id: id.user_id,
       },
     });
     return user;

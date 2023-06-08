@@ -7,7 +7,11 @@ import {
   Param,
 } from '@nestjs/common';
 import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
-import { EmailUserContract } from '@kinopoisk-snitch/contracts';
+import { EmailUserContract, IdUserContract } from '@kinopoisk-snitch/contracts';
+import {
+  getUserByEmailRMQConfig,
+  getUserRMQConfig,
+} from '@kinopoisk-snitch/rmq-configs';
 
 @Controller('/users')
 export class UserQuery {
@@ -21,21 +25,18 @@ export class UserQuery {
         HttpStatus.BAD_REQUEST
       );
     } else {
-      const user = await this.amqpConnection.request({
-        exchange: 'GetUsersExchange',
-        routingKey: 'get-user',
+      const user = await this.amqpConnection.request<IdUserContract.Response>({
+        ...getUserRMQConfig(),
         payload: user_id,
       });
       return user;
     }
   }
 
-  //da
   @Get('/getUserByEmail')
   async getUserByEmail(@Body() user_email: EmailUserContract.Request) {
-    const user = await this.amqpConnection.request({
-      exchange: 'GetUsersExchange',
-      routingKey: 'get-user',
+    const user = await this.amqpConnection.request<EmailUserContract.Response>({
+      ...getUserByEmailRMQConfig(),
       payload: user_email,
     });
     return user;

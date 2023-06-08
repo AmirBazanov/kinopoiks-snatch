@@ -1,5 +1,6 @@
 export * from './lib/users/create.user.contract';
 export * from './lib/users/edit.user.contract';
+export * from './lib/users/id.user.contract';
 export * from './lib/comments/create.comment.contract';
 export * from './lib/comments/create.on.commnet.contract';
 export * from './lib/users/email.user.contract';
@@ -27,4 +28,3 @@ export * from './lib/genres/all.genres.contract';
 export * from './lib/genres/id.genre.contract';
 export * from './lib/genres/name.genre.contract';
 export * from './lib/persons/id.person.contract';
-
