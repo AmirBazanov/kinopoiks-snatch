@@ -6,6 +6,11 @@ import {
   Param,
 } from '@nestjs/common';
 import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
+import {
+  getByFilmIdCommentsRMQConfig,
+  getByIdCommentRMQConfig,
+  getByUserIdCommentsRMQConfig,
+} from '@kinopoisk-snitch/rmq-configs';
 
 @Controller('/reviews')
 export class CommentQuery {
@@ -20,8 +25,7 @@ export class CommentQuery {
       );
     } else {
       const comment = await this.amqpConnection.request({
-        exchange: 'GetCommentsExchange',
-        routingKey: 'get-by-id-comment',
+        ...getByIdCommentRMQConfig(),
         payload: comment_id,
       });
       return comment;
@@ -37,8 +41,7 @@ export class CommentQuery {
       );
     } else {
       const comments = await this.amqpConnection.request({
-        exchange: 'GetCommentsExchange',
-        routingKey: 'get-by-film-id-comments',
+        ...getByFilmIdCommentsRMQConfig(),
         payload: film_id,
       });
       return comments;
@@ -54,8 +57,7 @@ export class CommentQuery {
       );
     } else {
       const comments = await this.amqpConnection.request({
-        exchange: 'GetCommentsExchange',
-        routingKey: 'get-by-user-id-comments',
+        ...getByUserIdCommentsRMQConfig(),
         payload: user_id,
       });
       return comments;

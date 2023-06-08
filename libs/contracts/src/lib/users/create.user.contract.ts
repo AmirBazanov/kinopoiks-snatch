@@ -25,6 +25,4 @@ export namespace CreateUserContract {
     @IsString()
     external_service_id?: string;
   }
-
-  export class Response {}
 }
