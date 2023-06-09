@@ -40,6 +40,10 @@ export class UserService {
     return user;
   }
 
+  async editToken(info: object) {
+    await this.userRepository.editToken(info);
+  }
+
   async deleteProfile(id: number) {
     await this.userRepository.deleteProfile(id);
   }

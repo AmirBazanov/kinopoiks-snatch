@@ -9,6 +9,7 @@ import {
 import {
   createUserRMQConfig,
   deleteUserRMQConfig,
+  editTokenRMQConfig,
   editUserRMQConfig,
 } from '@kinopoisk-snitch/rmq-configs';
 
@@ -26,6 +27,11 @@ export class UserCommand {
   async editUser(@Payload() userInfo: EditUserContract.Request) {
     const user = await this.userService.editUser(userInfo);
     return user;
+  }
+
+  @RabbitRPC(editTokenRMQConfig())
+  async editToken(@Payload() info: object) {
+    await this.userService.editToken(info);
   }
 
   @RabbitRPC(deleteUserRMQConfig())

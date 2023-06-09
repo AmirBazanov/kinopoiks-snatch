@@ -6,13 +6,13 @@ export namespace CreateCommentContract {
     @IsString()
     user_id: string;
     @IsString()
-    private readonly title: string;
+    title: string;
     @IsString()
-    private readonly content: string;
+    content: string;
     @IsString()
-    private readonly type;
+    type;
     @IsNumber()
-    private readonly film_id: number;
+    film_id: number;
   }
 
   export class Response {}
