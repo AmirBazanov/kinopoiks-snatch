@@ -1,7 +1,7 @@
 import { ArgumentsHost, Catch, ExceptionFilter } from '@nestjs/common';
 import { TokenExpiredError } from 'jsonwebtoken';
 import { TokenError } from 'passport-oauth2';
-import { AUTH_ERROR, TOKEN_EXPIRED } from '../constants/errors-constants';
+import { AUTH_ERROR, TOKEN_EXPIRED } from '@kinopoisk-snitch/constants';
 
 @Catch(TokenError)
 export class PassportTokenErrorFilter implements ExceptionFilter {
