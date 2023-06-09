@@ -25,7 +25,11 @@ export class AuthCommands {
 
   @RabbitRPC(authLoginRMQConfig())
   async login(@Payload() data: AuthLogin.Request) {
-    return this.authService.singIn(data.email, data.password);
+    const tokens = await this.authService.singIn(data.email, data.password);
+    if (tokens instanceof HttpException) {
+      return { error: tokens };
+    }
+    return tokens;
   }
 
   @RabbitRPC(authRegisterRMQConfig())

@@ -1,4 +1,6 @@
-import { IsEmail, IsString } from 'class-validator';
+import { IsEmail, IsString, ValidateNested } from 'class-validator';
+import { NotFoundException } from '@nestjs/common';
+import { Type } from 'class-transformer';
 
 export namespace AuthLogin {
   export class Request {
@@ -15,5 +17,9 @@ export namespace AuthLogin {
 
     @IsString()
     refresh_token: string;
+
+    @ValidateNested({ each: true })
+    @Type(() => NotFoundException)
+    error: NotFoundException;
   }
 }

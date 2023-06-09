@@ -1,5 +1,6 @@
-import { IsString } from 'class-validator';
+import { IsString, ValidateNested } from 'class-validator';
 import { BadRequestException } from '@nestjs/common';
+import { Type } from 'class-transformer';
 
 export namespace AuthUpdateToken {
   export class Request {
@@ -14,6 +15,8 @@ export namespace AuthUpdateToken {
     @IsString()
     refresh_token: string;
 
+    @ValidateNested({ each: true })
+    @Type(() => BadRequestException)
     error: BadRequestException;
   }
 }

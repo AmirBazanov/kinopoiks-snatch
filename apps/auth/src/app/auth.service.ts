@@ -16,10 +16,7 @@ import {
   getUserByEmailRMQConfig,
 } from '@kinopoisk-snitch/rmq-configs';
 import bcrypt from 'bcrypt';
-import {
-  TOKEN_UNVERIFIED,
-  USER_NOT_FOUND,
-} from '../../../api/src/constants/errors-constants';
+import { TOKEN_EXPIRED, USER_NOT_FOUND } from '@kinopoisk-snitch/constants';
 
 @Injectable()
 export class AuthService {
@@ -48,7 +45,7 @@ export class AuthService {
     try {
       jwt_payload = this.jwtService.verify<JwtPayload>(refresh_token);
     } catch (e) {
-      return new BadRequestException(TOKEN_UNVERIFIED);
+      return new BadRequestException(TOKEN_EXPIRED);
     }
     return await this.singJwt(jwt_payload);
   }

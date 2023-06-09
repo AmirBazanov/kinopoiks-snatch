@@ -2,7 +2,6 @@ import {
   Body,
   Controller,
   Get,
-  HttpException,
   HttpStatus,
   Patch,
   Post,
@@ -37,7 +36,7 @@ import {
   BAD_REQUEST,
   TOKEN_UNVERIFIED,
   USER_NOT_FOUND,
-} from '../constants/errors-constants';
+} from '@kinopoisk-snitch/constants';
 import { UpdateTokenDto } from './dto/update-token.dto';
 
 @ApiTags('Auth')
@@ -72,14 +71,12 @@ export class AuthCommands {
   })
   @ApiResponse({ status: HttpStatus.NOT_FOUND, description: USER_NOT_FOUND })
   async login(@Body() loginDto: LoginDto) {
-    const user = await this.amqpService.request<
-      AuthLogin.Response | HttpException
-    >({
+    const user = await this.amqpService.request<AuthLogin.Response>({
       ...authLoginRMQConfig(),
       payload: loginDto,
     });
-    if (!user['access_token']) {
-      throw user['response'];
+    if (user.error) {
+      throw user.error['response'];
     }
     return user;
   }
