@@ -58,7 +58,7 @@ export class UserRepository {
       },
     });
 
-    user.refresh_token = info['new_token']['token'];
+    user.refresh_token = info['token'];
     await this.UserModel.save(user);
   }
 

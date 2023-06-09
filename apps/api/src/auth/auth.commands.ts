@@ -3,6 +3,7 @@ import {
   Controller,
   Get,
   HttpStatus,
+  Patch,
   Post,
   Req,
   UseFilters,
@@ -15,6 +16,7 @@ import {
   AuthGoogle,
   AuthLogin,
   AuthRegister,
+  AuthUpdateToken,
   AuthVk,
 } from '@kinopoisk-snitch/contracts';
 import { LoginDto, LoginDtoResponse } from './dto/login.dto';
@@ -23,17 +25,19 @@ import {
   authGoogleRMQConfig,
   authLoginRMQConfig,
   authRegisterRMQConfig,
+  authUpdateToken,
   authVkRMQConfig,
 } from '@kinopoisk-snitch/rmq-configs';
-import { GoogleOauthGuard } from '../assets/guards/google-oauth.guard';
-import { VkOauthGuard } from '../assets/guards/vk-oauth.guard';
-import { PassportTokenErrorFilter } from '../assets/exceptions-filters/oauth-exceptions';
+import { GoogleOauthGuard } from '../guards/google-oauth.guard';
+import { VkOauthGuard } from '../guards/vk-oauth.guard';
+import { PassportTokenErrorFilter } from '../exceptions-filters/oauth-exceptions';
 import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import {
   BAD_REQUEST,
+  TOKEN_UNVERIFIED,
   USER_NOT_FOUND,
-} from '../assets/constants/errors-constants';
-import { OwnerGuard } from '../assets/guards/role.guard';
+} from '@kinopoisk-snitch/constants';
+import { UpdateTokenDto } from './dto/update-token.dto';
 
 @ApiTags('Auth')
 @Controller('/auth')
@@ -67,10 +71,14 @@ export class AuthCommands {
   })
   @ApiResponse({ status: HttpStatus.NOT_FOUND, description: USER_NOT_FOUND })
   async login(@Body() loginDto: LoginDto) {
-    return this.amqpService.request<AuthLogin.Response>({
+    const user = await this.amqpService.request<AuthLogin.Response>({
       ...authLoginRMQConfig(),
       payload: loginDto,
     });
+    if (user.error) {
+      throw user.error['response'];
+    }
+    return user;
   }
 
   @Get('/google')
@@ -109,9 +117,27 @@ export class AuthCommands {
     });
   }
 
-  @Get('/admin')
-  @UseGuards(OwnerGuard)
-  async testAdmin(@Req() user) {
-    return user.user_id;
+  @Patch('/updateToken')
+  @ApiOperation({ summary: 'Updates access and refresh tokens' })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Success',
+    type: UpdateTokenDto,
+  })
+  @ApiResponse({
+    status: HttpStatus.BAD_REQUEST,
+    description: TOKEN_UNVERIFIED,
+  })
+  async updateToken(@Body() data: UpdateTokenDto) {
+    const refresh_token = data.refresh_token;
+    const updated_token =
+      await this.amqpService.request<AuthUpdateToken.Response>({
+        ...authUpdateToken(),
+        payload: { refresh_token: refresh_token },
+      });
+    if (updated_token.error) {
+      throw updated_token.error['response'];
+    }
+    return updated_token;
   }
 }

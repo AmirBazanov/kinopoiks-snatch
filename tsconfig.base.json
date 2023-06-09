@@ -15,6 +15,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@kinopoisk-snitch/constants": ["libs/constants/src/index.ts"],
       "@kinopoisk-snitch/contracts": ["libs/contracts/src/index.ts"],
       "@kinopoisk-snitch/interfaces": ["libs/interfaces/src/index.ts"],
       "@kinopoisk-snitch/pipes": ["libs/pipes/src/index.ts"],

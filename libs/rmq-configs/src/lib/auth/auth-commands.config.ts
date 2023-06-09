@@ -31,3 +31,11 @@ export const authVkRMQConfig = (): RmqConfig => {
     queue: 'VkAuthQueue',
   };
 };
+
+export const authUpdateToken = (): RmqConfig => {
+  return {
+    routingKey: 'update-token',
+    exchange: 'AuthExchange',
+    queue: 'UpdateTokenQueue',
+  };
+};

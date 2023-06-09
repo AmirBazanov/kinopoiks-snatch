@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy, VerifyCallback } from 'passport-google-oauth2';
-import { Profile } from 'passport-vkontakte';
 
 @Injectable()
 export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
@@ -17,7 +16,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
         'https://www.googleapis.com/auth/user.birthday.read',
       ],
     });
-  };
+  }
   async validate(_accessToken, _refreshToken, profile, done: VerifyCallback) {
     const { id, name, emails, provider } = profile;
     const user = {

@@ -1,4 +1,4 @@
-import { IsEmail, IsString } from 'class-validator';
+import { IsEmail, IsJWT, IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class LoginDto {
@@ -12,9 +12,9 @@ export class LoginDto {
 
 export class LoginDtoResponse {
   @ApiProperty({ description: 'access_token', nullable: false })
-  @IsEmail()
+  @IsJWT()
   access_token: string;
   @ApiProperty({ description: 'refresh_token', nullable: false })
-  @IsString()
+  @IsJWT()
   refresh_token: string;
 }

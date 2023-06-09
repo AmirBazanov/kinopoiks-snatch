@@ -28,3 +28,4 @@ export * from './lib/genres/all.genres.contract';
 export * from './lib/genres/id.genre.contract';
 export * from './lib/genres/name.genre.contract';
 export * from './lib/persons/id.person.contract';
+export * from './lib/auth/auth.update-token';
