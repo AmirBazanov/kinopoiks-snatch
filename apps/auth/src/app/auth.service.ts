@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
 import { JwtService } from '@nestjs/jwt';
 import {
@@ -8,9 +12,14 @@ import {
 } from '@kinopoisk-snitch/contracts';
 import {
   createUserRMQConfig,
+  editTokenRMQConfig,
   getUserByEmailRMQConfig,
 } from '@kinopoisk-snitch/rmq-configs';
 import bcrypt from 'bcrypt';
+import {
+  TOKEN_UNVERIFIED,
+  USER_NOT_FOUND,
+} from '../../../api/src/constants/errors-constants';
 
 @Injectable()
 export class AuthService {
@@ -19,14 +28,29 @@ export class AuthService {
     private readonly jwtService: JwtService
   ) {}
 
-  singJwt(user) {
+  async singJwt(user) {
     const payload: JwtPayload = {
       email: user.email,
       user_id: user.user_id,
       is_admin: user.is_admin,
     };
-    const access_token = this.jwtService.sign(payload);
-    return { access_token: access_token };
+    const access_token = this.jwtService.sign(payload, { expiresIn: '15m' });
+    const refresh_token = this.jwtService.sign(payload, { expiresIn: '30d' });
+    await this.amqpService.request({
+      ...editTokenRMQConfig(),
+      payload: { token: refresh_token, user_id: user.user_id },
+    });
+    return { access_token: access_token, refresh_token: refresh_token };
+  }
+
+  async updateToken(refresh_token: string) {
+    let jwt_payload: JwtPayload;
+    try {
+      jwt_payload = this.jwtService.verify<JwtPayload>(refresh_token);
+    } catch (e) {
+      return new BadRequestException(TOKEN_UNVERIFIED);
+    }
+    return await this.singJwt(jwt_payload);
   }
 
   async singIn(email: string, password: string) {
@@ -37,7 +61,7 @@ export class AuthService {
     if (user && (await bcrypt.compare(password, user.password))) {
       return this.singJwt(user);
     }
-    return new NotFoundException('user');
+    return new NotFoundException(USER_NOT_FOUND);
   }
 
   async register(userDto: CreateUserContract.Request) {

@@ -1,7 +1,6 @@
 import { RabbitMQConfig } from '@golevelup/nestjs-rabbitmq';
-import * as process from 'process';
 
-export function rmqConfig(): RabbitMQConfig {
+export function authRmqConfig(): RabbitMQConfig {
   return {
     uri: process.env.RABBITMQ_URI,
     exchanges: [
@@ -10,7 +9,6 @@ export function rmqConfig(): RabbitMQConfig {
         type: 'topic',
       },
     ],
-    enableControllerDiscovery: true,
     connectionInitOptions: { wait: false },
   };
 }
