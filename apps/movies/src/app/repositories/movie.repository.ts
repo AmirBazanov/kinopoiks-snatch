@@ -2,8 +2,7 @@ import {HttpStatus, Injectable, Logger} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import {GenresEntity, MoviesEntity} from '@kinopoisk-snitch/typeorm';
-import {CreateMovieContract, DeleteMovieContract, IdMovieContract} from '@kinopoisk-snitch/contracts';
-import {UpdateMovieContract} from "../../../../../libs/contracts/src/lib/movies/update.movie.contract";
+import {CreateMovieContract, IdMovieContract, UpdateMovieContract} from '@kinopoisk-snitch/contracts';
 import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
 import { getArrayPersonsOfMovieRMQConfig } from '@kinopoisk-snitch/rmq-configs';
 
