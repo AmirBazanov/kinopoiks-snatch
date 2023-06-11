@@ -16,12 +16,16 @@ import {
   incDisCommentRMQConfig,
   incLikeCommentRMQConfig,
 } from '@kinopoisk-snitch/rmq-configs';
+import { ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('CommentCommand')
 @Controller('/reviews')
 export class CommentCommand {
   constructor(private readonly amqpConnection: AmqpConnection) {}
 
   @Post('/film/:id')
+  @ApiOperation({ summary: 'Create comment' })
+  @ApiBody({ type: CreateCommentDto })
   async createComment(
     @Body() commentInfo: CreateCommentDto,
     @Param('id', ParseIntPipe) movie_id: string,
@@ -42,6 +46,8 @@ export class CommentCommand {
   }
 
   @Post('/createOnComment/:comment_id')
+  @ApiOperation({ summary: 'Create comment on comment by id in param' })
+  @ApiBody({ type: CreateCommentDto })
   async createOnComment(
     @Body() commentInfo: CreateCommentDto,
     @Param('comment_id', ParseIntPipe) comment_id: string,
@@ -63,6 +69,7 @@ export class CommentCommand {
 
   @UsePipes(new ParseIntPipe({ errorHttpStatusCode: HttpStatus.BAD_REQUEST }))
   @Post('/incLike/:id')
+  @ApiOperation({ summary: 'Put a like by comment id in param' })
   async incLikes(@Param('id') comment_id: string) {
     await this.amqpConnection.publish(
       incLikeCommentRMQConfig().exchange,
@@ -73,6 +80,7 @@ export class CommentCommand {
 
   @UsePipes(new ParseIntPipe({ errorHttpStatusCode: HttpStatus.BAD_REQUEST }))
   @Post('/incDis/:id')
+  @ApiOperation({ summary: 'Put a dislike by comment id in param' })
   async incDis(@Param('id') comment_id: string) {
     await this.amqpConnection.publish(
       incDisCommentRMQConfig().exchange,

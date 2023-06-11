@@ -20,12 +20,16 @@ import {
   editUserRMQConfig,
 } from '@kinopoisk-snitch/rmq-configs';
 import { EditTokenDto } from '../dtos/edit-token.dto';
+import { ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('UserCommand')
 @Controller('/users')
 export class UserCommand {
   constructor(private readonly amqpConnection: AmqpConnection) {}
 
   @Post('/createUser')
+  @ApiOperation({ summary: 'Create new user' })
+  @ApiBody({ type: CreateUserDto })
   async createUser(@Body() userDto: CreateUserDto) {
     try {
       await this.amqpConnection.publish(
@@ -39,6 +43,8 @@ export class UserCommand {
   }
 
   @Put('/editUser')
+  @ApiOperation({ summary: 'Edit user info' })
+  @ApiBody({ type: EditUserDto })
   async editUser(@Body() editUserDto: EditUserDto, @Req() req: Request) {
     try {
       const token = req.headers['authorization'].replace('Bearer ', '');
@@ -54,6 +60,8 @@ export class UserCommand {
   }
 
   @Put('/refresh_token/:id')
+  @ApiOperation({ summary: 'Edit user refresh_token by id in param' })
+  @ApiBody({ type: EditTokenDto })
   async editToken(
     @Param('id', ParseIntPipe) user_id: EditTokenDto,
     @Body() new_token: string
@@ -71,6 +79,7 @@ export class UserCommand {
 
   @UsePipes(new ParseIntPipe({ errorHttpStatusCode: HttpStatus.BAD_REQUEST }))
   @Delete('/deleteUser/:id')
+  @ApiOperation({ summary: 'Delete user by id in param' })
   async deleteUser(@Param('id') id: string) {
     try {
       await this.amqpConnection.publish(

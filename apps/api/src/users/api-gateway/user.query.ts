@@ -13,13 +13,17 @@ import {
   getUserByEmailRMQConfig,
   getUserRMQConfig,
 } from '@kinopoisk-snitch/rmq-configs';
+import { ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { EmailUserDto } from '../dtos/email-user.dto';
 
+@ApiTags('UserQuery')
 @Controller('/users')
 export class UserQuery {
   constructor(private readonly amqpConnection: AmqpConnection) {}
 
   @UsePipes(new ParseIntPipe({ errorHttpStatusCode: HttpStatus.BAD_REQUEST }))
   @Get('/getUser/:id')
+  @ApiOperation({ summary: 'Get user by id in param' })
   async getUserById(@Param('id') user_id: string) {
     const user = await this.amqpConnection.request<IdUserContract.Response>({
       ...getUserRMQConfig(),
@@ -29,7 +33,9 @@ export class UserQuery {
   }
 
   @Get('/getUserByEmail')
-  async getUserByEmail(@Body() user_email: EmailUserContract.Request) {
+  @ApiOperation({ summary: 'Get user by email' })
+  @ApiBody({ type: EmailUserDto })
+  async getUserByEmail(@Body() user_email: EmailUserDto) {
     const user = await this.amqpConnection.request<EmailUserContract.Response>({
       ...getUserByEmailRMQConfig(),
       payload: user_email,

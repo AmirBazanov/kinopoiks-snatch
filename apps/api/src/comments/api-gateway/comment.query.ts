@@ -12,13 +12,16 @@ import {
   getByIdCommentRMQConfig,
   getByUserIdCommentsRMQConfig,
 } from '@kinopoisk-snitch/rmq-configs';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('CommentQuery')
 @Controller('/reviews')
 export class CommentQuery {
   constructor(private readonly amqpConnection: AmqpConnection) {}
 
   @UsePipes(new ParseIntPipe({ errorHttpStatusCode: HttpStatus.BAD_REQUEST }))
   @Get('/getCommentById/:id')
+  @ApiOperation({ summary: 'Get comment by id in param' })
   async getCommentById(@Param('id') comment_id: string) {
     const comment = await this.amqpConnection.request({
       ...getByIdCommentRMQConfig(),
@@ -29,6 +32,7 @@ export class CommentQuery {
 
   @UsePipes(new ParseIntPipe({ errorHttpStatusCode: HttpStatus.BAD_REQUEST }))
   @Get('/byFilmId/:id')
+  @ApiOperation({ summary: 'Get comment by film id in param' })
   async getCommentsByFilmId(@Param('id') film_id: string) {
     const comments = await this.amqpConnection.request({
       ...getByFilmIdCommentsRMQConfig(),
@@ -39,6 +43,7 @@ export class CommentQuery {
 
   @UsePipes(new ParseIntPipe({ errorHttpStatusCode: HttpStatus.BAD_REQUEST }))
   @Get('/byUserId/:id')
+  @ApiOperation({ summary: 'Get comment by user id in param' })
   async getCommentsByUserId(@Param('id') user_id: string) {
     const comments = await this.amqpConnection.request({
       ...getByUserIdCommentsRMQConfig(),
