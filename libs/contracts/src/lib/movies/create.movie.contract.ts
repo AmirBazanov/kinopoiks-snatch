@@ -41,6 +41,10 @@ export namespace CreateMovieContract {
     country_id: number;
     @IsOptional()
     genres_id: number[];
+    @IsOptional()
+    awards_id: number[];
+    @IsOptional()
+    persons_id: number[];
   }
 
   export class Response {

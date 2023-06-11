@@ -11,12 +11,11 @@ export class GenreCommand {
   @Post('/createGenre')
   async createMovie(@Body() genreDto: CreateGenreDto) {
     try {
-      const response = await this.amqpConnection.request<CreateGenreContract.Response>({
-        exchange: createGenreRMQConfig().exchange,
-        routingKey: createGenreRMQConfig().routingKey,
-        payload: genreDto,
-      });
-      return response;
+      await this.amqpConnection.publish(
+        createGenreRMQConfig().exchange,
+        createGenreRMQConfig().routingKey,
+        genreDto,
+      );
     } catch (e) {
       throw new Error(e);
     }

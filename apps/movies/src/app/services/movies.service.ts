@@ -11,6 +11,7 @@ import { MoviesEntity, MoviesPersonsRolesEntity } from '@kinopoisk-snitch/typeor
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import {getByFilmIdCommentsRMQConfig} from "@kinopoisk-snitch/rmq-configs";
+import {Payload} from "@nestjs/microservices";
 
 @Injectable()
 export class MoviesService {
@@ -50,6 +51,10 @@ export class MoviesService {
   async getMovieByTitle(movieDto: TitleMovieContract.Request) {
     const response = await this.movieRepository.getMovieByTitle(movieDto.title);
     return response;
+  }
+
+  async getMoviesByGenre(genre_id: number) {
+    return await this.movieRepository.getMoviesByGenre(genre_id);
   }
 
   async getAllMovies() {

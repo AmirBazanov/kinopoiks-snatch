@@ -11,12 +11,11 @@ export class CountryCommand {
   @Post('/createCountry')
   async createCountry(@Body() countryDto: CreateCountryDto) {
     try {
-      const response = await this.amqpConnection.request<CreateCountryContract.Response>({
-        exchange: createCountryRMQConfig().exchange,
-        routingKey: createCountryRMQConfig().routingKey,
-        payload: countryDto,
-      });
-      return response;
+      await this.amqpConnection.publish(
+        createCountryRMQConfig().exchange,
+        createCountryRMQConfig().routingKey,
+        countryDto,
+      );
     } catch (e) {
       throw new Error(e);
     }

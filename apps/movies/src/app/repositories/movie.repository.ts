@@ -1,7 +1,7 @@
-import {HttpStatus, Injectable, Logger} from '@nestjs/common';
+import {HttpStatus, Injectable} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import {GenresEntity, MoviesEntity} from '@kinopoisk-snitch/typeorm';
+import {AwardsEntity, GenresEntity, MoviesEntity, MoviesPersonsRolesEntity} from '@kinopoisk-snitch/typeorm';
 import {CreateMovieContract, IdMovieContract, UpdateMovieContract} from '@kinopoisk-snitch/contracts';
 import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
 import { getArrayPersonsOfMovieRMQConfig } from '@kinopoisk-snitch/rmq-configs';
@@ -13,6 +13,8 @@ export class MovieRepository {
     private readonly MovieModel: Repository<MoviesEntity>,
     @InjectRepository(GenresEntity)
     private readonly GenreModel: Repository<GenresEntity>,
+    @InjectRepository(AwardsEntity)
+    private readonly AwardModel: Repository<AwardsEntity>,
     private readonly amqpConnection: AmqpConnection
   ) {}
 
@@ -25,9 +27,17 @@ export class MovieRepository {
       if (movieInfo.genres_id) {
         genres = await this.getGenresEntities(movieInfo);
       }
+
+      let awards = [];
+
+      if (movieInfo.awards_id) {
+        awards = await this.getAwardsEntities(movieInfo);
+      }
+
       const movie = await this.MovieModel.create({
         ...movieInfo,
         genres: genres,
+        awards: awards,
         country: {
           country_id: movieInfo.country_id,
         }
@@ -59,12 +69,20 @@ export class MovieRepository {
     }
   }
 
-  async getGenresEntities(updateDto: UpdateMovieContract.Request | CreateMovieContract.Request) {
+  async getGenresEntities(movieDto: UpdateMovieContract.Request | CreateMovieContract.Request) {
     const genres: GenresEntity[] = [];
-    for (const genre_id of updateDto.genres_id) {
+    for (const genre_id of movieDto.genres_id) {
       genres.push(await this.GenreModel.findOne({where: {genre_id: genre_id}}));
     }
     return genres;
+  }
+
+  async getAwardsEntities(movieDto: CreateMovieContract.Request) {
+    const awards: AwardsEntity[] = [];
+    for (const award_id of movieDto.awards_id) {
+      awards.push(await this.AwardModel.findOne({where: {award_id: award_id}}));
+    }
+    return awards;
   }
 
   async getMovieById(id: IdMovieContract.Request) {
@@ -99,6 +117,18 @@ export class MovieRepository {
       orig_title: title
     });
   } catch (e) {
+      return {httpStatus: HttpStatus.NOT_FOUND}
+    }
+  }
+
+  async getMoviesByGenre(genre_id: number) {
+    try {
+      const movies = await this.MovieModel.find({
+        where: {genres: {genre_id: genre_id}},
+        relations: {country: true, genres: true, awards: true, }
+      });
+      return movies;
+    } catch (e) {
       return {httpStatus: HttpStatus.NOT_FOUND}
     }
   }
