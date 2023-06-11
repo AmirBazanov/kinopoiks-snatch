@@ -1,7 +1,7 @@
 import { Controller, Get, HttpException, HttpStatus, Param } from '@nestjs/common';
 import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
 import { getPersonByIdRMQConfig, getPersonByNameRMQConfig } from '@kinopoisk-snitch/rmq-configs';
-import { IdPersonContract, NamePersonContract } from '@kinopoisk-snitch/contracts';
+import { IdPersonContract } from '@kinopoisk-snitch/contracts';
 
 @Controller('/persons')
 export class PersonsQuery {
@@ -24,12 +24,12 @@ export class PersonsQuery {
     }
   }
 
-  @Get('/getPersonByName/:fullName')
-  async getPersonByName(@Param('fullName') personDto: string) {
-    return await this.amqpConnection.request<NamePersonContract.Response>({
-      exchange: getPersonByNameRMQConfig().exchange,
-      routingKey: getPersonByNameRMQConfig().routingKey,
-      payload: personDto,
-    });
-  }
+  // @Get('/getPersonByName/:fullName')
+  // async getPersonByName(@Param('fullName') personDto: string) {
+  //   return await this.amqpConnection.request<NamePersonContract.Response>({
+  //     exchange: getPersonByNameRMQConfig().exchange,
+  //     routingKey: getPersonByNameRMQConfig().routingKey,
+  //     payload: personDto,
+  //   });
+  // }
 }

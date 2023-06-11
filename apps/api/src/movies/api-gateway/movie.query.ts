@@ -10,7 +10,7 @@ import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
 import {AllMoviesContract, DeleteMovieContract, IdMovieContract, TitleMovieContract} from '@kinopoisk-snitch/contracts';
 import {
   deleteMovieRMQConfig,
-  getAllMoviesRMQConfig,
+  getAllMoviesRMQConfig, getGenresMoviesRMQConfig,
   getMovieByTitleRMQConfig,
   getMovieRMQConfig
 } from "@kinopoisk-snitch/rmq-configs";
@@ -44,6 +44,23 @@ export class MovieQuery {
       payload: movie_title,
     });
     return movie;
+  }
+
+  @Get('/getMovieByGenre/:id')
+  async getMovieByGenreId(@Param('id') genre_id: number) {
+    if (isNaN(Number(genre_id))) {
+      throw new HttpException(
+        'ID must be a number',
+        HttpStatus.BAD_REQUEST
+      );
+    } else {
+      const movie = await this.amqpConnection.request<IdMovieContract.Response>({
+        exchange: getGenresMoviesRMQConfig().exchange,
+        routingKey: getGenresMoviesRMQConfig().routingKey,
+        payload: genre_id,
+      });
+      return movie;
+    }
   }
 
   @Get('/getAllMovies')
