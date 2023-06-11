@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
-import { ADMIN_ONLY } from '../constants/errors-constants';
+import { ADMIN_ONLY } from '@kinopoisk-snitch/constants';
 
 @Injectable()
 export class AdminGuard implements CanActivate {

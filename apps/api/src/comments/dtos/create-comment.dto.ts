@@ -9,7 +9,7 @@ export class CreateCommentDto {
 
   @IsOptional()
   comment_id: number;
-  private readonly title: string;
-  private readonly content: string;
-  private readonly type: string;
+  title: string;
+  content: string;
+  type: string;
 }

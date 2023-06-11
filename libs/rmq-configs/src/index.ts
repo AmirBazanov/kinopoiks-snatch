@@ -20,3 +20,5 @@ export * from './lib/countries/country-queries.config';
 export * from './lib/genres/amqp.genre.config';
 export * from './lib/genres/genre-commands.config';
 export * from './lib/genres/genre-queries.config';
+export * from './lib/persons/persons-commands.config';
+export * from './lib/auth/amqp-auth.config';

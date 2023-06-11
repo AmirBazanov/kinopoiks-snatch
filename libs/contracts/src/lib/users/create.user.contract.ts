@@ -26,5 +26,18 @@ export namespace CreateUserContract {
     external_service_id?: string;
   }
 
-  export class Response {}
+  export class Response {
+    user_id: number;
+    email: string;
+    user_name: string;
+    community: string;
+    birthday: Date;
+    gender: string;
+    external_service_id: string;
+    quote: string;
+    created_at: Date;
+    is_admin: boolean;
+    refresh_token: string;
+    is_eng: boolean;
+  }
 }

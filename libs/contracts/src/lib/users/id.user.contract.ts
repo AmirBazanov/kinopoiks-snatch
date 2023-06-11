@@ -1,9 +1,10 @@
-import { IsEmail } from 'class-validator';
+// eslint-disable-next-line @typescript-eslint/no-namespace
+import { IsNumber } from 'class-validator';
 
-export namespace EmailUserContract {
+export namespace IdUserContract {
   export class Request {
-    @IsEmail()
-    email: string;
+    @IsNumber()
+    user_id: number;
   }
 
   export class Response {

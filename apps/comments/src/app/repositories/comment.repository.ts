@@ -36,15 +36,20 @@ export class CommentRepository {
     commentInfo: CreateCommentOnCommentContract.Request,
     user_id: number
   ) {
-    const comment_id_for_reply = commentInfo.comment_id;
+    const comment_for_reply = await this.CommentModel.findOne({
+      where: {
+        comment_id: commentInfo.comment_id,
+      },
+      relations: ['movie'],
+    });
     delete commentInfo.comment_id;
     const comment = await this.CommentModel.create({
       ...commentInfo,
       parent: {
-        comment_id: comment_id_for_reply,
+        comment_id: comment_for_reply.comment_id,
       },
       movie: {
-        movie_id: 123,
+        movie_id: comment_for_reply.movie.movie_id,
       },
       user: {
         user_id: user_id,
@@ -92,8 +97,10 @@ export class CommentRepository {
         comment_id: id,
       },
     });
-    comment.likes = comment.likes + 1;
-    await this.CommentModel.save(comment);
+    if (comment !== null) {
+      comment.likes = comment.likes + 1;
+      await this.CommentModel.save(comment);
+    }
   }
 
   async incDis(id: number) {
@@ -102,7 +109,9 @@ export class CommentRepository {
         comment_id: id,
       },
     });
-    comment.dislikes = comment.dislikes + 1;
-    await this.CommentModel.save(comment);
+    if (comment !== null) {
+      comment.dislikes = comment.dislikes + 1;
+      await this.CommentModel.save(comment);
+    }
   }
 }

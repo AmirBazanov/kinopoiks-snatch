@@ -3,6 +3,7 @@ import { UserRepository } from '../repositpries/user.repository';
 import {
   CreateUserContract,
   EditUserContract,
+  IdUserContract,
 } from '@kinopoisk-snitch/contracts';
 import process from 'process';
 import { JwtService } from '@nestjs/jwt';
@@ -19,7 +20,7 @@ export class UserService {
     return newUser;
   }
 
-  async getUserById(id: number) {
+  async getUserById(id: IdUserContract.Request) {
     const user = await this.userRepository.findUserById(id);
     return user;
   }
@@ -37,6 +38,10 @@ export class UserService {
     delete userInfo.user_id;
     const user = await this.userRepository.editUser(userInfo, user_id);
     return user;
+  }
+
+  async editToken(info: object) {
+    await this.userRepository.editToken(info);
   }
 
   async deleteProfile(id: number) {

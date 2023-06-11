@@ -16,6 +16,14 @@ export function editUserRMQConfig(): RmqConfig {
   };
 }
 
+export function editTokenRMQConfig(): RmqConfig {
+  return {
+    exchange: 'PutUsersExchange',
+    routingKey: 'edit-token',
+    queue: 'EditTokenCommandQueue',
+  };
+}
+
 export function deleteUserRMQConfig(): RmqConfig {
   return {
     exchange: 'DeleteUsersExchange',

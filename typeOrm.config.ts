@@ -1,10 +1,6 @@
-
 import { DataSource } from 'typeorm';
 import { ConfigService } from '@nestjs/config';
 import { config } from 'dotenv';
-
-
-
 
 config();
 
@@ -18,5 +14,5 @@ export default new DataSource({
   password: configService.get('POSTGRES_PASSWORD'),
   database: configService.get('POSTGRES_DB'),
   entities: ['libs/typeorm/src/lib/entities/**.entity.ts'],
-  migrations: ['migrations/**.ts']
+  migrations: ['migrations/examples/**.ts'],
 });

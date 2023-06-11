@@ -24,7 +24,13 @@ export class PersonsEntity {
   @Column('int2', { nullable: true })
   height: number;
 
-  @Column('date', { nullable: true })
+  @Column({
+    type: 'date',
+    transformer: {
+      from: (value: string) => new Date(value),
+      to: (value: Date) => value.toISOString().slice(0, 10), // format the Date to YYYY-MM-DD
+    },
+  })
   date_birth: Date;
 
   @Column({ nullable: true })
@@ -43,6 +49,9 @@ export class PersonsEntity {
   @JoinTable()
   awards: AwardsEntity[];
 
-  @OneToMany(() => MoviesPersonsRolesEntity, (moviesPersonsRole) => moviesPersonsRole.person)
+  @OneToMany(
+    () => MoviesPersonsRolesEntity,
+    (moviesPersonsRole) => moviesPersonsRole.person
+  )
   moviesPersonsRole: MoviesPersonsRolesEntity[];
 }

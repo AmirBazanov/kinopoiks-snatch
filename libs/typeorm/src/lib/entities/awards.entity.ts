@@ -18,7 +18,13 @@ export class AwardsEntity {
   @Column()
   name: string;
 
-  @Column()
+  @Column({
+    type: 'date',
+    transformer: {
+      from: (value: string) => new Date(value),
+      to: (value: Date) => value.toISOString().slice(0, 10), // format the Date to YYYY-MM-DD
+    },
+  })
   year: Date;
 
   @Column()
