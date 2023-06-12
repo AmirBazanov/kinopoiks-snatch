@@ -24,6 +24,7 @@ export class AwardsEntity {
       from: (value: string) => new Date(value),
       to: (value: Date) => value.toISOString().slice(0, 10), // format the Date to YYYY-MM-DD
     },
+    nullable: true,
   })
   year: Date;
 
