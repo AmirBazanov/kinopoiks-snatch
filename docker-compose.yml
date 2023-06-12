@@ -11,8 +11,6 @@ services:
       - '15672:15672'
     env_file:
       - .env
-    networks:
-      - net
 
   postgres:
     image: postgres
@@ -22,34 +20,6 @@ services:
       - '5432:5432'
     volumes:
       - pg-data:/var/lib/postgresql/data
-    networks:
-      - net
-
-  api:
-    build: ./apps/api
-    restart: always
-    container_name: api-service
-    ports: 
-      - "8000:3000"
-    depends_on:
-      - rabbitmq
-      - postgres
-    networks:
-      - net
-
-  persons:
-    build: ./apps/persons
-    restart: on-failure
-    container_name: persons-service
-    depends_on:
-      - rabbitmq
-      - postgres
-    networks:
-      - net
-
-networks:
-  net:
-    driver: bridge
 
 volumes:
   pg-data:

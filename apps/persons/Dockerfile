@@ -1,7 +1,12 @@
-FROM suvorigo/nx-project
+FROM node:18.14-alpine
 
-WORKDIR /apps/persons
+WORKDIR /usr/src/app
 
-COPY . .
+COPY ["package*.json", "nx.json", "*.env", "*config*","./"]
+COPY ./apps/persons ./apps/persons
+COPY ./libs ./libs
 
-CMD [ "npx", "nx", "serve", "persons" ]
+RUN npm install \
+&& npm install -g nx
+
+CMD [ "nx", "serve", "persons" ]
