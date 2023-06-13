@@ -6,7 +6,7 @@ services:
       context: .
       dockerfile: ./apps/api/Dockerfile
     ports:
-      - "3000:3000"
+      - '3000:3000'
   auth:
     image: auth
     build:
@@ -17,19 +17,19 @@ services:
     build:
       context: .
       dockerfile: ./apps/comments/Dockerfile
-    depends_on: [api,  postgres]
+    depends_on: [api, postgres]
   countries:
     image: countries
     build:
       context: .
       dockerfile: ./apps/countries/Dockerfile
-    depends_on: [api,  postgres]
+    depends_on: [api, postgres]
   genres:
     image: genres
     build:
       context: .
       dockerfile: ./apps/genres/Dockerfile
-    depends_on: [api,  postgres]
+    depends_on: [api, postgres]
   movies:
     image: movies
     build:
@@ -49,20 +49,19 @@ services:
       dockerfile: ./apps/users/Dockerfile
     depends_on: [api, postgres]
 
-
-  rabbitmq:
-    image: rabbitmq:3-management
-    container_name: rabbitmq
-    hostname: rabbitmq
-    volumes:
-      - /var/lib/rabbitmq
-    ports:
-      - '5672:5672'
-      - '15672:15672'
-    env_file:
-      - .env
-    networks:
-      - rabbitmq-net
+  # rabbitmq:
+  #   image: rabbitmq:3-management
+  #   container_name: rabbitmq
+  #   hostname: rabbitmq
+  #   volumes:
+  #     - /var/lib/rabbitmq
+  #   ports:
+  #     - '5672:5672'
+  #     - '15672:15672'
+  #   env_file:
+  #     - .env
+  #   networks:
+  #     - rabbitmq-net
 
   postgres:
     image: postgres
