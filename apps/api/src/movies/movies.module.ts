@@ -9,8 +9,6 @@ import { rmqMovieConfig } from '@kinopoisk-snitch/rmq-configs';
 
 @Module({
   imports: [
-    TypeormModuleConfig,
-    TypeOrmModule.forFeature([MoviesEntity]),
     RabbitMQModule.forRoot(RabbitMQModule, rmqMovieConfig()),
   ],
   controllers: [MovieCommand, MovieQuery, MovieEvent],

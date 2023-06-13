@@ -1,4 +1,5 @@
 import { RabbitMQConfig } from '@golevelup/nestjs-rabbitmq';
+import * as process from "process";
 
 export function rmqCountryConfig(): RabbitMQConfig {
   return {
@@ -12,7 +13,7 @@ export function rmqCountryConfig(): RabbitMQConfig {
         type: 'topic',
       },
     ],
-    uri: 'amqp://nestjs:nestjs@localhost:5672',
+    uri: process.env.RABBITMQ_URI,
     connectionInitOptions: { wait: false },
     enableControllerDiscovery: true,
   };

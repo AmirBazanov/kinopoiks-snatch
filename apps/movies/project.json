@@ -18,6 +18,14 @@
         "isolatedConfig": true,
         "webpackConfig": "apps/movies/webpack.config.js"
       },
+      "tasksRunnerOptions": {
+        "default": {
+          "runner": "nx/tasks-runners/default",
+          "options": {
+            "cacheableOperations": ["build", "test"]
+          }
+        }
+      },
       "configurations": {
         "development": {},
         "production": {}

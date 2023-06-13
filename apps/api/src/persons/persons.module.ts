@@ -9,8 +9,6 @@ import { PersonsQuery } from './api-gateway/person.query';
 
 @Module({
   imports: [
-    TypeormModuleConfig,
-    TypeOrmModule.forFeature([PersonsEntity]),
     RabbitMQModule.forRoot(RabbitMQModule, rmqPersonConfig()),
   ],
   controllers: [

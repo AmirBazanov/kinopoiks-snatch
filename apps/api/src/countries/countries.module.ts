@@ -9,8 +9,6 @@ import {rmqCountryConfig} from '@kinopoisk-snitch/rmq-configs';
 
 @Module({
   imports: [
-    TypeormModuleConfig,
-    TypeOrmModule.forFeature([CountriesEntity]),
     RabbitMQModule.forRoot(RabbitMQModule, rmqCountryConfig()),
   ],
   controllers: [CountryCommand, CountryQuery, CountryEvent],

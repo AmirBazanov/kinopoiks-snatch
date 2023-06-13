@@ -9,8 +9,6 @@ import { rmqUserConfig } from '@kinopoisk-snitch/rmq-configs';
 
 @Module({
   imports: [
-    TypeormModuleConfig,
-    TypeOrmModule.forFeature([UsersEntity]),
     RabbitMQModule.forRoot(RabbitMQModule, rmqUserConfig()),
   ],
   controllers: [UserCommand, UserQuery, UserEvent],

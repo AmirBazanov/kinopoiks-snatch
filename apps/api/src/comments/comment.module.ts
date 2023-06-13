@@ -9,8 +9,6 @@ import { rmqCommentConfig } from '@kinopoisk-snitch/rmq-configs';
 
 @Module({
   imports: [
-    TypeormModuleConfig,
-    TypeOrmModule.forFeature([CommentsEntity]),
     RabbitMQModule.forRoot(RabbitMQModule, rmqCommentConfig()),
   ],
   controllers: [CommentCommand, CommentQuery, CommentEvent],

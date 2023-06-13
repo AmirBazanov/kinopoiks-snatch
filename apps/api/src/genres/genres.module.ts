@@ -9,8 +9,6 @@ import {rmqGenreConfig} from "@kinopoisk-snitch/rmq-configs";
 
 @Module({
   imports: [
-    TypeormModuleConfig,
-    TypeOrmModule.forFeature([GenresEntity]),
     RabbitMQModule.forRoot(RabbitMQModule, rmqGenreConfig()),
   ],
   controllers: [GenreCommand, GenreQuery, GenreEvent],
