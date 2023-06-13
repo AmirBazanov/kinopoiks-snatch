@@ -11,6 +11,6 @@ export function rmqConfig(): RabbitMQConfig {
       },
     ],
     enableControllerDiscovery: true,
-    connectionInitOptions: { wait: false },
+    connectionInitOptions: { wait: false, timeout: 60 },
   };
 }
