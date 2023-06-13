@@ -8,12 +8,8 @@ import {
   UsersEntity,
 } from '@kinopoisk-snitch/typeorm';
 import { AuthModule } from '../auth/auth.module';
-import { UserModule } from '../users/user.module';
-import { CommentsModule } from '../comments/comment.module';
-import { PersonsModule } from '../persons/persons.module';
-import { MoviesModule } from '../movies/movies.module';
-import { CountriesModule } from '../countries/countries.module';
-import { GenresModule } from '../genres/genres.module';
+import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
+import * as process from 'process';
 
 @Module({
   imports: [
@@ -21,12 +17,7 @@ import { GenresModule } from '../genres/genres.module';
     TypeormModuleConfig,
     TypeOrmModule.forFeature([UsersEntity, CommentsEntity, PersonsEntity]),
     AuthModule,
-    UserModule,
-    CommentsModule,
-    PersonsModule,
-    MoviesModule,
-    CountriesModule,
-    GenresModule,
+    RabbitMQModule.forRoot(RabbitMQModule, { uri: process.env.RABBITMQ_URI }),
   ],
   controllers: [],
   providers: [],
