@@ -1,4 +1,4 @@
-import { Controller } from '@nestjs/common';
+import { Controller, HttpException } from '@nestjs/common';
 import { UserService } from '../services/user.service';
 import { RabbitRPC } from '@golevelup/nestjs-rabbitmq';
 import { Payload } from '@nestjs/microservices';
@@ -20,6 +20,9 @@ export class UserCommand {
   @RabbitRPC(createUserRMQConfig())
   async createUser(@Payload() userDto: CreateUserContract.Request) {
     const newUser = await this.userService.createUser(userDto);
+    if (newUser instanceof HttpException) {
+      return { error: newUser };
+    }
     return newUser;
   }
 

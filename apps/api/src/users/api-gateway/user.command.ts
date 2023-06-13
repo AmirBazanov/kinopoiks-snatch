@@ -21,6 +21,7 @@ import {
 } from '@kinopoisk-snitch/rmq-configs';
 import { EditTokenDto } from '../dtos/edit-token.dto';
 import { ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { CreateUserContract } from '@kinopoisk-snitch/contracts';
 
 @ApiTags('UserCommand')
 @Controller('/users')
@@ -32,11 +33,14 @@ export class UserCommand {
   @ApiBody({ type: CreateUserDto })
   async createUser(@Body() userDto: CreateUserDto) {
     try {
-      await this.amqpConnection.publish(
-        createUserRMQConfig().exchange,
-        createUserRMQConfig().routingKey,
-        userDto
-      );
+      const user =
+        await this.amqpConnection.request<CreateUserContract.Response>({
+          ...createUserRMQConfig(),
+          payload: userDto,
+        });
+      if (user.error) {
+        return user.error['response'];
+      }
     } catch (e) {
       throw new Error(e);
     }

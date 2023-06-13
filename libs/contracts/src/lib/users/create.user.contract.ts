@@ -1,4 +1,6 @@
-import { IsOptional, IsString } from 'class-validator';
+import { IsOptional, IsString, ValidateNested } from 'class-validator';
+import { Type } from 'class-transformer';
+import { NotFoundException } from '@nestjs/common';
 
 // eslint-disable-next-line @typescript-eslint/no-namespace
 export namespace CreateUserContract {
@@ -39,5 +41,9 @@ export namespace CreateUserContract {
     is_admin: boolean;
     refresh_token: string;
     is_eng: boolean;
+
+    @ValidateNested({ each: true })
+    @Type(() => NotFoundException)
+    error: NotFoundException;
   }
 }
