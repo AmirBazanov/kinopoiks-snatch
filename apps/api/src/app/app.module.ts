@@ -1,23 +1,23 @@
 import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
-import {
-  CommentsEntity,
-  PersonsEntity,
-  TypeormModuleConfig,
-  UsersEntity,
-} from '@kinopoisk-snitch/typeorm';
+import { UsersEntity } from '@kinopoisk-snitch/typeorm';
 import { AuthModule } from '../auth/auth.module';
-import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
-import * as process from 'process';
+import { CommentsModule } from '../comments/comment.module';
+import { CountriesModule } from '../countries/countries.module';
+import { GenresModule } from '../genres/genres.module';
+import { MoviesModule } from '../movies/movies.module';
+import { PersonsModule } from '../persons/persons.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
-    TypeormModuleConfig,
-    TypeOrmModule.forFeature([UsersEntity, CommentsEntity, PersonsEntity]),
     AuthModule,
-    RabbitMQModule.forRoot(RabbitMQModule, { uri: process.env.RABBITMQ_URI }),
+    CommentsModule,
+    CountriesModule,
+    GenresModule,
+    MoviesModule,
+    PersonsModule,
+    UsersEntity,
   ],
   controllers: [],
   providers: [],
