@@ -52,6 +52,14 @@
         "jestConfig": "apps/api/jest.config.ts",
         "passWithNoTests": true
       },
+      "tasksRunnerOptions": {
+        "default": {
+          "runner": "nx/tasks-runners/default",
+          "options": {
+            "cacheableOperations": ["build", "test"]
+          }
+        }
+      },
       "configurations": {
         "ci": {
           "ci": true,

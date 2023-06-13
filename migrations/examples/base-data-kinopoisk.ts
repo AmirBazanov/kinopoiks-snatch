@@ -1,6 +1,6 @@
 import { MigrationInterface, QueryRunner } from "typeorm"
 
-export class BaseDataKinopoisk implements MigrationInterface {
+export class BaseDataKinopoisk1685258438334 implements MigrationInterface {
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.query(`
@@ -18,7 +18,7 @@ export class BaseDataKinopoisk implements MigrationInterface {
             ('Фэнтези', false), ('Fantasy', true),
             ('Мюзикл', false), ('Musical', true),
             ('Мультфильм', false), ('Cartoon', true),
-            ('Криминал', false), ('Crime', true);   
+            ('Криминал', false), ('Crime', true);
         `);
         await queryRunner.query(`
             INSERT INTO "Roles" (name, is_eng) VALUES

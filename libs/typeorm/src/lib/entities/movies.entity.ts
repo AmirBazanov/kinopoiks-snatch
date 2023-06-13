@@ -27,7 +27,13 @@ export class MoviesEntity {
   @Column()
   orig_title: string;
 
-  @Column()
+  @Column({
+    type: 'date',
+    transformer: {
+      from: (value: string) => new Date(value),
+      to: (value: Date) => value.toISOString().slice(0, 10), // format the Date to YYYY-MM-DD
+    },
+  })
   production_year: Date;
 
   @Column({ nullable: true })
@@ -63,11 +69,11 @@ export class MoviesEntity {
   @Column({ default: false })
   is_eng: boolean;
 
-  @OneToMany(() => AwardsEntity, (award) => award.movie)
+  @OneToMany(() => AwardsEntity, (award) => award.movie, { nullable: true })
   @JoinTable()
   awards: AwardsEntity[];
 
-  @ManyToMany(() => GenresEntity)
+  @ManyToMany(() => GenresEntity, { nullable: true })
   @JoinTable()
   genres: GenresEntity[];
 
@@ -75,10 +81,16 @@ export class MoviesEntity {
   @JoinColumn({ name: 'country_id' })
   country: CountriesEntity;
 
-  @OneToMany(() => CommentsEntity, (comment) => comment.movie)
+  @OneToMany(() => CommentsEntity, (comment) => comment.movie, {
+    nullable: true,
+  })
   @JoinTable()
   comments: CommentsEntity[];
 
-  @OneToMany(() => MoviesPersonsRolesEntity, (moviesPersonsRole) => moviesPersonsRole.movie)
+  @OneToMany(
+    () => MoviesPersonsRolesEntity,
+    (moviesPersonsRole) => moviesPersonsRole.movie,
+    { nullable: true }
+  )
   moviesPersonsRole: MoviesPersonsRolesEntity[];
 }

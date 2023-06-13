@@ -14,5 +14,5 @@ export default new DataSource({
   password: configService.get('POSTGRES_PASSWORD'),
   database: configService.get('POSTGRES_DB'),
   entities: ['libs/typeorm/src/lib/entities/**.entity.ts'],
-  migrations: ['migrations/examples/**.ts'],
+  migrations: ['migrations/examples/movie**.ts'],
 });

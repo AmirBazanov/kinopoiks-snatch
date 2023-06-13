@@ -5,8 +5,6 @@ WORKDIR /usr/src/app
 COPY ["package*.json", "nx.json", "*.env", "*config*","./"]
 COPY ./apps/countries ./apps/countries
 COPY ./libs ./libs
-
-RUN npm install \
-    && npm install -g nx
-
-CMD nx serve countries
+RUN npm i nx
+RUN npx nx run countries:build:production
+CMD node dist/apps/countries/main.js

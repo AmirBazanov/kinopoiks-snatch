@@ -10,7 +10,7 @@ import * as process from 'process';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({ isGlobal: true }),
+    ConfigModule.forRoot(),
     RabbitMQModule.forRoot(RabbitMQModule, rmqConfig()),
     JwtModule.register({
       secret: process.env.JWT_SECRET,
