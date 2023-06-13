@@ -1,6 +1,4 @@
 import { Module } from '@nestjs/common';
-import { CommentsEntity, TypeormModuleConfig } from '@kinopoisk-snitch/typeorm';
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
 import { CommentCommand } from './api-gateway/comment.command';
 import { CommentQuery } from './api-gateway/comment.query';

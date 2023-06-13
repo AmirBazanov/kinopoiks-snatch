@@ -1,6 +1,4 @@
 import { Module } from '@nestjs/common';
-import { TypeormModuleConfig, UsersEntity } from '@kinopoisk-snitch/typeorm';
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
 import { UserCommand } from './api-gateway/user.command';
 import { UserEvent } from './api-gateway/user.event';
