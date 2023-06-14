@@ -8,6 +8,7 @@ import {
   Post,
   Put,
   Req,
+  Res,
   UsePipes,
 } from '@nestjs/common';
 import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
@@ -22,6 +23,7 @@ import {
 import { EditTokenDto } from '../dtos/edit-token.dto';
 import { ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CreateUserContract } from '@kinopoisk-snitch/contracts';
+import { Response } from 'express';
 
 @ApiTags('UserCommand')
 @Controller('/users')
@@ -31,7 +33,7 @@ export class UserCommand {
   @Post('/createUser')
   @ApiOperation({ summary: 'Create new user' })
   @ApiBody({ type: CreateUserDto })
-  async createUser(@Body() userDto: CreateUserDto) {
+  async createUser(@Body() userDto: CreateUserDto, @Res() res: Response) {
     try {
       const user =
         await this.amqpConnection.request<CreateUserContract.Response>({
@@ -39,7 +41,7 @@ export class UserCommand {
           payload: userDto,
         });
       if (user.error) {
-        return user.error['response'];
+        return res.status(HttpStatus.BAD_REQUEST).send(user.error['response']);
       }
     } catch (e) {
       throw new Error(e);
