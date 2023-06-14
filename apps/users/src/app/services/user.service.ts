@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { UserRepository } from '../repositpries/user.repository';
 import {
   CreateUserContract,
@@ -7,6 +7,7 @@ import {
 } from '@kinopoisk-snitch/contracts';
 import process from 'process';
 import { JwtService } from '@nestjs/jwt';
+import { USER_EXIST } from '@kinopoisk-snitch/constants';
 
 @Injectable()
 export class UserService {
@@ -17,6 +18,9 @@ export class UserService {
 
   async createUser(userInfo: CreateUserContract.Request) {
     const newUser = await this.userRepository.createUser(userInfo);
+    if (!newUser) {
+      return new NotFoundException(USER_EXIST);
+    }
     return newUser;
   }
 

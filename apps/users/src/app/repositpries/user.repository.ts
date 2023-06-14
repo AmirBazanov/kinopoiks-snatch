@@ -2,13 +2,13 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UsersEntity } from '@kinopoisk-snitch/typeorm';
-import * as bcrypt from 'bcryptjs';
 import {
   CreateUserContract,
   EditUserContract,
   IdUserContract,
 } from '@kinopoisk-snitch/contracts';
 import { USER_EXIST } from '@kinopoisk-snitch/constants';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UserRepository {
