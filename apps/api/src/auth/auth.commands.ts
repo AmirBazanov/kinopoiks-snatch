@@ -55,10 +55,14 @@ export class AuthCommands {
   })
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: BAD_REQUEST })
   async register(@Body() registerDto: RegisterDto) {
-    return this.amqpService.request<AuthRegister.Response>({
+    const newUser = await this.amqpService.request<AuthRegister.Response>({
       ...authRegisterRMQConfig(),
       payload: registerDto,
     });
+    if (newUser.httpStatus != 201){
+      throw newUser
+    }
+    return newUser
   }
 
   @Post('/login')

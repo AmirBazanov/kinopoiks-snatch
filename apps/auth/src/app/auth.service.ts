@@ -62,10 +62,13 @@ export class AuthService {
   }
 
   async register(userDto: CreateUserContract.Request) {
-    return this.amqpService.request<CreateUserContract.Response>({
+    const newUser = await this.amqpService.request<CreateUserContract.Response>({
       ...createUserRMQConfig(),
       payload: userDto,
     });
+    if (newUser.error) {
+      return newUser.error['response'];
+    }
   }
 
   async googleAuth(userGoogle) {

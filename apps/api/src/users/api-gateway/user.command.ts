@@ -38,11 +38,13 @@ export class UserCommand {
           ...createUserRMQConfig(),
           payload: userDto,
         });
+
       if (user.error) {
         return user.error['response'];
       }
     } catch (e) {
       throw new Error(e);
+
     }
   }
 
