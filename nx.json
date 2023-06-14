@@ -35,6 +35,14 @@
         "{workspaceRoot}/jest.preset.js"
       ]
     },
+    "tasksRunnerOptions": {
+      "default": {
+        "runner": "nx/tasks-runners/default",
+        "options": {
+          "cacheableOperations": ["build", "test"]
+        }
+      }
+    },
     "lint": {
       "inputs": [
         "default",

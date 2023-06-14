@@ -1,6 +1,4 @@
 import { Module } from '@nestjs/common';
-import {TypeormModuleConfig, GenresEntity} from '@kinopoisk-snitch/typeorm';
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
 import { GenreCommand } from './api-gateway/genre.command';
 import { GenreEvent } from './api-gateway/genre.event';
@@ -9,8 +7,6 @@ import {rmqGenreConfig} from "@kinopoisk-snitch/rmq-configs";
 
 @Module({
   imports: [
-    TypeormModuleConfig,
-    TypeOrmModule.forFeature([GenresEntity]),
     RabbitMQModule.forRoot(RabbitMQModule, rmqGenreConfig()),
   ],
   controllers: [GenreCommand, GenreQuery, GenreEvent],

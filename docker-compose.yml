@@ -1,16 +1,68 @@
 version: '3.1'
 services:
-  rabbitmq:
-    image: rabbitmq:3-management
-    container_name: rabbitmq
-    hostname: rabbitmq
-    volumes:
-      - /var/lib/rabbitmq
+  api:
+    image: api
+    build:
+      context: .
+      dockerfile: ./apps/api/Dockerfile
     ports:
-      - '5672:5672'
-      - '15672:15672'
-    env_file:
-      - .env
+      - "3000:3000"
+  auth:
+    image: auth
+    build:
+      context: .
+      dockerfile: ./apps/auth/Dockerfile
+  comments:
+    image: comments
+    build:
+      context: .
+      dockerfile: ./apps/comments/Dockerfile
+    depends_on: [api,  postgres]
+  countries:
+    image: countries
+    build:
+      context: .
+      dockerfile: ./apps/countries/Dockerfile
+    depends_on: [api,  postgres]
+  genres:
+    image: genres
+    build:
+      context: .
+      dockerfile: ./apps/genres/Dockerfile
+    depends_on: [api,  postgres]
+  movies:
+    image: movies
+    build:
+      context: .
+      dockerfile: ./apps/movies/Dockerfile
+    depends_on: [api, postgres]
+  persons:
+    image: persons
+    build:
+      context: .
+      dockerfile: ./apps/persons/Dockerfile
+    depends_on: [api, postgres]
+  users:
+    image: users
+    build:
+      context: .
+      dockerfile: ./apps/users/Dockerfile
+    depends_on: [api, postgres]
+
+
+#  rabbitmq:
+#    image: rabbitmq:3-management
+#    container_name: rabbitmq
+#    hostname: rabbitmq
+#    volumes:
+#      - /var/lib/rabbitmq
+#    ports:
+#      - '5672:5672'
+#      - '15672:15672'
+#    env_file:
+#      - .env
+#    networks:
+#      - rabbitmq-net
 
   postgres:
     image: postgres
@@ -23,3 +75,6 @@ services:
 
 volumes:
   pg-data:
+networks:
+  rabbitmq-net:
+    driver: bridge
