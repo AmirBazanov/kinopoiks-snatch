@@ -1,7 +1,7 @@
 import {Inject, Injectable} from '@nestjs/common';
 import {MovieRepository} from "../repositories/movie.repository";
 import {
-  CreateMovieContract,
+  CreateMovieContract, FilteredMoviesContract,
   IdMovieContract,
   TitleMovieContract,
   UpdateMovieContract
@@ -55,6 +55,10 @@ export class MoviesService {
 
   async getMoviesByGenre(genre_id: number) {
     return await this.movieRepository.getMoviesByGenre(genre_id);
+  }
+
+  async getFilteredMovies(filters: FilteredMoviesContract.Request) {
+    return await this.movieRepository.getFilteredMovies(filters);
   }
 
   async getAllMovies() {

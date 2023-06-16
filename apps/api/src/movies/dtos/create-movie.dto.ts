@@ -43,4 +43,10 @@ export class CreateMovieDto {
 
   @IsOptional()
   country_id: number;
+  @IsOptional()
+  genres_id: number[];
+  @IsOptional()
+  awards_id: number[];
+  @IsOptional()
+  persons_id: number[];
 }

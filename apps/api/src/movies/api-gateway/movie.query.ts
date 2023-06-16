@@ -7,13 +7,20 @@ import {
   Param,
 } from '@nestjs/common';
 import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
-import {AllMoviesContract, DeleteMovieContract, IdMovieContract, TitleMovieContract} from '@kinopoisk-snitch/contracts';
+import {
+  AllMoviesContract,
+  DeleteMovieContract,
+  FilteredMoviesContract,
+  IdMovieContract,
+  TitleMovieContract
+} from '@kinopoisk-snitch/contracts';
 import {
   deleteMovieRMQConfig,
   getAllMoviesRMQConfig, getGenresMoviesRMQConfig,
   getMovieByTitleRMQConfig,
-  getMovieRMQConfig
+  getMovieRMQConfig, getMoviesByFiltersRMQConfig
 } from "@kinopoisk-snitch/rmq-configs";
+import {FiltersDto} from "../dtos/filters.dto";
 
 @Controller('/movies')
 export class MovieQuery {
@@ -61,6 +68,16 @@ export class MovieQuery {
       });
       return movie;
     }
+  }
+
+  @Get('/getMoviesByFilters')
+  async getMoviesByFilters(@Body() filters: FiltersDto) {
+    const movies = await this.amqpConnection.request<FilteredMoviesContract.Response>({
+      exchange: getMoviesByFiltersRMQConfig().exchange,
+      routingKey: getMoviesByFiltersRMQConfig().routingKey,
+      payload: filters
+    });
+    return movies;
   }
 
   @Get('/getAllMovies')

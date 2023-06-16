@@ -1,8 +1,13 @@
 import {HttpStatus, Injectable} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import {AwardsEntity, GenresEntity, MoviesEntity, MoviesPersonsRolesEntity} from '@kinopoisk-snitch/typeorm';
-import {CreateMovieContract, IdMovieContract, UpdateMovieContract} from '@kinopoisk-snitch/contracts';
+import {Between, In, LessThanOrEqual, MoreThanOrEqual, Repository} from 'typeorm';
+import {AwardsEntity, GenresEntity, MoviesEntity} from '@kinopoisk-snitch/typeorm';
+import {
+  CreateMovieContract,
+  FilteredMoviesContract,
+  IdMovieContract,
+  UpdateMovieContract
+} from '@kinopoisk-snitch/contracts';
 import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
 import { getArrayPersonsOfMovieRMQConfig } from '@kinopoisk-snitch/rmq-configs';
 
@@ -53,11 +58,7 @@ export class MovieRepository {
     try {
       const country_id = updateDto.country_id;
       delete updateDto.country_id;
-      // let genres = [];
-      //
-      // if (updateDto.genres_id) {
-      //   genres = await this.getGenresEntities(updateDto);
-      // }
+
       const movie = await this.MovieModel.update(
         {movie_id: updateDto.movie_id},
         {...updateDto, country: {country_id: country_id}}
@@ -117,6 +118,75 @@ export class MovieRepository {
       orig_title: title
     });
   } catch (e) {
+      return {httpStatus: HttpStatus.NOT_FOUND}
+    }
+  }
+
+  async getFilteredMovies(filters: FilteredMoviesContract.Request) {
+    try {
+      const builder = this.MovieModel.createQueryBuilder("movies");
+
+      const options = { is_eng: filters.is_eng };
+      const orOptions = [];
+
+      if (filters.yearFrom && filters.yearTo) {
+        options["production_year"] = Between(new Date(filters.yearFrom), new Date(filters.yearTo));
+      }
+
+      if (filters.genreIds && filters.genreIds.length > 0) {
+        options["genres"] = {genre_id: In(filters.genreIds)}
+      }
+
+      if (filters.countryIds && filters.countryIds.length > 0) {
+        options["country"] = {country_id: In(filters.countryIds)}
+      }
+
+      if (filters.text) {
+        const orOption1 = {...options};
+        const orOption2 = {...options};
+
+        orOption1["title"] = new RegExp(filters.text, 'i');
+        orOption2["description"] = new RegExp(filters.text, 'i');
+
+        orOptions.push(orOption1, orOption2);
+      }
+
+      const order = {};
+
+      switch (filters.sort) {
+        case ("title"):
+          order["title"] = "ASC";
+          break;
+
+        case ("title_DESC"):
+          order["title"] = "DESC";
+          break;
+
+        case ("year"):
+          order["production_year"] = "ASC";
+          break;
+
+        case ("year_DESC"):
+          order["production_year"] = "DESC";
+          break;
+      }
+
+      const movies = await this.MovieModel.find(
+        {
+          where: orOptions.length > 0 ? orOptions : {...options},
+          order: {...order}
+        }
+      );
+
+      const totalPages = Math.ceil(movies.length / filters.perPage);
+      const indexFrom = filters.perPage * (filters.page - 1);
+      const indexTo = filters.perPage + indexFrom;
+
+      return {
+        movies: movies.slice(indexFrom, indexTo),
+        totalPages: totalPages
+      } ;
+    } catch (e) {
       return {httpStatus: HttpStatus.NOT_FOUND}
     }
   }

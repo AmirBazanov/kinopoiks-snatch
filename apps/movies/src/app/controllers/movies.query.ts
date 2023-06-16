@@ -7,11 +7,11 @@ import {
   getCountMoviesOfPersonRMQConfig,
   getGenresIdsArrayOfMoviesRMQConfig, getGenresMoviesRMQConfig,
   getMovieByTitleRMQConfig,
-  getMovieRMQConfig,
+  getMovieRMQConfig, getMoviesByFiltersRMQConfig,
   getMoviesOfPersonRMQConfig
 } from "@kinopoisk-snitch/rmq-configs";
 import {Payload} from "@nestjs/microservices";
-import {IdMovieContract, TitleMovieContract} from "@kinopoisk-snitch/contracts";
+import {FilteredMoviesContract, IdMovieContract, TitleMovieContract} from "@kinopoisk-snitch/contracts";
 
 @Controller()
 export class MoviesQuery {
@@ -30,6 +30,11 @@ export class MoviesQuery {
   @RabbitRPC(getGenresMoviesRMQConfig())
   async getMoviesByGenre(@Payload() genre_id: number) {
     return await this.moviesService.getMoviesByGenre(genre_id);
+  }
+
+  @RabbitRPC(getMoviesByFiltersRMQConfig())
+  async getFilteredMovies(@Payload() filters: FilteredMoviesContract.Request) {
+    return await this.moviesService.getFilteredMovies(filters);
   }
 
   @RabbitRPC(getAllMoviesRMQConfig())
