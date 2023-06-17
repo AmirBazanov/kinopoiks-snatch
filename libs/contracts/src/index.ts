@@ -19,6 +19,7 @@ export * from './lib/movies/id.movie.contract';
 export * from './lib/movies/all.movies.contract';
 export * from './lib/movies/delete.movie.contract';
 export * from './lib/movies/update.movie.contract';
+export * from './lib/movies/filtered.movies.contract'
 export * from './lib/countres/create.country.contract';
 export * from './lib/countres/id.country.contract';
 export * from './lib/countres/name.country.contract';
