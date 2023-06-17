@@ -109,13 +109,13 @@ export class MovieRepository {
 
   async getMovieByTitle(title: string) {
     try {
-    const movies = await this.MovieModel.findOne({
-      where: {title: ILike(title)},
-      relations: {country: true, genres: true, awards: true, }
+    const movies = await this.MovieModel.find({
+      where: {title: ILike(`%${title}%`)},
+      relations: {country: true, genres: true, awards: true }
     });
     if (movies) return movies;
     return await this.MovieModel.findBy({
-      orig_title: ILike(title)
+      orig_title: ILike(`%${title}%`)
     });
   } catch (e) {
       return {httpStatus: HttpStatus.NOT_FOUND}
@@ -152,7 +152,7 @@ export class MovieRepository {
 
         orOption1["title"] = ILike(`%${filters.text}%`);
         orOption2["film_description"] = ILike(`%${filters.text}%`);
-        orOption3["film_description"] = ILike(`%${filters.text}%`);
+        orOption3["tagline"] = ILike(`%${filters.text}%`);
 
         orOptions.push(orOption1, orOption2);
       }
