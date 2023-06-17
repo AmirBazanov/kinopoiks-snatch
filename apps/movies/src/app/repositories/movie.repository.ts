@@ -1,6 +1,6 @@
 import {HttpStatus, Injectable} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import {Between, In, LessThanOrEqual, MoreThanOrEqual, Repository} from 'typeorm';
+import {Any, Between, ILike, In, Repository} from 'typeorm';
 import {AwardsEntity, GenresEntity, MoviesEntity} from '@kinopoisk-snitch/typeorm';
 import {
   CreateMovieContract,
@@ -110,12 +110,12 @@ export class MovieRepository {
   async getMovieByTitle(title: string) {
     try {
     const movies = await this.MovieModel.findOne({
-      where: {title: title},
+      where: {title: ILike(title)},
       relations: {country: true, genres: true, awards: true, }
     });
     if (movies) return movies;
     return await this.MovieModel.findBy({
-      orig_title: title
+      orig_title: ILike(title)
     });
   } catch (e) {
       return {httpStatus: HttpStatus.NOT_FOUND}
@@ -124,13 +124,17 @@ export class MovieRepository {
 
   async getFilteredMovies(filters: FilteredMoviesContract.Request) {
     try {
-      const builder = this.MovieModel.createQueryBuilder("movies");
-
-      const options = { is_eng: filters.is_eng };
+      const options = {};
       const orOptions = [];
 
+      if (filters.is_eng !== undefined) {
+        options["is_eng"] = filters.is_eng;
+      }
+
       if (filters.yearFrom && filters.yearTo) {
-        options["production_year"] = Between(new Date(filters.yearFrom), new Date(filters.yearTo));
+        const yearFrom = new Date(filters.yearFrom, 0, 1);
+        const yearTo = new Date(filters.yearTo, 11, 31);
+        options["production_year"] = Between(yearFrom, yearTo);
       }
 
       if (filters.genreIds && filters.genreIds.length > 0) {
@@ -144,9 +148,11 @@ export class MovieRepository {
       if (filters.text) {
         const orOption1 = {...options};
         const orOption2 = {...options};
+        const orOption3 = {...options};
 
-        orOption1["title"] = new RegExp(filters.text, 'i');
-        orOption2["description"] = new RegExp(filters.text, 'i');
+        orOption1["title"] = ILike(`%${filters.text}%`);
+        orOption2["film_description"] = ILike(`%${filters.text}%`);
+        orOption3["film_description"] = ILike(`%${filters.text}%`);
 
         orOptions.push(orOption1, orOption2);
       }
@@ -174,7 +180,8 @@ export class MovieRepository {
       const movies = await this.MovieModel.find(
         {
           where: orOptions.length > 0 ? orOptions : {...options},
-          order: {...order}
+          order: {...order},
+          relations: {country: true, genres: true, awards: true}
         }
       );
 
@@ -187,6 +194,7 @@ export class MovieRepository {
         totalPages: totalPages
       } ;
     } catch (e) {
+      console.log(e)
       return {httpStatus: HttpStatus.NOT_FOUND}
     }
   }

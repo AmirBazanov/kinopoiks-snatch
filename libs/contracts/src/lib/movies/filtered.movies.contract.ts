@@ -24,10 +24,8 @@ export namespace FilteredMoviesContract {
     sort: string;
     @IsBoolean()
     is_eng: boolean;
-    @IsOptional()
     @IsNumber()
     page: number;
-    @IsOptional()
     @IsNumber()
     perPage: number;
   }
