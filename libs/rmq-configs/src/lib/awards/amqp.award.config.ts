@@ -11,6 +11,14 @@ export function rmqAwardConfig(): RabbitMQConfig {
         name: 'GetAwardsExchange',
         type: 'topic',
       },
+      {
+        name: 'PutAwardsExchange',
+        type: 'topic',
+      },
+      {
+        name: 'DeleteAwardExchange',
+        type: 'topic',
+      },
     ],
     uri: process.env.RABBITMQ_URI,
     connectionInitOptions: { wait: false },
