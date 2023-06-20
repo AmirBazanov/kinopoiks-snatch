@@ -1,30 +1,36 @@
-import {Inject, Injectable} from '@nestjs/common';
-import {MovieRepository} from "../repositories/movie.repository";
+import { Inject, Injectable } from '@nestjs/common';
+import { MovieRepository } from '../repositories/movie.repository';
 import {
   CreateAwardContract,
-  CreateMovieContract, FilteredMoviesContract,
+  CreateMovieContract,
+  EditAwardContract,
+  FilteredMoviesContract,
   IdMovieContract,
   TitleMovieContract,
-  UpdateMovieContract
-} from "@kinopoisk-snitch/contracts";
-import {AmqpConnection} from "@golevelup/nestjs-rabbitmq";
-import { MoviesEntity, MoviesPersonsRolesEntity } from '@kinopoisk-snitch/typeorm';
+  UpdateMovieContract,
+} from '@kinopoisk-snitch/contracts';
+import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
+import {
+  MoviesEntity,
+  MoviesPersonsRolesEntity,
+} from '@kinopoisk-snitch/typeorm';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import {getByFilmIdCommentsRMQConfig} from "@kinopoisk-snitch/rmq-configs";
-import {Payload} from "@nestjs/microservices";
+import { getByFilmIdCommentsRMQConfig } from '@kinopoisk-snitch/rmq-configs';
 
 @Injectable()
 export class MoviesService {
-  constructor(@Inject(MovieRepository)
-              private readonly movieRepository: MovieRepository,
-              private readonly amqpService: AmqpConnection,
-              @InjectRepository(MoviesEntity)
-              private readonly moviesRepo: Repository<MoviesEntity>,
-              @InjectRepository(MoviesPersonsRolesEntity)
-              private readonly moviesPersonsRolesRepository: Repository<MoviesPersonsRolesEntity>,
-              private readonly amqpConnection: AmqpConnection
-              ) {}
+  constructor(
+    @Inject(MovieRepository)
+    private readonly movieRepository: MovieRepository,
+    private readonly amqpService: AmqpConnection,
+    @InjectRepository(MoviesEntity)
+    private readonly moviesRepo: Repository<MoviesEntity>,
+    @InjectRepository(MoviesPersonsRolesEntity)
+    private readonly moviesPersonsRolesRepository: Repository<MoviesPersonsRolesEntity>,
+    private readonly amqpConnection: AmqpConnection
+  ) {}
+
   async createMovie(movieDto: CreateMovieContract.Request) {
     const response = await this.movieRepository.createMovie(movieDto);
     return response;
@@ -41,11 +47,11 @@ export class MoviesService {
       const comments = await this.amqpConnection.request({
         exchange: getByFilmIdCommentsRMQConfig().exchange,
         routingKey: getByFilmIdCommentsRMQConfig().routingKey,
-        payload: Number(movieDto)
+        payload: Number(movieDto),
       });
-      return {...response, comments: comments};
+      return { ...response, comments: comments };
     } catch (e) {
-      return {...response, comments: null};
+      return { ...response, comments: null };
     }
   }
 
@@ -77,7 +83,7 @@ export class MoviesService {
     for (let i = 0; i < arrayIdsMovies.length; i++) {
       const curMovie = await this.moviesRepo.findOne({
         where: {
-          movie_id: arrayIdsMovies[i]
+          movie_id: arrayIdsMovies[i],
         },
         relations: {
           genres: true,
@@ -85,8 +91,8 @@ export class MoviesService {
         select: {
           genres: {
             genre_id: true,
-          }
-        }
+          },
+        },
       });
 
       const lengthGenres = curMovie.genres.length;
@@ -105,21 +111,22 @@ export class MoviesService {
   async getCountMoviesOfPerson(person_id: number) {
     const arrayIdsMovies = [];
 
-    const arrayIdsMoviesForPerson = await this.moviesPersonsRolesRepository.find({
-      where: {
-        person: {
-          person_id: person_id,
+    const arrayIdsMoviesForPerson =
+      await this.moviesPersonsRolesRepository.find({
+        where: {
+          person: {
+            person_id: person_id,
+          },
         },
-      },
-      relations: {
-        movie: true
-      },
-      select: {
-        movie: {
-          movie_id: true,
-        }
-      },
-    });
+        relations: {
+          movie: true,
+        },
+        select: {
+          movie: {
+            movie_id: true,
+          },
+        },
+      });
 
     for (let i = 0; i < arrayIdsMoviesForPerson.length; i++) {
       if (arrayIdsMovies.includes(arrayIdsMoviesForPerson[i].movie.movie_id))
@@ -153,8 +160,8 @@ export class MoviesService {
         },
         role: {
           name: true,
-        }
-      }
+        },
+      },
     });
 
     for (let i = 0; i < arrayMoviesOfPerson.length; i++) {
@@ -164,10 +171,9 @@ export class MoviesService {
         movie_id: curMovie.movie.movie_id,
         title: curMovie.movie.title,
         role: curMovie.role.name,
-      }
+      };
 
-      if (arrayMovies.includes(movie))
-        continue;
+      if (arrayMovies.includes(movie)) continue;
 
       arrayMovies.push(movie);
     }
@@ -179,5 +185,15 @@ export class MoviesService {
     const movie_id = Number(awardInfo.movie_id);
     const person_id = Number(awardInfo.person_id);
     await this.movieRepository.createAward(awardInfo, movie_id, person_id);
+  }
+
+  async editAward(awardInfo: EditAwardContract.Request) {
+    const award_id = awardInfo['award_id'];
+    const awardInfoForEdit = awardInfo['awardInfo'];
+    await this.movieRepository.editAwardById(awardInfoForEdit, award_id);
+  }
+
+  async deleteAward(award_id: number) {
+    await this.movieRepository.deleteAward(award_id);
   }
 }

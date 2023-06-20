@@ -1,5 +1,5 @@
-import {IsDate, IsOptional} from "class-validator";
-import {Type} from "class-transformer";
+import { IsDate, IsOptional } from 'class-validator';
+import { Type } from 'class-transformer';
 
 export class CreateAwardDto {
   name: string;
@@ -10,7 +10,7 @@ export class CreateAwardDto {
   is_eng: boolean;
 
   @IsOptional()
-  person_id: number;
+  person_id?: number;
 
   movie_id: number;
 }
