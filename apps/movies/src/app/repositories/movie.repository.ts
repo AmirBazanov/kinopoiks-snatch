@@ -116,10 +116,8 @@ export class MovieRepository {
         },
         relations: { country: true, genres: true, awards: true },
       });
-
       const persons = await this.amqpConnection.request({
-        exchange: getArrayPersonsOfMovieRMQConfig().exchange,
-        routingKey: getArrayPersonsOfMovieRMQConfig().routingKey,
+        ...getArrayPersonsOfMovieRMQConfig(),
         payload: id,
       });
 

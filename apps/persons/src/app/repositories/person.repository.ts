@@ -1,8 +1,8 @@
-import { IdPersonContract } from "@kinopoisk-snitch/contracts";
-import { AwardsEntity, MoviesPersonsRolesEntity, PersonsEntity } from "@kinopoisk-snitch/typeorm";
-import { HttpStatus, Injectable } from "@nestjs/common";
-import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
+import {IdPersonContract} from "@kinopoisk-snitch/contracts";
+import {AwardsEntity, MoviesPersonsRolesEntity, PersonsEntity} from "@kinopoisk-snitch/typeorm";
+import {HttpStatus, Injectable} from "@nestjs/common";
+import {InjectRepository} from "@nestjs/typeorm";
+import {Repository} from "typeorm";
 
 @Injectable()
 export class PersonRepository {
@@ -16,35 +16,33 @@ export class PersonRepository {
     ) {}
 
     async getPersonById(personDto: IdPersonContract.Request) {
-        const person = await this.personRepository.findOne({
-            where: {
-                person_id: personDto.person_id,
-            },
-            relations: {
-                awards: true,
-            },
-            select: {
-                awards: {
-                    name: true,
-                    nomination: true,
-                    year: true,
-                }
+      return this.personRepository.findOne({
+          where: {
+            person_id: personDto.person_id,
+          },
+          relations: {
+            awards: true,
+          },
+          select: {
+            awards: {
+              name: true,
+              nomination: true,
+              year: true,
             }
+          }
         });
-
-        return person;
     }
 
     async getPersonByName(fullName: string) {
         try {
             const arrayPersons: PersonsEntity[] = [];
 
-            const person: PersonsEntity[] = await 
+            const person: PersonsEntity[] = await
                 this.personRepository
                     .createQueryBuilder('person')
                     .where(
-                    `CONCAT(person.name, ' ', person.sur_name) LIKE :personFullName`, 
-                    { 
+                    `CONCAT(person.name, ' ', person.sur_name) LIKE :personFullName`,
+                    {
                         personFullName: `%${fullName}%`
                     },
                     )
@@ -54,7 +52,7 @@ export class PersonRepository {
                 const currentPerson = await this.personRepository.findOne({
                     where: {
                         person_id: person[i].person_id
-                    }, 
+                    },
                     select: {
                         person_id: true,
                         name: true,
@@ -63,7 +61,7 @@ export class PersonRepository {
                         date_birth: true,
                     }
                 });
-                
+
                 arrayPersons.push(currentPerson);
             }
 
@@ -75,65 +73,30 @@ export class PersonRepository {
     }
 
     async getPersonsOfMovie(id: number) {
-        const arrayIdsPersons = [];
-        const arrayPersons = [];
 
-        const arrayIdsPersonsOfMovie = await this.moviesPersonsRolesRepository.find({
-            where: {
-                movie: {
-                    movie_id: id,
-                }},
-                relations: {
-                    person: true,
-                },
-                select: {
-                    person: {
-                        person_id: true,
-                    }
-                }
-        });
+      return this.moviesPersonsRolesRepository.find({
+        where: {
+          movie: {
+            movie_id: id,
+          }
+        },
+        relations: {
+          person: true,
+          role: true
+        },
+        select: {
+          person: {
+            person_id: true,
+            name: true,
+            sur_name: true,
+            moviesPersonsRole: {}
+          },
+          role: {
+            name: true
+          }
+        },
 
-        for (let i = 0; i < arrayIdsPersonsOfMovie.length; i++) {
-            if (arrayIdsPersons.includes(arrayIdsPersonsOfMovie[i].person.person_id))
-                continue;
-
-            arrayIdsPersons.push(arrayIdsPersonsOfMovie[i].person.person_id);
-        }
-
-        for (let j = 0; j < arrayIdsPersons.length; j++) {
-            const curPerson = await this.moviesPersonsRolesRepository.findOne({
-                where: {
-                    person: {
-                        person_id: arrayIdsPersons[j],
-                    }
-                },
-                relations: {
-                    person: true,
-                    role: true,
-                },
-                select: {
-                    person: {
-                        person_id: true,
-                        name: true,
-                        sur_name: true,
-                    },
-                    role: {
-                        name: true,
-                    },
-                }
-            });
-
-            const person = {
-                person_id: curPerson.person.person_id,
-                name: curPerson.person.name,
-                surname: curPerson.person.sur_name,
-                role: curPerson.role.name,
-            }
-
-            arrayPersons.push(person);
-        }     
-
-        return arrayPersons;        
+      })
     }
 
     async getArrayIdsMoviesForGenresPersons(person: PersonsEntity) {
@@ -154,10 +117,10 @@ export class PersonRepository {
                 }
             }
         });
-      
-        for (let i = 0; i < (await arrayIdsMoviesForPerson).length; i++) {
+
+        for (let i = 0; i < (arrayIdsMoviesForPerson).length; i++) {
             arrayIdsMovies[i] = arrayIdsMoviesForPerson[i].movie.movie_id;
-        };
+        }
 
         return arrayIdsMovies;
     }
@@ -178,16 +141,16 @@ export class PersonRepository {
                     }
             }
         });
-      
-        const arrayCarrer = [];
-      
+
+        const arrayCarrier = [];
+
         for (let i = 0; i < arrayIdsRolesForPerson.length; i++) {
-            if (arrayCarrer.includes(arrayIdsRolesForPerson[i].role.name))
+            if (arrayCarrier.includes(arrayIdsRolesForPerson[i].role.name))
                 continue;
-      
-            arrayCarrer.push(arrayIdsRolesForPerson[i].role.name);
+
+            arrayCarrier.push(arrayIdsRolesForPerson[i].role.name);
         }
 
-        return arrayCarrer;
+        return arrayCarrier;
     }
 }

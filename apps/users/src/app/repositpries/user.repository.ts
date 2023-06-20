@@ -30,7 +30,7 @@ export class UserRepository {
         password: passwordHash,
         created_at: new Date(),
       });
-      const newUser = await this.UserModel.save(temp);
+      const newUser: CreateUserContract.Response = await this.UserModel.save(temp);
       return newUser;
     } else {
       return new BadRequestException(USER_EXIST);
