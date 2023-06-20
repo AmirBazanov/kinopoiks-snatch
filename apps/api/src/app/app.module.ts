@@ -7,6 +7,7 @@ import { PersonsModule } from '../persons/persons.module';
 import { MoviesModule } from '../movies/movies.module';
 import { CountriesModule } from '../countries/countries.module';
 import { GenresModule } from '../genres/genres.module';
+import {AwardModule} from "../awards/award.module";
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { GenresModule } from '../genres/genres.module';
     MoviesModule,
     CountriesModule,
     GenresModule,
+    AwardModule,
   ],
   controllers: [],
   providers: [],

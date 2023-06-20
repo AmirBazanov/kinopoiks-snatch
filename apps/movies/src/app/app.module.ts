@@ -15,7 +15,7 @@ import {
 } from "@kinopoisk-snitch/typeorm";
 import {TypeOrmModule} from "@nestjs/typeorm";
 import {RabbitMQModule} from "@golevelup/nestjs-rabbitmq";
-import {rmqGenreConfig, rmqMovieConfig, rmqPersonConfig} from "@kinopoisk-snitch/rmq-configs";
+import {rmqAwardConfig, rmqGenreConfig, rmqMovieConfig, rmqPersonConfig} from "@kinopoisk-snitch/rmq-configs";
 import {MovieRepository} from "./repositories/movie.repository";
 
 
@@ -27,6 +27,7 @@ import {MovieRepository} from "./repositories/movie.repository";
     RabbitMQModule.forRoot(RabbitMQModule, rmqMovieConfig()),
     RabbitMQModule.forRoot(RabbitMQModule, rmqGenreConfig()),
     RabbitMQModule.forRoot(RabbitMQModule, rmqPersonConfig()),
+    RabbitMQModule.forRoot(RabbitMQModule, rmqAwardConfig()),
   ],
   controllers: [MoviesCommand, MoviesEvent, MoviesQuery],
   providers: [MoviesService, MovieRepository],
