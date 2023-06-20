@@ -1,13 +1,9 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { UsersEntity } from '@kinopoisk-snitch/typeorm';
-import {
-  CreateUserContract,
-  EditUserContract,
-  IdUserContract,
-} from '@kinopoisk-snitch/contracts';
-import { USER_EXIST } from '@kinopoisk-snitch/constants';
+import {BadRequestException, Injectable} from '@nestjs/common';
+import {InjectRepository} from '@nestjs/typeorm';
+import {Repository} from 'typeorm';
+import {UsersEntity} from '@kinopoisk-snitch/typeorm';
+import {CreateUserContract, EditUserContract, IdUserContract,} from '@kinopoisk-snitch/contracts';
+import {USER_EXIST} from '@kinopoisk-snitch/constants';
 import * as bcrypt from 'bcrypt';
 
 @Injectable()
@@ -38,17 +34,15 @@ export class UserRepository {
   }
 
   async findUserById(id: IdUserContract.Request) {
-    const user = await this.UserModel.findOne({
+    return  this.UserModel.findOne({
       where: {
         user_id: id.user_id,
       },
     });
-    return user;
   }
 
   async findUserByEmail(email: string) {
-    const user = await this.UserModel.findOneBy({ email: email });
-    return user;
+    return  this.UserModel.findOneBy({email: email});
   }
 
   async editUser(userInfo: EditUserContract.Request, user_id: number) {

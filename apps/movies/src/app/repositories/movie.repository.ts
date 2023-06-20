@@ -1,11 +1,7 @@
-import { HttpStatus, Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Between, ILike, In, Repository } from 'typeorm';
-import {
-  AwardsEntity,
-  GenresEntity,
-  MoviesEntity,
-} from '@kinopoisk-snitch/typeorm';
+import {HttpStatus, Injectable} from '@nestjs/common';
+import {InjectRepository} from '@nestjs/typeorm';
+import {Between, ILike, In, Repository} from 'typeorm';
+import {AwardsEntity, GenresEntity, MoviesEntity,} from '@kinopoisk-snitch/typeorm';
 import {
   CreateAwardContract,
   CreateMovieContract,
@@ -14,8 +10,8 @@ import {
   IdMovieContract,
   UpdateMovieContract,
 } from '@kinopoisk-snitch/contracts';
-import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
-import { getArrayPersonsOfMovieRMQConfig } from '@kinopoisk-snitch/rmq-configs';
+import {AmqpConnection} from '@golevelup/nestjs-rabbitmq';
+import {getArrayPersonsOfMovieRMQConfig} from '@kinopoisk-snitch/rmq-configs';
 
 @Injectable()
 export class MovieRepository {
@@ -75,7 +71,7 @@ export class MovieRepository {
       );
       return {
         httpStatus: HttpStatus.OK,
-        message: 'Movie updated successfully',
+        movie
       };
     } catch (e) {
       console.log(e);
@@ -219,11 +215,10 @@ export class MovieRepository {
 
   async getMoviesByGenre(genre_id: number) {
     try {
-      const movies = await this.MovieModel.find({
-        where: { genres: { genre_id: genre_id } },
-        relations: { country: true, genres: true, awards: true },
+      return  this.MovieModel.find({
+        where: {genres: {genre_id: genre_id}},
+        relations: {country: true, genres: true, awards: true},
       });
-      return movies;
     } catch (e) {
       return { httpStatus: HttpStatus.NOT_FOUND };
     }
