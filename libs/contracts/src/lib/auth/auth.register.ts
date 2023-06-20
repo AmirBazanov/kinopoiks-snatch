@@ -34,7 +34,7 @@ export namespace AuthRegister {
 
   export class Response {
     @IsEnum(HttpStatus)
-    httpStatus: HttpStatus;
+    statusCode: HttpStatus;
     @IsString()
     message: string;
   }

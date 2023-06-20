@@ -69,6 +69,7 @@ export class AuthService {
     if (newUser.error) {
       return newUser.error['response'];
     }
+    return {...newUser, password: null, refresh_token:null}
   }
 
   async googleAuth(userGoogle) {

@@ -59,7 +59,7 @@ export class AuthCommands {
       ...authRegisterRMQConfig(),
       payload: registerDto,
     });
-    if (newUser.httpStatus != 201){
+    if (newUser?.statusCode){
       throw newUser
     }
     return newUser
