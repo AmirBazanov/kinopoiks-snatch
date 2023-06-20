@@ -38,6 +38,7 @@ export class MovieQuery {
         exchange: getMovieRMQConfig().exchange,
         routingKey: getMovieRMQConfig().routingKey,
         payload: movie_id,
+        timeout: 100000,
       });
       return movie;
     }

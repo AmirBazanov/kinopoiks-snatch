@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import {Any, Between, ILike, In, Repository} from 'typeorm';
 import {AwardsEntity, GenresEntity, MoviesEntity} from '@kinopoisk-snitch/typeorm';
 import {
+  CreateAwardContract,
   CreateMovieContract,
   FilteredMoviesContract,
   IdMovieContract,
@@ -226,6 +227,26 @@ export class MovieRepository {
       return {httpStatus: HttpStatus.OK, message: "Movie deleted successfully"}
     } catch(e) {
       return {httpStatus: HttpStatus.INTERNAL_SERVER_ERROR, message: "Could not delete movie"}
+    }
+  }
+
+  async createAward(awardInfo: CreateAwardContract.Request,
+                    movie_id: number,
+                    person_id: number) {
+    try {
+      const award = await this.AwardModel.create({
+        ...awardInfo,
+        movie: {
+          movie_id: movie_id,
+        },
+        person: {
+          person_id: person_id,
+        },
+        year: new Date(awardInfo.year),
+      });
+      await this.AwardModel.save(award);
+    }catch (e) {
+      return e;
     }
   }
 }

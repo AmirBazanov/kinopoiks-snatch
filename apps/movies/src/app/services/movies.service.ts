@@ -1,6 +1,7 @@
 import {Inject, Injectable} from '@nestjs/common';
 import {MovieRepository} from "../repositories/movie.repository";
 import {
+  CreateAwardContract,
   CreateMovieContract, FilteredMoviesContract,
   IdMovieContract,
   TitleMovieContract,
@@ -172,5 +173,11 @@ export class MoviesService {
     }
 
     return arrayMovies;
+  }
+
+  async createAward(awardInfo: CreateAwardContract.Request) {
+    const movie_id = Number(awardInfo.movie_id);
+    const person_id = Number(awardInfo.person_id);
+    await this.movieRepository.createAward(awardInfo, movie_id, person_id);
   }
 }
