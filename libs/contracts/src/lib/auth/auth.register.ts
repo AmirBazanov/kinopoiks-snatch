@@ -21,9 +21,6 @@ export namespace AuthRegister {
     email: string;
     @IsString()
     gender: string;
-    @IsBoolean()
-    @IsOptional()
-    is_admin: boolean;
     @IsString()
     password: string;
     @IsString()

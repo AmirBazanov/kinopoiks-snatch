@@ -57,7 +57,7 @@ export class AuthCommands {
   async register(@Body() registerDto: RegisterDto) {
     const newUser = await this.amqpService.request<AuthRegister.Response>({
       ...authRegisterRMQConfig(),
-      payload: registerDto,
+      payload: {...registerDto, is_admin:false},
     });
     if (newUser?.statusCode){
       throw newUser

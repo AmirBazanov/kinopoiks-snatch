@@ -23,10 +23,6 @@ export class RegisterDto implements Partial<UsersEntity> {
   @ApiProperty({ description: 'Gender', nullable: true })
   @IsString()
   gender: string;
-  @ApiProperty({ description: 'Is user admin', nullable: false })
-  @IsBoolean()
-  @IsOptional()
-  is_admin: boolean;
   @ApiProperty({ description: 'Quote', nullable: true })
   @IsString()
   quote: string;
