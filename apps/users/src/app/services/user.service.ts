@@ -25,7 +25,7 @@ export class UserService {
   }
 
   async getUserById(id: IdUserContract.Request) {
-    const user = await this.userRepository.findUserById(id);
+    const user = await this.userRepository.findUserById(Number(id));
     return user;
   }
 

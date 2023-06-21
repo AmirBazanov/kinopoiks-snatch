@@ -1,9 +1,12 @@
-import {BadRequestException, Injectable} from '@nestjs/common';
-import {InjectRepository} from '@nestjs/typeorm';
-import {Repository} from 'typeorm';
-import {UsersEntity} from '@kinopoisk-snitch/typeorm';
-import {CreateUserContract, EditUserContract, IdUserContract,} from '@kinopoisk-snitch/contracts';
-import {USER_EXIST} from '@kinopoisk-snitch/constants';
+import { BadRequestException, Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { UsersEntity } from '@kinopoisk-snitch/typeorm';
+import {
+  CreateUserContract,
+  EditUserContract,
+} from '@kinopoisk-snitch/contracts';
+import { USER_EXIST } from '@kinopoisk-snitch/constants';
 import * as bcrypt from 'bcrypt';
 
 @Injectable()
@@ -26,23 +29,22 @@ export class UserRepository {
         password: passwordHash,
         created_at: new Date(),
       });
-      const newUser: CreateUserContract.Response = await this.UserModel.save(temp);
+      const newUser: CreateUserContract.Response = await this.UserModel.save(
+        temp
+      );
       return newUser;
     } else {
       return new BadRequestException(USER_EXIST);
     }
   }
 
-  async findUserById(id: IdUserContract.Request) {
-    return  this.UserModel.findOne({
-      where: {
-        user_id: id.user_id,
-      },
-    });
+  async findUserById(id: number) {
+    const user = await this.UserModel.findOneBy({ user_id: id });
+    return user;
   }
 
   async findUserByEmail(email: string) {
-    return  this.UserModel.findOneBy({email: email});
+    return this.UserModel.findOneBy({ email: email });
   }
 
   async editUser(userInfo: EditUserContract.Request, user_id: number) {
