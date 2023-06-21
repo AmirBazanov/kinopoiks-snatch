@@ -5,7 +5,7 @@ import {
 } from '@kinopoisk-snitch/typeorm';
 
 export namespace UpdatePersonContract {
-  export class Request implements Partial<PersonsEntity> {
+  export class Request {
     date_birth: Date;
     height: number;
     is_eng: boolean;

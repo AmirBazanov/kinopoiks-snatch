@@ -1,7 +1,8 @@
 import {Body, Controller, Post} from '@nestjs/common';
 import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
 import {CreatePersonDto} from "../dtos/create-person.dto";
-import {createMovieRMQConfig, createPersonRMQConfig} from "@kinopoisk-snitch/rmq-configs";
+import {addRoleRMQConfig, createPersonRMQConfig} from "@kinopoisk-snitch/rmq-configs";
+import {AddRoleDto} from "../dtos/add-role.dto";
 
 @Controller('/persons')
 export class PersonsCommand {
@@ -14,6 +15,18 @@ export class PersonsCommand {
         createPersonRMQConfig().exchange,
         createPersonRMQConfig().routingKey,
         createPersonDTO,
+      );
+    } catch (e) {
+      throw new Error(e);
+    }
+  }
+  @Post('/addRole')
+  async addRole(@Body() addRoleDto: AddRoleDto) {
+    try {
+      await this.amqpConnection.publish(
+        addRoleRMQConfig().exchange,
+        addRoleRMQConfig().routingKey,
+        addRoleDto,
       );
     } catch (e) {
       throw new Error(e);

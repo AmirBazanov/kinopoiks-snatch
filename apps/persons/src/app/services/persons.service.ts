@@ -3,7 +3,7 @@ import { getCountMoviesOfPersonRMQConfig, getGenresArrayOfPersonRMQConfig, getMo
 import { PersonsEntity } from '@kinopoisk-snitch/typeorm';
 import { HttpStatus, Injectable } from '@nestjs/common';
 import { PersonRepository } from '../repositories/person.repository';
-import {IdPersonContract, UpdatePersonContract} from '@kinopoisk-snitch/contracts';
+import {AddRoleContract, IdPersonContract, UpdatePersonContract} from '@kinopoisk-snitch/contracts';
 import {CreatePersonContract} from "../../../../../libs/contracts/src/lib/persons/create.person.contract";
 import {rethrow} from "@nestjs/core/helpers/rethrow";
 
@@ -78,5 +78,13 @@ export class PersonsService {
 
   async deletePerson(id: number) {
     return await this.personRepository.deletePerson(id);
+  }
+
+  async addRole(addRoleDto: AddRoleContract.Request) {
+    return await this.personRepository.addRole(addRoleDto);
+  }
+
+  async removeRole(persons_role_id: number) {
+    return await this.personRepository.removeRole(persons_role_id);
   }
 }

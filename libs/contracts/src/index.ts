@@ -31,6 +31,7 @@ export * from './lib/genres/name.genre.contract';
 export * from './lib/persons/id.person.contract';
 export * from './lib/persons/create.person.contract';
 export * from './lib/persons/update.person.contract';
+export * from './lib/persons/add.role.contract';
 export * from './lib/auth/auth.update-token';
 export * from './lib/awards/create.award.contract';
 export * from './lib/awards/edit.award.contract';

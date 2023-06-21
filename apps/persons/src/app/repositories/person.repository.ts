@@ -1,5 +1,10 @@
-import {CreatePersonContract, IdPersonContract, UpdatePersonContract} from "@kinopoisk-snitch/contracts";
-import {AwardsEntity, MoviesPersonsRolesEntity, PersonsEntity} from "@kinopoisk-snitch/typeorm";
+import {
+  AddRoleContract,
+  CreatePersonContract,
+  IdPersonContract,
+  UpdatePersonContract
+} from "@kinopoisk-snitch/contracts";
+import {AwardsEntity, MoviesPersonsRolesEntity, PersonsEntity, RolesEntity} from "@kinopoisk-snitch/typeorm";
 import {HttpStatus, Injectable} from "@nestjs/common";
 import {InjectRepository} from "@nestjs/typeorm";
 import {Repository} from "typeorm";
@@ -12,7 +17,9 @@ export class PersonRepository {
     @InjectRepository(AwardsEntity)
     private readonly awardsRepository: Repository<AwardsEntity>,
     @InjectRepository(MoviesPersonsRolesEntity)
-    private readonly moviesPersonsRolesRepository: Repository<MoviesPersonsRolesEntity>
+    private readonly moviesPersonsRolesRepository: Repository<MoviesPersonsRolesEntity>,
+    @InjectRepository(RolesEntity)
+    private readonly rolesRepository: Repository<RolesEntity>
   ) {
   }
 
@@ -176,8 +183,8 @@ export class PersonRepository {
   async updatePerson(personDto: UpdatePersonContract.Request) {
     try {
       const person = await this.personRepository.update(
-        { person_id: personDto.person_id },
-        { ...personDto }
+        {person_id: personDto.person_id},
+        {...personDto}
       );
       return {
         httpStatus: HttpStatus.OK,
@@ -188,6 +195,58 @@ export class PersonRepository {
       return {
         httpStatus: HttpStatus.INTERNAL_SERVER_ERROR,
         message: 'Internal Server Error',
+      };
+    }
+  }
+
+  async addRole(addRoleDto: AddRoleContract.Request) {
+    try {
+      let role = await this.rolesRepository.findOne({ where: {name: addRoleDto.role_name} });
+
+      if (!role) {
+        role = await this.rolesRepository.create({
+          name: addRoleDto.role_name,
+          is_eng: addRoleDto.is_eng,
+        });
+        await this.rolesRepository.save(role);
+      }
+
+      const personRole = await this.moviesPersonsRolesRepository.create({
+        movie: {movie_id: addRoleDto.movie_id},
+        role: {role_id: role.role_id},
+        person: {person_id: addRoleDto.person_id}
+      });
+
+      await this.moviesPersonsRolesRepository.save(personRole);
+
+      return {
+        httpStatus: HttpStatus.OK,
+        role: personRole,
+      };
+    } catch (e) {
+      return {
+        httpStatus: HttpStatus.INTERNAL_SERVER_ERROR,
+        message: 'Internal Server Error',
+      }
+    }
+  }
+
+  async removeRole(persons_role_id: number) {
+    try {
+      const personsRole = await this.moviesPersonsRolesRepository.findOne({
+        where: {
+          movies_persons_roles_id: persons_role_id,
+        },
+      });
+      await this.moviesPersonsRolesRepository.remove(personsRole);
+      return {
+        httpStatus: HttpStatus.OK,
+        message: "Person's role deleted successfully",
+      };
+    } catch (e) {
+      return {
+        httpStatus: HttpStatus.INTERNAL_SERVER_ERROR,
+        message: "Could not delete person's role",
       };
     }
   }

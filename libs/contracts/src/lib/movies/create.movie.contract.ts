@@ -1,7 +1,6 @@
 import {IsBoolean, IsDate, IsEnum, IsOptional, IsString} from 'class-validator';
 import {Type} from "class-transformer";
 import {HttpStatus} from "@nestjs/common";
-import {GenresEntity} from "@kinopoisk-snitch/typeorm";
 
 // eslint-disable-next-line @typescript-eslint/no-namespace
 export namespace CreateMovieContract {

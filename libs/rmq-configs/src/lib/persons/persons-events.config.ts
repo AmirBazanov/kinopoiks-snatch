@@ -14,3 +14,11 @@ export const deletePersonRMQConfig = (): RmqConfig => {
     queue: 'PersonEventsQueueDelete',
   };
 };
+
+export const removeRoleRMQConfig = (): RmqConfig => {
+  return {
+    exchange: 'DeletePersonsExchange',
+    routingKey: 'remove-role',
+    queue: 'RoleEventsQueueRemove',
+  };
+};

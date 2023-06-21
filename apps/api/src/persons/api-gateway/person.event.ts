@@ -2,7 +2,7 @@ import {Body, Controller, Delete, HttpException, HttpStatus, Param, Put} from '@
 import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
 import {CreatePersonDto} from "../dtos/create-person.dto";
 import {UpdatePersonContract} from "@kinopoisk-snitch/contracts";
-import {deletePersonRMQConfig, updatePersonRMQConfig} from "@kinopoisk-snitch/rmq-configs";
+import {deletePersonRMQConfig, removeRoleRMQConfig, updatePersonRMQConfig} from "@kinopoisk-snitch/rmq-configs";
 
 @Controller('/persons')
 export class PersonsEvent {
@@ -38,6 +38,23 @@ export class PersonsEvent {
         exchange: deletePersonRMQConfig().exchange,
         routingKey: deletePersonRMQConfig().routingKey,
         payload: person_id,
+      });
+      return response;
+    }
+  }
+
+  @Delete('/removeRole/:id')
+  async deleteRole(@Param('id') role_id: number) {
+    if (isNaN(Number(role_id))) {
+      throw new HttpException(
+        'ID must be a number',
+        HttpStatus.BAD_REQUEST
+      );
+    } else {
+      const response = await this.amqpConnection.request({
+        exchange: removeRoleRMQConfig().exchange,
+        routingKey: removeRoleRMQConfig().routingKey,
+        payload: role_id,
       });
       return response;
     }

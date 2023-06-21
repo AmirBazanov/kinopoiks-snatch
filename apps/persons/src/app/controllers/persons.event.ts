@@ -1,7 +1,7 @@
 import {AmqpConnection, RabbitRPC} from '@golevelup/nestjs-rabbitmq';
 import { Controller } from '@nestjs/common';
 import { PersonsService } from '../services/persons.service';
-import {deletePersonRMQConfig, updatePersonRMQConfig} from "@kinopoisk-snitch/rmq-configs";
+import {deletePersonRMQConfig, removeRoleRMQConfig, updatePersonRMQConfig} from "@kinopoisk-snitch/rmq-configs";
 import {Payload} from "@nestjs/microservices";
 import {UpdatePersonContract} from "@kinopoisk-snitch/contracts";
 
@@ -20,5 +20,10 @@ export class PersonsEvent {
   @RabbitRPC(deletePersonRMQConfig())
   async deletePerson(@Payload() person_id: number) {
     return await this.personService.deletePerson(person_id);
+  }
+
+  @RabbitRPC(removeRoleRMQConfig())
+  async removeRole(@Payload() id: number) {
+    return await this.personService.removeRole(id);
   }
 }

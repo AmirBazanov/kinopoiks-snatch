@@ -7,3 +7,11 @@ export const createPersonRMQConfig = (): RmqConfig => {
     queue: 'CreatePersonQueue',
   };
 };
+
+export const addRoleRMQConfig = (): RmqConfig => {
+  return {
+    exchange: 'PostPersonsExchange',
+    routingKey: 'add-role',
+    queue: 'AddRoleQueue',
+  };
+};
