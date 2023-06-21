@@ -1,4 +1,4 @@
-import {CreatePersonContract, IdPersonContract} from "@kinopoisk-snitch/contracts";
+import {CreatePersonContract, IdPersonContract, UpdatePersonContract} from "@kinopoisk-snitch/contracts";
 import {AwardsEntity, MoviesPersonsRolesEntity, PersonsEntity} from "@kinopoisk-snitch/typeorm";
 import {HttpStatus, Injectable} from "@nestjs/common";
 import {InjectRepository} from "@nestjs/typeorm";
@@ -169,6 +169,25 @@ export class PersonRepository {
       return {
         httpStatus: HttpStatus.INTERNAL_SERVER_ERROR,
         message: 'Could not delete person',
+      };
+    }
+  }
+
+  async updatePerson(personDto: UpdatePersonContract.Request) {
+    try {
+      const person = await this.personRepository.update(
+        { person_id: personDto.person_id },
+        { ...personDto }
+      );
+      return {
+        httpStatus: HttpStatus.OK,
+        person
+      };
+    } catch (e) {
+      console.log(e);
+      return {
+        httpStatus: HttpStatus.INTERNAL_SERVER_ERROR,
+        message: 'Internal Server Error',
       };
     }
   }

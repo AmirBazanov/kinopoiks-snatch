@@ -21,6 +21,8 @@ export * from './lib/genres/amqp.genre.config';
 export * from './lib/genres/genre-commands.config';
 export * from './lib/genres/genre-queries.config';
 export * from './lib/persons/persons-commands.config';
+export * from './lib/persons/persons-events.config';
+export * from './lib/persons/persons-queries.config';
 export * from './lib/auth/amqp-auth.config';
 export * from './lib/awards/amqp.award.config';
 export * from './lib/awards/award-command.config';

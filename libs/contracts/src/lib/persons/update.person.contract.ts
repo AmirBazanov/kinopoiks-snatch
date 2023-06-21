@@ -4,12 +4,13 @@ import {
   PersonsEntity,
 } from '@kinopoisk-snitch/typeorm';
 
-export namespace CreatePersonContract {
+export namespace UpdatePersonContract {
   export class Request implements Partial<PersonsEntity> {
     date_birth: Date;
     height: number;
     is_eng: boolean;
     name: string;
+    person_id: number;
     photo: string;
     place_birth: string;
     spouse: string;

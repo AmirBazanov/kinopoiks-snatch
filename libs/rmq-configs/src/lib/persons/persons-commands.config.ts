@@ -2,7 +2,7 @@ import { RmqConfig } from '../types';
 
 export const createPersonRMQConfig = (): RmqConfig => {
   return {
-    exchange: 'PersonsExchange',
+    exchange: 'PostPersonsExchange',
     routingKey: 'create-person',
     queue: 'CreatePersonQueue',
   };
