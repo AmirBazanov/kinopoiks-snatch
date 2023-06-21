@@ -4,6 +4,8 @@ import { PersonsEntity } from '@kinopoisk-snitch/typeorm';
 import { HttpStatus, Injectable } from '@nestjs/common';
 import { PersonRepository } from '../repositories/person.repository';
 import { IdPersonContract } from '@kinopoisk-snitch/contracts';
+import {CreatePersonContract} from "../../../../../libs/contracts/src/lib/persons/create.person.contract";
+import {rethrow} from "@nestjs/core/helpers/rethrow";
 
 @Injectable()
 export class PersonsService {
@@ -64,5 +66,9 @@ export class PersonsService {
       routingKey: getMoviesOfPersonRMQConfig().routingKey,
       payload: person.person_id,
     });
+  }
+
+  async createPerson(personDto: CreatePersonContract.Request) {
+    return await this.personRepository.createPerson(personDto);
   }
 }

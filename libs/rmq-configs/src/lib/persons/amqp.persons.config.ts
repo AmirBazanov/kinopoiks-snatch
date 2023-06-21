@@ -5,7 +5,19 @@ export function rmqPersonConfig(): RabbitMQConfig {
     uri: process.env.RABBITMQ_URI,
     exchanges: [
       {
-        name: 'PersonsExchange',
+        name: 'PostPersonsExchange',
+        type: 'topic',
+      },
+      {
+        name: 'GetPersonsExchange',
+        type: 'topic',
+      },
+      {
+        name: 'PutPersonsExchange',
+        type: 'topic',
+      },
+      {
+        name: 'DeletePersonsExchange',
         type: 'topic',
       },
     ],
