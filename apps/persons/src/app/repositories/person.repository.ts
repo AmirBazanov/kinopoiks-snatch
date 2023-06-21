@@ -73,30 +73,10 @@ export class PersonRepository {
     }
 
     async getPersonsOfMovie(id: number) {
+      return  this.moviesPersonsRolesRepository.createQueryBuilder('personsRoles').leftJoin('personsRoles.person', 'person')
+        .leftJoin('personsRoles.role', 'role').addSelect(['role.name','person.name', "person.sur_name", 'role.role_id'])
+        .getMany()
 
-      return this.moviesPersonsRolesRepository.find({
-        where: {
-          movie: {
-            movie_id: id,
-          }
-        },
-        relations: {
-          person: true,
-          role: true
-        },
-        select: {
-          person: {
-            person_id: true,
-            name: true,
-            sur_name: true,
-            moviesPersonsRole: {}
-          },
-          role: {
-            name: true
-          }
-        },
-
-      })
     }
 
     async getArrayIdsMoviesForGenresPersons(person: PersonsEntity) {
