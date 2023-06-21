@@ -17,7 +17,7 @@ export class UserQuery {
 
   @RabbitRPC(getUserRMQConfig())
   async getUserById(@Payload() user_id: IdUserContract.Request) {
-    return this.userService.getUserById(user_id);
+    return await this.userService.getUserById(user_id);
   }
 
   @RabbitRPC(getUserByEmailRMQConfig())
