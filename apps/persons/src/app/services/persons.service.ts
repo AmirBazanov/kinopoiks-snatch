@@ -3,7 +3,9 @@ import { getCountMoviesOfPersonRMQConfig, getGenresArrayOfPersonRMQConfig, getMo
 import { PersonsEntity } from '@kinopoisk-snitch/typeorm';
 import { HttpStatus, Injectable } from '@nestjs/common';
 import { PersonRepository } from '../repositories/person.repository';
-import { IdPersonContract } from '@kinopoisk-snitch/contracts';
+import {AddRoleContract, IdPersonContract, UpdatePersonContract} from '@kinopoisk-snitch/contracts';
+import {CreatePersonContract} from "../../../../../libs/contracts/src/lib/persons/create.person.contract";
+import {rethrow} from "@nestjs/core/helpers/rethrow";
 
 @Injectable()
 export class PersonsService {
@@ -64,5 +66,25 @@ export class PersonsService {
       routingKey: getMoviesOfPersonRMQConfig().routingKey,
       payload: person.person_id,
     });
+  }
+
+  async createPerson(personDto: CreatePersonContract.Request) {
+    return await this.personRepository.createPerson(personDto);
+  }
+
+  async updatePerson(personDto: UpdatePersonContract.Request) {
+    return await this.personRepository.updatePerson(personDto);
+  }
+
+  async deletePerson(id: number) {
+    return await this.personRepository.deletePerson(id);
+  }
+
+  async addRole(addRoleDto: AddRoleContract.Request) {
+    return await this.personRepository.addRole(addRoleDto);
+  }
+
+  async removeRole(persons_role_id: number) {
+    return await this.personRepository.removeRole(persons_role_id);
   }
 }

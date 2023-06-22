@@ -101,7 +101,7 @@ export class MoviesService {
         if (arrayIdsGenresForMovies.includes(curMovie.genres[j].genre_id))
           continue;
 
-        arrayIdsGenresForMovies.push(await curMovie.genres[j].genre_id);
+        arrayIdsGenresForMovies.push(curMovie.genres[j].genre_id);
       }
     }
 
@@ -140,7 +140,6 @@ export class MoviesService {
 
   async getMoviesOfPerson(person_id: number) {
     const arrayMovies = [];
-    const arrayIdsMovies = [];
 
     const arrayMoviesOfPerson = await this.moviesPersonsRolesRepository.find({
       where: {

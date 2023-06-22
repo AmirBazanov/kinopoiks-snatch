@@ -215,7 +215,7 @@ export class MovieRepository {
 
   async getMoviesByGenre(genre_id: number) {
     try {
-      return  this.MovieModel.find({
+      return this.MovieModel.find({
         where: {genres: {genre_id: genre_id}},
         relations: {country: true, genres: true, awards: true},
       });
