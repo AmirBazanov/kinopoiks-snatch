@@ -1,10 +1,25 @@
-import {Body, Controller, Delete, HttpException, HttpStatus, Param, Put} from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  HttpException,
+  HttpStatus,
+  Param,
+  Put,
+  UseGuards, UsePipes,
+  ValidationPipe
+} from '@nestjs/common';
 import {CreateMovieDto} from "../dtos/create-movie.dto";
 import {DeleteMovieContract, UpdateMovieContract} from "@kinopoisk-snitch/contracts";
 import {deleteMovieRMQConfig, updateMovieRMQConfig} from "@kinopoisk-snitch/rmq-configs";
 import {AmqpConnection} from "@golevelup/nestjs-rabbitmq";
+import {AdminGuard} from "../../../guards/role.guard";
+import {Admin} from "../../../decorators/role.decorator";
 
-@Controller('/movies')
+@UseGuards(AdminGuard)
+@Admin()
+@UsePipes(new ValidationPipe())
+@Controller('admin/movies')
 export class MovieEvent {
   constructor(private readonly amqpConnection: AmqpConnection) {}
   @Put('/update/:id')
