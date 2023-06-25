@@ -15,7 +15,7 @@ import {AmqpConnection} from '@golevelup/nestjs-rabbitmq';
 import {EditUserDto} from '../dtos/edit-user.dto';
 import {deleteUserRMQConfig, editTokenRMQConfig, editUserRMQConfig,} from '@kinopoisk-snitch/rmq-configs';
 import {EditTokenDto} from '../dtos/edit-token.dto';
-import {ApiBody, ApiOperation} from '@nestjs/swagger';
+import {ApiBody, ApiOperation, ApiResponse} from '@nestjs/swagger';
 import {AdminGuard} from "../../../guards/role.guard";
 import {Admin} from "../../../decorators/role.decorator";
 
@@ -26,8 +26,14 @@ import {Admin} from "../../../decorators/role.decorator";
 export class UserCommand {
   constructor(private readonly amqpConnection: AmqpConnection) {}
   @Put('/editUser')
-  @ApiOperation({ summary: 'Edit user info' })
+  @ApiOperation({ summary: 'Edit User' })
   @ApiBody({ type: EditUserDto })
+  @ApiResponse({
+    status: HttpStatus.CREATED,
+    description: 'Success',
+    type: EditUserDto
+  })
+  @ApiResponse({ status: HttpStatus.NOT_FOUND, description: 'User not found' })
   async editUser(@Body() editUserDto: EditUserDto, @Req() req: Request) {
     try {
 
@@ -43,8 +49,13 @@ export class UserCommand {
   }
 
   @Put('/refresh_token/:id')
-  @ApiOperation({ summary: 'Edit user refresh_token by id in param' })
+  @ApiOperation({ summary: 'Edit User`s refresh_toke' })
   @ApiBody({ type: EditTokenDto })
+  @ApiResponse({
+    status: HttpStatus.CREATED,
+    description: 'Success',
+  })
+  @ApiResponse({ status: HttpStatus.NOT_FOUND, description: 'User not found' })
   async editToken(
     @Param('id', ParseIntPipe) user_id: EditTokenDto,
     @Body() new_token: string
@@ -62,7 +73,12 @@ export class UserCommand {
 
   @UsePipes(new ParseIntPipe({ errorHttpStatusCode: HttpStatus.BAD_REQUEST }))
   @Delete('/deleteUser/:id')
-  @ApiOperation({ summary: 'Delete user by id in param' })
+  @ApiOperation({ summary: 'Delete User' })
+  @ApiResponse({
+    status: HttpStatus.CREATED,
+    description: 'Success',
+  })
+  @ApiResponse({ status: HttpStatus.NOT_FOUND, description: 'User not found' })
   async deleteUser(@Param('id') id: string) {
     try {
       await this.amqpConnection.publish(
