@@ -15,13 +15,14 @@ import {AmqpConnection} from '@golevelup/nestjs-rabbitmq';
 import {EditUserDto} from '../dtos/edit-user.dto';
 import {deleteUserRMQConfig, editTokenRMQConfig, editUserRMQConfig,} from '@kinopoisk-snitch/rmq-configs';
 import {EditTokenDto} from '../dtos/edit-token.dto';
-import {ApiBody, ApiOperation, ApiResponse} from '@nestjs/swagger';
+import {ApiBody, ApiOperation, ApiResponse, ApiTags} from '@nestjs/swagger';
 import {AdminGuard} from "../../../guards/role.guard";
 import {Admin} from "../../../decorators/role.decorator";
 
 @UseGuards(AdminGuard)
 @Admin()
 @UsePipes(new ValidationPipe())
+@ApiTags('Admin')
 @Controller('admin/users')
 export class UserCommand {
   constructor(private readonly amqpConnection: AmqpConnection) {}
