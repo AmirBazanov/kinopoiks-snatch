@@ -1,10 +1,26 @@
-import {Body, Controller, Delete, HttpException, HttpStatus, Param, Put} from '@nestjs/common';
-import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
+import {
+  Body,
+  Controller,
+  Delete,
+  HttpException,
+  HttpStatus,
+  Param,
+  Put,
+  UseGuards,
+  UsePipes,
+  ValidationPipe
+} from '@nestjs/common';
+import {AmqpConnection} from '@golevelup/nestjs-rabbitmq';
 import {CreatePersonDto} from "../dtos/create-person.dto";
 import {UpdatePersonContract} from "@kinopoisk-snitch/contracts";
 import {deletePersonRMQConfig, removeRoleRMQConfig, updatePersonRMQConfig} from "@kinopoisk-snitch/rmq-configs";
+import {AdminGuard} from "../../../guards/role.guard";
+import {Admin} from "../../../decorators/role.decorator";
 
-@Controller('/persons')
+@UseGuards(AdminGuard)
+@Admin()
+@UsePipes(new ValidationPipe())
+@Controller('admin/persons')
 export class PersonsEvent {
   constructor(private readonly amqpConnection: AmqpConnection) {}
 
@@ -17,12 +33,11 @@ export class PersonsEvent {
         HttpStatus.BAD_REQUEST
       );
     } else {
-      const person = await this.amqpConnection.request<UpdatePersonContract.Response>({
+      return await this.amqpConnection.request<UpdatePersonContract.Response>({
         exchange: updatePersonRMQConfig().exchange,
         routingKey: updatePersonRMQConfig().routingKey,
         payload: {person_id, ...personDto},
       });
-      return person;
     }
   }
 
@@ -34,12 +49,11 @@ export class PersonsEvent {
         HttpStatus.BAD_REQUEST
       );
     } else {
-      const response = await this.amqpConnection.request({
+      return await this.amqpConnection.request({
         exchange: deletePersonRMQConfig().exchange,
         routingKey: deletePersonRMQConfig().routingKey,
         payload: person_id,
       });
-      return response;
     }
   }
 
@@ -51,12 +65,11 @@ export class PersonsEvent {
         HttpStatus.BAD_REQUEST
       );
     } else {
-      const response = await this.amqpConnection.request({
+      return await this.amqpConnection.request({
         exchange: removeRoleRMQConfig().exchange,
         routingKey: removeRoleRMQConfig().routingKey,
         payload: role_id,
       });
-      return response;
     }
   }
 }

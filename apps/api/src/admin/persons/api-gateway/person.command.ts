@@ -1,10 +1,15 @@
-import {Body, Controller, Post} from '@nestjs/common';
+import {Body, Controller, Post, UseGuards, UsePipes, ValidationPipe} from '@nestjs/common';
 import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
 import {CreatePersonDto} from "../dtos/create-person.dto";
 import {addRoleRMQConfig, createPersonRMQConfig} from "@kinopoisk-snitch/rmq-configs";
 import {AddRoleDto} from "../dtos/add-role.dto";
+import {AdminGuard} from "../../../guards/role.guard";
+import {Admin} from "../../../decorators/role.decorator";
 
-@Controller('/persons')
+@UseGuards(AdminGuard)
+@Admin()
+@UsePipes(new ValidationPipe())
+@Controller('admin/persons')
 export class PersonsCommand {
   constructor(private readonly amqpConnection: AmqpConnection) {}
 
