@@ -5,7 +5,7 @@ import {
   Param,
   ParseIntPipe,
   Post,
-  Put, UseGuards,
+  Put, UseGuards, UsePipes, ValidationPipe,
 } from '@nestjs/common';
 import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
 import { CreateAwardDto } from '../dtos/create-award.dto';
@@ -19,6 +19,7 @@ import {AdminGuard} from "../../../guards/role.guard";
 import {Admin} from "../../../decorators/role.decorator";
 
 @UseGuards(AdminGuard)
+@UsePipes(new ValidationPipe())
 @Admin()
 @Controller('admin/awards')
 export class AwardCommand {

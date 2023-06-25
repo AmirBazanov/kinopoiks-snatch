@@ -1,5 +1,5 @@
-import { IsBoolean, IsDate, IsOptional, IsString } from 'class-validator';
-import { Type } from 'class-transformer';
+import {IsBoolean, IsDateString, IsNumber, IsOptional, IsString} from 'class-validator';
+
 
 export class EditAwardDto {
   @IsOptional()
@@ -7,8 +7,7 @@ export class EditAwardDto {
   name?: string;
 
   @IsOptional()
-  @Type(() => Date)
-  @IsDate({ message: 'Date must be a valid ISO 8601 date string' })
+  @IsDateString()
   year?: Date;
 
   @IsOptional()
@@ -20,8 +19,10 @@ export class EditAwardDto {
   is_eng?: boolean;
 
   @IsOptional()
+  @IsNumber()
   person_id?: number;
 
   @IsOptional()
+  @IsNumber()
   movie_id?: number;
 }
