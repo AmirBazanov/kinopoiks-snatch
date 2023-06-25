@@ -1,10 +1,14 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import {Body, Controller, Post, UseGuards, UsePipes, ValidationPipe} from '@nestjs/common';
 import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
-import { CreateGenreDto } from '../dtos/create-genre.dto';
+import { CreateGenreDto } from '../../../genres/dtos/create-genre.dto';
 import {createGenreRMQConfig} from "@kinopoisk-snitch/rmq-configs";
-import {CreateGenreContract} from "@kinopoisk-snitch/contracts";
+import {AdminGuard} from "../../../guards/role.guard";
+import {Admin} from "../../../decorators/role.decorator";
 
-@Controller('/genres')
+@UseGuards(AdminGuard)
+@Admin()
+@UsePipes(new ValidationPipe())
+@Controller('admin/genres')
 export class GenreCommand {
   constructor(private readonly amqpConnection: AmqpConnection) {}
 
