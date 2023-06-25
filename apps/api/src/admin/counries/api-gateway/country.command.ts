@@ -1,10 +1,15 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import {Body, Controller, Post, UseGuards, UsePipes, ValidationPipe} from '@nestjs/common';
 import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
 import { CreateCountryDto } from '../dtos/create-country.dto';
 import {createCountryRMQConfig} from "@kinopoisk-snitch/rmq-configs";
-import {CreateCountryContract} from "@kinopoisk-snitch/contracts";
 
-@Controller('/countries')
+import {AdminGuard} from "../../../guards/role.guard";
+import {Admin} from "../../../decorators/role.decorator";
+
+@UseGuards(AdminGuard)
+@Admin()
+@UsePipes(new ValidationPipe())
+@Controller('admin/countries')
 export class CountryCommand {
   constructor(private readonly amqpConnection: AmqpConnection) {}
 
