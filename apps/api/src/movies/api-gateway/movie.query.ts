@@ -1,24 +1,17 @@
-import {
-  Body,
-  Controller, Delete,
-  Get,
-  HttpException,
-  HttpStatus,
-  Param,
-} from '@nestjs/common';
-import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
+import {Body, Controller, Get, HttpException, HttpStatus, Param,} from '@nestjs/common';
+import {AmqpConnection} from '@golevelup/nestjs-rabbitmq';
 import {
   AllMoviesContract,
-  DeleteMovieContract,
   FilteredMoviesContract,
   IdMovieContract,
   TitleMovieContract
 } from '@kinopoisk-snitch/contracts';
 import {
-  deleteMovieRMQConfig,
-  getAllMoviesRMQConfig, getGenresMoviesRMQConfig,
+  getAllMoviesRMQConfig,
+  getGenresMoviesRMQConfig,
   getMovieByTitleRMQConfig,
-  getMovieRMQConfig, getMoviesByFiltersRMQConfig
+  getMovieRMQConfig,
+  getMoviesByFiltersRMQConfig
 } from "@kinopoisk-snitch/rmq-configs";
 import {FiltersDto} from "../dtos/filters.dto";
 
@@ -34,24 +27,22 @@ export class MovieQuery {
         HttpStatus.BAD_REQUEST
       );
     } else {
-      const movie = await this.amqpConnection.request<IdMovieContract.Response>({
+      return await this.amqpConnection.request<IdMovieContract.Response>({
         exchange: getMovieRMQConfig().exchange,
         routingKey: getMovieRMQConfig().routingKey,
         payload: movie_id,
         timeout: 100000,
       });
-      return movie;
     }
   }
 
   @Get('/getMovieByTitle')
   async getMovieByTitle(@Body() movie_title: TitleMovieContract.Request) {
-    const movie = await this.amqpConnection.request<TitleMovieContract.Response>({
+    return await this.amqpConnection.request<TitleMovieContract.Response>({
       exchange: getMovieByTitleRMQConfig().exchange,
       routingKey: getMovieByTitleRMQConfig().routingKey,
       payload: movie_title,
     });
-    return movie;
   }
 
   @Get('/getMovieByGenre/:id')
@@ -62,31 +53,28 @@ export class MovieQuery {
         HttpStatus.BAD_REQUEST
       );
     } else {
-      const movie = await this.amqpConnection.request<IdMovieContract.Response>({
+      return await this.amqpConnection.request<IdMovieContract.Response>({
         exchange: getGenresMoviesRMQConfig().exchange,
         routingKey: getGenresMoviesRMQConfig().routingKey,
         payload: genre_id,
       });
-      return movie;
     }
   }
 
   @Get('/getMoviesByFilters')
   async getMoviesByFilters(@Body() filters: FiltersDto) {
-    const movies = await this.amqpConnection.request<FilteredMoviesContract.Response>({
+    return await this.amqpConnection.request<FilteredMoviesContract.Response>({
       exchange: getMoviesByFiltersRMQConfig().exchange,
       routingKey: getMoviesByFiltersRMQConfig().routingKey,
       payload: filters
     });
-    return movies;
   }
 
   @Get('/getAllMovies')
   async getAllMovies() {
-    const movies = await this.amqpConnection.request<AllMoviesContract.Response>({
+    return await this.amqpConnection.request<AllMoviesContract.Response>({
       exchange: getAllMoviesRMQConfig().exchange,
       routingKey: getAllMoviesRMQConfig().routingKey,
     });
-    return movies;
   }
 }

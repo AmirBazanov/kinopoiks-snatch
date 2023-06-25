@@ -1,8 +1,6 @@
 import { Module } from '@nestjs/common';
 import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
-import { PersonsCommand } from './api-gateway/person.command';
 import { rmqPersonConfig } from '@kinopoisk-snitch/rmq-configs'
-import { PersonsEvent } from './api-gateway/person.event';
 import { PersonsQuery } from './api-gateway/person.query';
 
 @Module({
@@ -10,8 +8,6 @@ import { PersonsQuery } from './api-gateway/person.query';
     RabbitMQModule.forRoot(RabbitMQModule, rmqPersonConfig()),
   ],
   controllers: [
-    PersonsCommand,
-    PersonsEvent,
     PersonsQuery,
   ],
 })

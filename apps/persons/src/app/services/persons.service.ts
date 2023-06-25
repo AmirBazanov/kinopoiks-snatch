@@ -1,11 +1,18 @@
-import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
-import { getCountMoviesOfPersonRMQConfig, getGenresArrayOfPersonRMQConfig, getMoviesOfPersonRMQConfig } from '@kinopoisk-snitch/rmq-configs';
-import { PersonsEntity } from '@kinopoisk-snitch/typeorm';
-import { HttpStatus, Injectable } from '@nestjs/common';
-import { PersonRepository } from '../repositories/person.repository';
-import {AddRoleContract, IdPersonContract, UpdatePersonContract} from '@kinopoisk-snitch/contracts';
-import {CreatePersonContract} from "../../../../../libs/contracts/src/lib/persons/create.person.contract";
-import {rethrow} from "@nestjs/core/helpers/rethrow";
+import {AmqpConnection} from '@golevelup/nestjs-rabbitmq';
+import {
+  getCountMoviesOfPersonRMQConfig,
+  getGenresArrayOfPersonRMQConfig,
+  getMoviesOfPersonRMQConfig
+} from '@kinopoisk-snitch/rmq-configs';
+import {PersonsEntity} from '@kinopoisk-snitch/typeorm';
+import {HttpStatus, Injectable} from '@nestjs/common';
+import {PersonRepository} from '../repositories/person.repository';
+import {
+  AddRoleContract,
+  CreatePersonContract,
+  IdPersonContract,
+  UpdatePersonContract
+} from '@kinopoisk-snitch/contracts';
 
 @Injectable()
 export class PersonsService {
@@ -38,6 +45,26 @@ export class PersonsService {
     return await this.personRepository.getPersonsOfMovie(id);
   }
 
+  async createPerson(personDto: CreatePersonContract.Request) {
+    return await this.personRepository.createPerson(personDto);
+  }
+
+  async updatePerson(personDto: UpdatePersonContract.Request) {
+    return await this.personRepository.updatePerson(personDto);
+  }
+
+  async deletePerson(id: number) {
+    return await this.personRepository.deletePerson(id);
+  }
+
+  async addRole(addRoleDto: AddRoleContract.Request) {
+    return await this.personRepository.addRole(addRoleDto);
+  }
+
+  async removeRole(persons_role_id: number) {
+    return await this.personRepository.removeRole(persons_role_id);
+  }
+
   private async getGenresOfPerson(person: PersonsEntity) {
     const arrayIdsMovies = await this.personRepository.getArrayIdsMoviesForGenresPersons(person);
 
@@ -66,25 +93,5 @@ export class PersonsService {
       routingKey: getMoviesOfPersonRMQConfig().routingKey,
       payload: person.person_id,
     });
-  }
-
-  async createPerson(personDto: CreatePersonContract.Request) {
-    return await this.personRepository.createPerson(personDto);
-  }
-
-  async updatePerson(personDto: UpdatePersonContract.Request) {
-    return await this.personRepository.updatePerson(personDto);
-  }
-
-  async deletePerson(id: number) {
-    return await this.personRepository.deletePerson(id);
-  }
-
-  async addRole(addRoleDto: AddRoleContract.Request) {
-    return await this.personRepository.addRole(addRoleDto);
-  }
-
-  async removeRole(persons_role_id: number) {
-    return await this.personRepository.removeRole(persons_role_id);
   }
 }
