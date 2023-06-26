@@ -1,11 +1,12 @@
 import {Inject, Injectable} from '@nestjs/common';
-import {CreateGenreContract, IdGenreContract} from "@kinopoisk-snitch/contracts";
+import {CreateGenreContract, IdGenreContract, UpdateGenreContract} from "@kinopoisk-snitch/contracts";
 import {AmqpConnection} from "@golevelup/nestjs-rabbitmq";
 import {GenreRepository} from "../repositories/genres.repository";
 import { getGenresIdsArrayOfMoviesRMQConfig } from '@kinopoisk-snitch/rmq-configs';
 import { InjectRepository } from '@nestjs/typeorm';
 import { GenresEntity } from '@kinopoisk-snitch/typeorm';
 import { Repository } from 'typeorm';
+import {Payload} from "@nestjs/microservices";
 
 @Injectable()
 export class GenresService {
@@ -45,8 +46,16 @@ export class GenresService {
       const curGenre = await this.genresRepo.findOne({where: {genre_id: arrayIdsGenres[i]}});
 
       arrayNamesGenres[i] = curGenre.name;
-    };
+    }
 
     return arrayNamesGenres;
+  }
+  async updateGenre(@Payload() genreDto: UpdateGenreContract.Request) {
+    const response = await this.genreRepository.updateGenre(genreDto);
+    return response;
+  }
+  async deleteGenre(@Payload() genre_id: number) {
+    const response = await this.genreRepository.deleteGenre(genre_id);
+    return response;
   }
 }

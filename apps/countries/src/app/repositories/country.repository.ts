@@ -2,7 +2,7 @@ import {HttpStatus, Injectable} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import {CountriesEntity} from '@kinopoisk-snitch/typeorm';
-import {CreateCountryContract, IdCountryContract} from '@kinopoisk-snitch/contracts';
+import {CreateCountryContract, IdCountryContract, UpdateCountryContract} from '@kinopoisk-snitch/contracts';
 
 @Injectable()
 export class CountryRepository {
@@ -57,5 +57,44 @@ export class CountryRepository {
 
   async getAllCountries() {
     return await this.CountryModel.find();
+  }
+
+  async updateCountry(countryDto: UpdateCountryContract.Request) {
+    try {
+      const country = await this.CountryModel.update(
+        { country_id: countryDto.country_id },
+        { ...countryDto }
+      );
+      return {
+        httpStatus: HttpStatus.OK,
+        message: `Country updated successfully:\n${country}`,
+      };
+    } catch (e) {
+      console.log(e);
+      return {
+        httpStatus: HttpStatus.INTERNAL_SERVER_ERROR,
+        message: 'Internal Server Error',
+      };
+    }
+  }
+
+  async deleteCountry(country_id: number) {
+    try {
+      const country = await this.CountryModel.findOne({
+        where: {
+          country_id: country_id,
+        },
+      });
+      await this.CountryModel.remove(country);
+      return {
+        httpStatus: HttpStatus.OK,
+        message: 'Country deleted successfully',
+      };
+    } catch (e) {
+      return {
+        httpStatus: HttpStatus.INTERNAL_SERVER_ERROR,
+        message: 'Could not delete country',
+      };
+    }
   }
 }

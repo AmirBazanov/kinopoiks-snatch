@@ -12,6 +12,14 @@ export function rmqCountryConfig(): RabbitMQConfig {
         name: 'GetCountriesExchange',
         type: 'topic',
       },
+      {
+        name: 'PutCountriesExchange',
+        type: 'topic',
+      },
+      {
+        name: 'DeleteCountriesExchange',
+        type: 'topic',
+      },
     ],
     uri: process.env.RABBITMQ_URI,
     connectionInitOptions: { wait: false },

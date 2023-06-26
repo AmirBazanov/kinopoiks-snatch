@@ -4,6 +4,7 @@ import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
 import {rmqCountryConfig} from "@kinopoisk-snitch/rmq-configs";
 import {JwtModule} from "@nestjs/jwt";
 import {CountryCommand} from "./api-gateway/country.command";
+import {CountryEvent} from "./api-gateway/country.event";
 
 
 
@@ -14,7 +15,7 @@ import {CountryCommand} from "./api-gateway/country.command";
       secret: process.env.JWT_SECRET,
     }),
   ],
-  controllers: [CountryCommand],
+  controllers: [CountryCommand, CountryEvent],
   providers: [],
 })
 export class CountriesModule {}
