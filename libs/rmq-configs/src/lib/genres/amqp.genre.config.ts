@@ -11,6 +11,14 @@ export function rmqGenreConfig(): RabbitMQConfig {
         name: 'GetGenresExchange',
         type: 'topic',
       },
+      {
+        name: 'PutGenresExchange',
+        type: 'topic',
+      },
+      {
+        name: 'DeleteGenresExchange',
+        type: 'topic',
+      },
     ],
     uri: process.env.RABBITMQ_URI,
     connectionInitOptions: { wait: false },

@@ -4,6 +4,7 @@ import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
 import {rmqGenreConfig} from "@kinopoisk-snitch/rmq-configs";
 import {JwtModule} from "@nestjs/jwt";
 import {GenreCommand} from "./api-gateway/genre.command";
+import {GenreEvent} from "./api-gateway/genre.event";
 
 
 
@@ -14,7 +15,7 @@ import {GenreCommand} from "./api-gateway/genre.command";
       secret: process.env.JWT_SECRET,
     }),
   ],
-  controllers: [GenreCommand],
+  controllers: [GenreCommand, GenreEvent],
   providers: [],
 })
 export class GenresModule {}

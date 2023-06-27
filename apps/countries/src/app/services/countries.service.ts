@@ -3,7 +3,7 @@ import {CountryRepository} from "../repositories/country.repository";
 import {
   CreateCountryContract,
   IdCountryContract,
-  TitleMovieContract
+  TitleMovieContract, UpdateCountryContract
 } from "@kinopoisk-snitch/contracts";
 import {AmqpConnection} from "@golevelup/nestjs-rabbitmq";
 
@@ -29,6 +29,16 @@ export class CountriesService {
 
   async getAllCountries() {
     const response = await this.countryRepository.getAllCountries();
+    return response;
+  }
+
+  async updateCountry(countryDto: UpdateCountryContract.Request) {
+    const response = await this.countryRepository.updateCountry(countryDto);
+    return response;
+  }
+
+  async deleteCountry(country_id: number) {
+    const response = await this.countryRepository.deleteCountry(country_id);
     return response;
   }
 }

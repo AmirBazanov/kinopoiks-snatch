@@ -191,7 +191,6 @@ export class PersonRepository {
         person
       };
     } catch (e) {
-      console.log(e);
       return {
         httpStatus: HttpStatus.INTERNAL_SERVER_ERROR,
         message: 'Internal Server Error',
