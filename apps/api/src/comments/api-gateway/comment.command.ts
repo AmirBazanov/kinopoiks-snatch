@@ -1,22 +1,13 @@
-import {
-  Body,
-  Controller,
-  HttpStatus,
-  Param,
-  ParseIntPipe,
-  Post,
-  Req,
-  UsePipes,
-} from '@nestjs/common';
-import { CreateCommentDto } from '../dtos/create-comment.dto';
-import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
+import {Body, Controller, HttpStatus, Param, ParseIntPipe, Post, Req, UsePipes,} from '@nestjs/common';
+import {CreateCommentDto} from '../dtos/create-comment.dto';
+import {AmqpConnection} from '@golevelup/nestjs-rabbitmq';
 import {
   createCommentOnCommentRMQConfig,
   createCommentRMQConfig,
   incDisCommentRMQConfig,
   incLikeCommentRMQConfig,
 } from '@kinopoisk-snitch/rmq-configs';
-import { ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
+import {ApiBody, ApiOperation, ApiTags} from '@nestjs/swagger';
 
 @ApiTags('CommentCommand')
 @Controller('/reviews')
@@ -31,8 +22,7 @@ export class CommentCommand {
     @Param('id', ParseIntPipe) movie_id: string,
     @Req() req: Request
   ) {
-    const token = req.headers['authorization'].replace('Bearer ', '');
-    commentInfo.user_id = token;
+    commentInfo.user_id = req.headers['authorization'].replace('Bearer ', '');
     commentInfo.film_id = movie_id;
     try {
       await this.amqpConnection.publish(
@@ -54,8 +44,7 @@ export class CommentCommand {
     @Req() req: Request
   ) {
     commentInfo.comment_id = Number(comment_id);
-    const token = req.headers['authorization'].replace('Bearer ', '');
-    commentInfo.user_id = token;
+    commentInfo.user_id = req.headers['authorization'].replace('Bearer ', '');
     try {
       await this.amqpConnection.publish(
         createCommentOnCommentRMQConfig().exchange,
